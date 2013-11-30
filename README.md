@@ -63,7 +63,7 @@ run->edit configurations
 
 and create a new application. Select the main class as:
 
-nu.nethome.home.start.HomeManager (in server-install modules)
+nu.nethome.home.start.StaticHomeManagerStarter (in server-install modules)
 
 And the configuration should be able to build and run the application.
 
