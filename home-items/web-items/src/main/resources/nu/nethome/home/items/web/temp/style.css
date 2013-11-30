@@ -1,0 +1,121 @@
+/**
+ * Copyright (C) 2005-2013, Stefan Strömberg <stefangs@nethome.nu>
+ *
+ * This file is part of OpenNetHome  (http://www.nethome.nu)
+ *
+ * OpenNetHome is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenNetHome is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+.top
+{
+    background-color: #ffffff;
+    margin-bottom: -4px;
+    margin-top: 0px;
+}
+.main
+{
+    background-color: #ffffff;
+}
+.panel
+{
+	width: 180px;
+	border: none;
+	padding: 20px 20px 20px 20px;
+	background-color: #050505;
+	color: #ffffff;
+	font-family: sans-serif;
+	font-weight: bold;
+	font-size: small;
+}
+.graphpanel
+{
+	width: 812px;
+	border: none;
+	padding: 20px 20px 20px 20px;
+	background-color: #050505;
+	color: #ffffff;
+	font-family: sans-serif;
+	font-weight: bold;
+	font-size: small;
+}
+.display
+{
+	width: 180px;
+	border: thin solid #000000;
+	background-color: #9D8140;
+	color: #000000;
+	text-align: center;
+	font-family: sans-serif;
+	font-weight: bold;
+	font-size: small;
+}
+.graphdisplay
+{
+	width: 750px;
+	height: 450px;
+	border: thin solid #000000;
+	background-color: #9D8140;
+	color: #000000;
+	text-align: center;
+	font-family: sans-serif;
+	font-weight: bold;
+	font-size: small;
+}
+.displaytext
+{
+	width: 180px;
+	border: thin solid #000000;
+	background-color: #9D8140;
+	color: #000000;
+	text-align: left;
+	font-family: sans-serif;
+	font-weight: normal;
+	font-size: x-small;
+}
+.devider
+{
+	width: auto;
+	background-color: #000000;
+	height:2px;
+	font-size:1px;
+}
+.buttoncolumn
+{
+	border: none;
+	padding: 15px 15px 15px 15px;
+	background-color: #050505;
+	color: #ffffff;
+	font-family: sans-serif;
+	font-weight: bold;
+	font-size: small;
+}
+.buttonrow
+{
+	width: 180px;
+	height: 30px;
+	text-align: right;
+	vertical-align: middle;
+}
+.graphbuttonrow
+{
+	border: none;
+	height: 30px;
+	padding: 5px 5px 5px 5px;
+	vertical-align: middle;
+}
+.button
+{
+	vertical-align: middle;
+	border: none;
+}

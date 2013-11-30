@@ -1,0 +1,195 @@
+<?xml version = "1.0" encoding="UTF-8"?>
+<HomeItems>
+	<HomeItem Class="Room" >
+		<Attribute Name="ID">33</Attribute>
+		<Attribute Name="Name">Bed Room</Attribute>
+		<Attribute Name="Items">43,56,40,39</Attribute>
+		<Attribute Name="Position">Left</Attribute>
+	</HomeItem>
+	<HomeItem Class="Location" >
+		<Attribute Name="ID">48</Attribute>
+		<Attribute Name="Name">DefaultLocation</Attribute>
+		<Attribute Name="Items">33,38,31,49</Attribute>
+	</HomeItem>
+	<HomeItem Class="HomeServer" >
+		<Attribute Name="ID">5</Attribute>
+		<Attribute Name="Name">Event Broker</Attribute>
+		<Attribute Name="Version">Unknown</Attribute>
+		<Attribute Name="SentEventCount">25</Attribute>
+		<Attribute Name="FileName">default.xml</Attribute>
+		<Attribute Name="UpgradeCommand">c:\upgrade.bat</Attribute>
+		<Attribute Name="UpTime">25 minutes</Attribute>
+		<Attribute Name="MaxDistributionTime">0,21</Attribute>
+		<Attribute Name="AverageDistributionTime">0,12</Attribute>
+		<Attribute Name="MaxItemTime">0,01</Attribute>
+		<Attribute Name="MaxItemName">RFTransmitter</Attribute>
+		<Attribute Name="AlarmCount">0</Attribute>
+		<Attribute Name="TotalLogRows">3</Attribute>
+	</HomeItem>
+	<HomeItem Class="UPMThermometer" >
+		<Attribute Name="ID">36</Attribute>
+		<Attribute Name="Name">Freezer Temperature</Attribute>
+		<Attribute Name="Temperature"></Attribute>
+		<Attribute Name="BatteryLevel">100</Attribute>
+		<Attribute Name="TimeSinceUpdate">1538</Attribute>
+		<Attribute Name="HouseCode">2</Attribute>
+		<Attribute Name="DeviceCode">2</Attribute>
+		<Attribute Name="LogFile">freezer.log</Attribute>
+		<Attribute Name="LastUpdate"></Attribute>
+		<Attribute Name="K">0.0625</Attribute>
+		<Attribute Name="M">-50.0</Attribute>
+	</HomeItem>
+	<HomeItem Class="UPMThermometer" >
+		<Attribute Name="ID">37</Attribute>
+		<Attribute Name="Name">Fridge Temperature</Attribute>
+		<Attribute Name="Temperature"></Attribute>
+		<Attribute Name="BatteryLevel">100</Attribute>
+		<Attribute Name="TimeSinceUpdate">1538</Attribute>
+		<Attribute Name="HouseCode">2</Attribute>
+		<Attribute Name="DeviceCode">3</Attribute>
+		<Attribute Name="LogFile">fridge.log</Attribute>
+		<Attribute Name="LastUpdate"></Attribute>
+		<Attribute Name="K">0.0625</Attribute>
+		<Attribute Name="M">-50.0</Attribute>
+	</HomeItem>
+	<HomeItem Class="Room" >
+		<Attribute Name="ID">49</Attribute>
+		<Attribute Name="Name">GUI</Attribute>
+		<Attribute Name="Items">50</Attribute>
+		<Attribute Name="Position">Right</Attribute>
+	</HomeItem>
+	<HomeItem Class="Room" >
+		<Attribute Name="ID">38</Attribute>
+		<Attribute Name="Name">Kitchen</Attribute>
+		<Attribute Name="Items">36,37,44</Attribute>
+		<Attribute Name="Position">Right</Attribute>
+	</HomeItem>
+	<HomeItem Class="NexaLCDimmer" >
+		<Attribute Name="ID">44</Attribute>
+		<Attribute Name="Name">Kitchen Lamp</Attribute>
+		<Attribute Name="State">Off</Attribute>
+		<Attribute Name="Address">123456</Attribute>
+		<Attribute Name="Button">1</Attribute>
+		<Attribute Name="DimLevel1">25</Attribute>
+		<Attribute Name="DimLevel2">50</Attribute>
+		<Attribute Name="DimLevel3">75</Attribute>
+		<Attribute Name="DimLevel4">100</Attribute>
+	</HomeItem>
+	<HomeItem Class="Room" >
+		<Attribute Name="ID">31</Attribute>
+		<Attribute Name="Name">Living Room</Attribute>
+		<Attribute Name="Items">32,34,35</Attribute>
+		<Attribute Name="Position">Left</Attribute>
+	</HomeItem>
+	<HomeItem Class="UPMHygrometer" >
+		<Attribute Name="ID">32</Attribute>
+		<Attribute Name="Name">Outside Moisture</Attribute>
+		<Attribute Name="Humidity"></Attribute>
+		<Attribute Name="BatteryStatus">Ok</Attribute>
+		<Attribute Name="LastUpdate"></Attribute>
+		<Attribute Name="HouseCode">10</Attribute>
+		<Attribute Name="DeviceCode">1</Attribute>
+		<Attribute Name="LogFile"></Attribute>
+		<Attribute Name="K">0.5</Attribute>
+		<Attribute Name="M">0.0</Attribute>
+	</HomeItem>
+	<HomeItem Class="UPMThermometer" >
+		<Attribute Name="ID">43</Attribute>
+		<Attribute Name="Name">Outside Temp</Attribute>
+		<Attribute Name="Temperature"></Attribute>
+		<Attribute Name="BatteryLevel">100</Attribute>
+		<Attribute Name="TimeSinceUpdate">1538</Attribute>
+		<Attribute Name="HouseCode">2</Attribute>
+		<Attribute Name="DeviceCode">4</Attribute>
+		<Attribute Name="LogFile"></Attribute>
+		<Attribute Name="LastUpdate"></Attribute>
+		<Attribute Name="K">0.0625</Attribute>
+		<Attribute Name="M">-50.0</Attribute>
+	</HomeItem>
+	<HomeItem Class="TempWEB" >
+		<Attribute Name="ID">46</Attribute>
+		<Attribute Name="Name">TempWeb</Attribute>
+		<Attribute Name="WEBServer">JettyWEB</Attribute>
+		<Attribute Name="LocalURL">/temp</Attribute>
+		<Attribute Name="ThermometerList">Freezer Temperature,Fridge Temperature,Outside Temp</Attribute>
+	</HomeItem>
+	<HomeItem Class="TrayBarIcon" >
+		<Attribute Name="ID">50</Attribute>
+		<Attribute Name="Name">Tray Bar Icon</Attribute>
+		<Attribute Name="ShowWelcome">False</Attribute>
+		<Attribute Name="Status">Active</Attribute>
+		<Attribute Name="StatusMessage">Ok</Attribute>
+	</HomeItem>
+	<HomeItem Class="HomeGUI" >
+		<Attribute Name="ID">42</Attribute>
+		<Attribute Name="Name">WEB-GUI</Attribute>
+		<Attribute Name="WEBServer">22</Attribute>
+		<Attribute Name="LocalURL">/home</Attribute>
+		<Attribute Name="LeftBanner"></Attribute>
+		<Attribute Name="RightBanner"></Attribute>
+		<Attribute Name="PlanPage">54</Attribute>
+		<Attribute Name="Location">48</Attribute>
+	</HomeItem>
+	<HomeItem Class="UPMWindDirection" >
+		<Attribute Name="ID">40</Attribute>
+		<Attribute Name="Name">Wind Direction</Attribute>
+		<Attribute Name="WindDirection">0,0</Attribute>
+		<Attribute Name="BatteryStatus">Ok</Attribute>
+		<Attribute Name="LogFile">winddirection.log</Attribute>
+		<Attribute Name="LastUpdate"></Attribute>
+	</HomeItem>
+	<HomeItem Class="UPMWindSpeed" >
+		<Attribute Name="ID">39</Attribute>
+		<Attribute Name="Name">Wind Speed</Attribute>
+		<Attribute Name="WindSpeed">0,0</Attribute>
+		<Attribute Name="WindSpeedMean">0,0</Attribute>
+		<Attribute Name="WindSpeedGust">0,0</Attribute>
+		<Attribute Name="BatteryStatus">Ok</Attribute>
+		<Attribute Name="LogFile">wind.log</Attribute>
+		<Attribute Name="LastUpdate"></Attribute>
+	</HomeItem>
+	<HomeItem Class="FS20Lamp" >
+		<Attribute Name="ID">34</Attribute>
+		<Attribute Name="Name">Window Lamp</Attribute>
+		<Attribute Name="State">Off</Attribute>
+		<Attribute Name="HouseCode">11111124</Attribute>
+		<Attribute Name="DeviceCode">1112</Attribute>
+		<Attribute Name="FHZ1000PcPort"></Attribute>
+	</HomeItem>
+	<HomeItem Class="WeekTimer" >
+		<Attribute Name="ID">35</Attribute>
+		<Attribute Name="Name">Window Timer</Attribute>
+		<Attribute Name="WeekDayTimes">06:45-08:00,17:00-21:40</Attribute>
+		<Attribute Name="WeekEndTimes">09:00-10:00,17:00-21:40</Attribute>
+		<Attribute Name="OnCommand">call,Window Lamp,on</Attribute>
+		<Attribute Name="OffCommand">call,Window Lamp,off</Attribute>
+	</HomeItem>
+	<HomeItem Class="JettyWEB" >
+		<Attribute Name="ID">22</Attribute>
+		<Attribute Name="Name">JettyWEB</Attribute>
+		<Attribute Name="Port">8020</Attribute>
+	</HomeItem>
+	<HomeItem Class="Plan" >
+		<Attribute Name="ID">54</Attribute>
+		<Attribute Name="Name">CreatedPlan</Attribute>
+		<Attribute Name="Items">44,34,56,35,32,40,39,36,37,43,55</Attribute>
+		<Attribute Name="ImageFile">media/home.jpg</Attribute>
+		<Attribute Name="ItemLocations">43#-8#87,44#715#363,32#56#465,56#257#78,55#457#32,35#608#445,36#708#241,34#549#435,37#768#242</Attribute>
+		<Attribute Name="UpdateInterval">2</Attribute>
+	</HomeItem>
+	<HomeItem Class="Plan" >
+		<Attribute Name="ID">55</Attribute>
+		<Attribute Name="Name">HomeOutwards</Attribute>
+		<Attribute Name="Items">44,35,54,34</Attribute>
+		<Attribute Name="ImageFile">media/home_back.jpg</Attribute>
+		<Attribute Name="ItemLocations">44#67#27,35#391#165,54#358#23,34#486#41</Attribute>
+		<Attribute Name="UpdateInterval">2</Attribute>
+	</HomeItem>
+	<HomeItem Class="NexaLCLamp" >
+		<Attribute Name="ID">56</Attribute>
+		<Attribute Name="Name">Bedroom Lamp</Attribute>
+		<Attribute Name="State">Off</Attribute>
+		<Attribute Name="Address">938457</Attribute>
+		<Attribute Name="Button">1</Attribute>
+	</HomeItem>
+</HomeItems>

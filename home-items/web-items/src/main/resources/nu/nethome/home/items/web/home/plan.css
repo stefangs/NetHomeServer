@@ -1,0 +1,308 @@
+/**
+ * Copyright (C) 2005-2013, Stefan Strömberg <stefangs@nethome.nu>
+ *
+ * This file is part of OpenNetHome  (http://www.nethome.nu)
+ *
+ * OpenNetHome is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenNetHome is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/* Style for the Home Items */
+
+li.close img {
+ float:right; 
+ margin-right:4px; 
+ margin-top:4px;
+ z-index:11;
+}
+
+.phomeitem
+{
+	width:350px;
+	background:url(tooltip-bg.png);
+	z-index:11;
+	/* font-size:1em; */
+	color:#FFF;
+
+	border:none;
+	height:42px;
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	-moz-border-radius:6px;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border-radius:6px;
+	padding-left: 5px;
+	position: absolute;
+	margin:0px;
+	float: left;
+}
+
+.phomeitem.row2 {
+	height:62px;
+}
+
+.phomeitem.row2 img.dividerimg {
+	height:62px;
+	width:3px;
+}
+
+.phomeitem.row3 {
+	height:82px;
+}
+
+.phomeitem.row3 img.dividerimg {
+	height:82px;
+	width:3px;
+}
+
+.phomeitem.row4 {
+	height:102px;
+}
+
+.phomeitem.row4 img.dividerimg {
+	height:102px;
+	width:3px;
+}
+
+.phomeitem.row5 {
+	height:124px;
+}
+
+.phomeitem.row5 img.dividerimg {
+	height:124px;
+	width:3px;
+}
+
+.phomeitem.row6 {
+	height:146px;
+}
+
+.phomeitem.row6 img.dividerimg {
+	height:146px;
+	width:3px;
+}
+
+.phomeitem.row9 {
+	height:230px;
+}
+
+.phomeitem.row9 img.dividerimg {
+	height:230px;
+	width:3px;
+}
+
+.phomeitem img
+{
+ vertical-align: middle;
+}
+
+.phomeitem ul {
+ margin: 0;
+ padding: 0;
+ list-style:none inside none;
+ display: inline;
+ font-size:120%;
+ width: 295px;
+}
+
+.phomeitem li {
+ display: inline;
+}
+
+.phomeitem li li{
+ display: block;
+ margin-left:5px;
+ height: 1.2em; /* PeLa */
+}
+
+.phomeitem li ul{
+ position: absolute;
+ width: 290px; /* PeLa 100% */
+}
+
+.phomeitem li li li{
+ display: inline;
+ border-color:#777777 #555555 #555555 #777777;
+ border-style:solid;
+ border-width:1px;
+ font-size:60%;
+ height:20px;
+ margin:0;
+ padding:1px;
+}
+
+ .draggable {
+    width: 100px;
+    position: absolute;
+ }
+
+ .poppable {
+    width: 100px;
+    position: absolute;
+ }
+
+.planlink {
+    width: 100px;
+    position: absolute;
+ }
+
+.actionbutton {
+    width: 100px;
+    position: absolute;
+ }
+
+.clickable {
+    width: 100px;
+    position: absolute;
+ }
+
+.itemlocation {
+    display: block;
+    text-align: center;
+    width: 100px;
+    padding-left: 0px;
+    float: left;
+}
+ 
+.itemlocation li {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.itemlocation li.icon {
+	text-indent:-9999px;
+	background:url(lamp32_on.png) no-repeat center;
+    height: 32px;
+    display: block;
+}
+
+.itemlocation li.icon.custom {
+	background: none;
+    text-indent:0px;
+    height: auto;
+}
+
+.itemlocation li.icon.control {
+	background:url(control32.png) no-repeat center;
+}
+
+.itemlocation li.icon.temp {
+	background:url(thermometer32.png) no-repeat center;
+}
+
+.itemlocation li.icon.lamp_off {
+	background:url(lamp32_off.png) no-repeat center;
+}
+
+.itemlocation li.icon.gauge {
+	background:url(gauge32.png) no-repeat center;
+}
+
+.itemlocation li.icon.gui {
+	background:url(gui32.png) no-repeat center;
+}
+
+.itemlocation li.icon.house {
+	background:url(infra32.png) no-repeat center;
+}
+
+.itemlocation li.icon.hw {
+	background:url(hw32.png) no-repeat center;
+}
+
+.itemlocation li.icon.port {
+	background:url(port32.png) no-repeat center;
+}
+
+.itemlocation li.icon.timer {
+	background:url(timer32.png) no-repeat center;
+}
+
+.itemlocation li.icon.link {
+	background:url(link32.png) no-repeat center;
+}
+
+.phomeitem a:hover {
+ text-decoration:underline;
+}
+
+.phomeitem a {
+ color:#003399;
+ outline-color:-moz-use-text-color;
+ outline-style:none;
+ outline-width:medium;
+ text-decoration:none;
+} 
+
+/* Style for the plan */
+div.plan {
+	position:relative;
+	width:900px;
+	height:745px;
+	text-align:left;
+	margin: 20px auto;
+	padding:0px;
+	border:none;
+}
+
+/* Style for editing plan */
+
+.pitemlistpanel
+{
+	width:400px;
+	background:url(tooltip-bg.png);
+
+	z-index:11;
+	/* font-size:1em; */
+	color:#000000;
+    padding:20px;
+	border:none;
+	height:390px;
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;s
+	-moz-border-radius:6px;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border-radius:6px;
+	float: left;
+}
+
+.pitemlistpanel ul {
+    background-color: rgba(255, 255, 255, 0.5);
+    border: medium none;
+    overflow: auto;
+	height:350px;
+    margin: 0px;
+    padding: 2px;
+}
+
+.pitemlistpanel li {
+    border-style: none;
+    color: black;
+    display: block;
+    font-size: 150%;
+}
+
+.panelclose {
+    margin-bottom: 5px;
+    margin-left: auto;
+    margin-right: 0;
+    width: 1%;
+}

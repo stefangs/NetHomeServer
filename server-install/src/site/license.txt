@@ -1,0 +1,76 @@
+
+========= License information ==============
+
+The NetHomeServer is distributed in the hope that it will be useful, 
+but WITHOUT ANY WARRANTY; without even the implied warranty of 
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+NetHomeServer uses a number of external libraries in source or jar-form.
+Here is a list of the terms and conditions under which these external
+libraries are used and may be distributed:
+
+* jd2xx.jar
+
+Java native interface port of Future Technology Devices International (FTDI) 
+D2XX direct USB driver. The interface is implemented by Pablo Bleyer Kocik
+and is released under Berkeley Software Distribution (BSD) License.
+See http://www.opensource.org/licenses/bsd-license.php for definition.
+Information about the library can be obtained on: https://jd2xx.dev.java.net
+jd2xx.jar is only used by NetHomeServer when running on the Windows operating systems.
+It is used in the FHZ1000PcPort-interface for FS20.
+
+
+* jdring-2.0.jar
+
+JDRing is a lightweight Java scheduling library that is simple and small, 
+but still supports ringing alarms at specified intervals, as one-time events, 
+or on complex schedules with full cron-like control.
+JDRing was originally written by Oliver Dedieu (other contributors: David Sims, 
+Simon B�cot, and Jim Lerner), and released under the LGPL license.
+See http://www.gnu.org/licenses/lgpl.txt for license definition.
+Information about the library can be obtained on: http://www.jtheory.com/jdring.html
+
+* RXTXcomm.jar, rxtxSerial.dll, rxtxParallel.dll, librxtxSerial.so, librxtxParallel.so
+
+RXTX is a native lib providing serial and parallel communication for the Java Development 
+Toolkit (JDK). All deliverables are under the gnu LGPL license. A complete license is
+supplied in the file RXTX_License.txt
+
+* activation.jar, saaj-api.jar, saaj-impl.jar
+
+JavaTM Web Services Developer Pack is developed and distributed by Sun Microsystems Inc.
+The files are redistributable as described on: 
+http://java.sun.com/webservices/docs/1.5/ReleaseNotes.html#RedistributableComponents
+under conditions specified by the license described on:
+http://java.sun.com/webservices/docs/1.5/LICENSE
+
+* xerces.jar
+
+SAX is the Simple API for XML, originally a Java-only API. SAX was the first widely 
+adopted API for XML in Java, and is a de facto standard. SAX is free, in fact, it's not
+possible to own a license to SAX, since it's been placed in the public domain.
+
+* Jetty WEB Server
+
+This is a great WEB-server written in java released by the Apache project. It is released 
+under Apache License Version 2.0. See http://www.apache.org/licenses/LICENSE-2.0 for details.
+
+* JFreeChart
+
+This is a fantastic chart drawing library, which is used to draw the temerature charts in
+the NetHomeServer. It is relesed as open source under a GNU LGPL-license. 
+See http://www.jfree.org/jfreechart for details.
+
+* XML-RPC
+Apache XML-RPC
+Copyright 1999-2009 The Apache Software Foundation. This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/). It is release under Apache License Version 2.0.
+
+* jQuery and jQueryUI
+jQuery and jQueryUI are javascript libraries making the world a better place for WEB-developers. They are
+maintained by the jQuery Foundation (https://jquery.org/) and released under the MIT License.
+
+* jqPlot
+jqPlot is great javascript a graphing library written and maintained by Chris Leonello (http://www.jqplot.com).
+jqPlot is an open source project dual licensed under the MIT and GPL version 2 licenses.
+

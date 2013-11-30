@@ -1,0 +1,13 @@
+#IDEA
+target
+*.iml
+*.ipr
+*.iws
+./rxtxSerial.dll
+./librxtxSerial.so
+./demo.xml
+*.class
+# Package Files #
+*.jar
+*.war
+*.ear

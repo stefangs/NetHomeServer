@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>jtheory.com : : : jdring 2.0</title>
+  <meta content="jtheory" name="author">
+</head>
+<body bgcolor="#ffffff">
+<table align="center" background="swirl_bg.jpg" border="0"
+ cellpadding="0" cellspacing="0" height="597" width="696">
+  <tbody>
+    <tr>
+      <td align="center" valign="center"> <br>
+      <table border="1" cellpadding="2" cellspacing="30" height="352"
+ width="610">
+        <tbody>
+          <tr>
+            <td valign="top">
+            <table align="left" border="0" cellpadding="0"
+ cellspacing="0" width="400">
+              <tbody>
+                <tr>
+                  <td
+ style="border: 2px dotted white; border-collapse: collapse;"
+ align="center" bgcolor="#9999cc"><font color="#ffffff"><b>jdring 2.0</b></font><br>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="left" valign="top">JDRing is a lightweight
+Java
+scheduling library that is simple and small, but still supports ringing
+alarms at specified intervals, as one-time events, or on complex
+schedules with full cron-like control.&nbsp; See below for a full list
+of features.<br>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">
+            <table align="right" border="0" cellpadding="0"
+ cellspacing="0" width="400">
+              <tbody>
+                <tr>
+                  <td
+ style="border: 2px dotted white; border-collapse: collapse;"
+ align="center" bgcolor="#9999cc"><font color="#ffffff"><b>why?</b></font><br>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="left" valign="top">JDRing was originally
+written by Oliver Dedieu (other contributors: David Sims, Simon
+B&eacute;cot, and Jim Lerner), and released
+under the LGPL license.&nbsp; I needed a simple scheduling library, so
+I fixed some bugs in it and added a lot
+of features that I wanted (including rewriting the scheduling code to
+support full cron flexibility).&nbsp; I've tried to send my changes
+back to Oliver, but he didn't respond, and the project homepage has
+disappeared (I think Oliver has moved on to bigger and better things),
+so I'm hosting my version here.&nbsp; There are many other scheduling
+tools available that you can use in your Java projects.&nbsp; In
+comparison, JDRing is quite simple to use and very compact (the jar is
+only 24K), plus it provides all of the scheduling features and
+flexibility that most projects need. </td>
+                </tr>
+              </tbody>
+            </table>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">
+            <table align="left" border="0" cellpadding="0"
+ cellspacing="0" width="400">
+              <tbody>
+                <tr>
+                  <td
+ style="border: 2px dotted white; border-collapse: collapse;"
+ align="center" bgcolor="#9999cc"><font color="#ffffff"><b>features</b></font><br>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="left" valign="top">
+                  <ul>
+                    <li>Alarms are added to and removed from the
+schedule in code -- no file formats or XML schemas to learn.&nbsp; Just
+call a method to add an alarm (and specify a listener that you define).</li>
+                    <li>You can optionally specify a name for each
+alarm; this lets you use a single listener for multiple alarms.&nbsp;
+If you don't specify a name, JDRing automatically gives each alarm a
+unique name.<br>
+                    </li>
+                    <li>Alarms can be rung at a fixed interval (e.g.,
+every 30 minutes), or at a single fixed date (e.g., November 10th, 2004
+at 10:15 AM), or on a cron-based flexible schedule.</li>
+                    <li>With cron-style scheduling, you can provide a
+list of minutes, hours, days of the month, days of the week, and months
+(or "all" for any of these), and the alarm will ring on every
+match.&nbsp; For example, you could ring an alarm on every half-hour
+from 9am through 2pm, Monday through Thursday, in only the summer
+months.&nbsp; The list would be like this: minutes: 0, 30; hours:
+9,10,11,12,13,14; days of week: 1,2,3,4; days of month: all; months:
+5,6,7.</li>
+                    <li>Counting standards are consistent with the <code>java.utils.Calendar</code>
+class, so minutes range from 0 to 59, hours from 0 to 23, days of the
+week from 1 (Sunday) to 7, and days of the month from 1 to 31
+(depending on the month).&nbsp; Months are not as you might expect,
+though -- they go from 0 (Jan) to 11 (December).</li>
+                    <li>When days of week and days of month are both
+specified in a cron-style schedule, the alarm is rung when <i>either
+one</i> matches (this is how cron works as well).&nbsp; For example, an
+alarm with minutes: 0; hours: 6; days of week: 2,3; days of month:
+1,15; and months: all.&nbsp; This alarm will ring at 6am on every
+Monday and Tuesday, plus on the first and fifteenth of the month (well,
+if the first is a Monday, it will ring once on that day).<br>
+                    </li>
+                    <li>Alarms by default are rung (listeners are
+notified) within a single alarm thread, so a long-running alarm will
+delay following alarms until it completes.&nbsp; This may be what you
+want -- because alarm tasks may be dependant on previous ones.&nbsp; If
+not, any alarm may be flagged to ring in a seperate thread, so that it
+will not delay the other alarms.<br>
+                    </li>
+                  </ul>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">
+            <table align="right" border="0" cellpadding="0"
+ cellspacing="0" width="400">
+              <tbody>
+                <tr>
+                  <td
+ style="border: 2px dotted white; border-collapse: collapse;"
+ align="center" bgcolor="#9999cc"><font color="#ffffff"><b>download</b></font><br>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="left" valign="top"><a
+ href="files/jdring-2.0.zip">jdring-2.0.zip</a> (includes source code,
+license, and jar file)<br>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">
+            <table align="left" border="0" cellpadding="0"
+ cellspacing="0" width="400">
+              <tbody>
+                <tr>
+                  <td
+ style="border: 2px dotted white; border-collapse: collapse;"
+ align="center" bgcolor="#9999cc"><font color="#ffffff"><b>license</b></font><br>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="left" valign="top">This program is
+copyright (c) jtheory creations and others, and licensed as open source
+under the <a target="_blank"
+ href="http://www.gnu.org/licenses/lgpl.txt">LGPL (Lesser GNU Public
+License)</a>, so you can freely download it, modify it, and use
+it.&nbsp; As long
+as you obey the limitations of the license (read it if you aren't
+sure!), you can even
+redistribute
+it for no charge. </td>
+                </tr>
+              </tbody>
+            </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>

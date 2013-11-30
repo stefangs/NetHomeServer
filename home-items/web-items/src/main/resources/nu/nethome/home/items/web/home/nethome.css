@@ -1,0 +1,754 @@
+/**
+ * Copyright (C) 2005-2013, Stefan Strömberg <stefangs@nethome.nu>
+ *
+ * This file is part of OpenNetHome  (http://www.nethome.nu)
+ *
+ * OpenNetHome is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenNetHome is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+
+.floatClear
+{
+    clear: both;
+    height: 1px !important;
+    margin: 0; border: 0; padding: 0;
+    width: 1px;
+}
+
+/* ------------------ logobar ------------------ */
+
+#logobar
+{
+    position: relative;
+    width: 100%;
+    margin: 0.5em 0 0.5em 0;
+}
+
+#logobar .secondary
+{
+    float: right;
+    border: 0;
+}
+
+#logobar .primary
+{
+    float: left;
+    border: 0;
+}
+
+/* ------------------ Menu bar ------------------- */
+
+.menubar
+{
+    position: relative;
+    width: auto;
+    background: url(menuback.png) top left repeat-x;
+    padding: 0em 1em;
+    margin-bottom: 1em;
+    height: 2.36em;
+    overflow: hidden;
+    top:0px;
+}
+
+.menubar.edit
+{
+    background: url(menubackedit.png) top left repeat-x;
+}
+
+.menubar ul
+{
+    list-style: none;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.menubar ul li
+{
+    padding: 0.5em 0.75em;
+    display: block;
+    float: left;
+    color: white;
+}
+
+.menubar ul li.pref
+{
+    float: right;
+}
+
+.menubar ul li.active {
+    background: #6c8c2f url(menuback_active.png) top left repeat-x;
+    height: 1.4em;
+}
+
+.menubar ul li a
+{
+    color: white;
+    text-decoration: none;
+    border-bottom: 1px transparent;
+}
+
+.menubar ul li a:hover
+{
+    border-bottom: 1px solid white;
+}
+
+.menubar img {
+    float: left;
+}
+
+.menu_divider {
+    background: url(menu_divider.png) top left no-repeat;
+    width: 2px;
+    height: 31px;
+}
+
+
+.menubar ul li.active a:hover,
+.menubar ul li.active a
+{
+    font-weight: bold;
+
+}
+
+.menubarBorder {
+	font-size:130%;
+    position: relative;
+    height: 2.36em;
+    width: 99%;
+}
+
+.menubarRight {
+    position: absolute;
+    background: url(menu_right.png) top right no-repeat;
+    width:8px;
+    height:2.36em;
+    top:0px;
+    right:0px;
+}
+
+.menubarRight.edit {
+    background: url(menu_rightedit.png) top right no-repeat;
+}
+
+.menubarLeft {
+    position: absolute;
+    background: url(menu_left.png) top left no-repeat;
+    width:8px;
+    height:2.36em;
+    top:0px;
+    left:0px;
+}
+
+.menubarLeft.edit {
+    background: url(menu_leftedit.png) top left no-repeat;
+}
+
+/*------------ General ------------------*/
+
+html{
+ background-color:#F7F7F7;
+ margin:0;
+ overflow-y:scroll;
+ padding:0;
+}
+
+
+#pageBody {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid #BBBBBB;
+    padding: 20px;
+    min-height: 800px;
+    min-width: 600px;
+    height: auto;
+    background-image: url(page_bg.png);
+    background-repeat: repeat-x;
+    z-index: 1;
+}
+
+
+body {
+  color:#000000;
+  font-family:Arial,Helvetica,"Nimbus Sans L",sans-serif;
+  font-size:62.5%;
+  font-size-adjust:none;
+  font-style:normal;
+  font-variant:normal;
+  font-weight:normal;
+  line-height:1.2;
+}
+
+a:hover {
+ text-decoration:underline;
+}
+
+a {
+ color:#003399;
+ outline-color:-moz-use-text-color;
+ outline-style:none;
+ outline-width:medium;
+ text-decoration:none;
+}
+
+/*-------------- Sidebar original ----------------*/
+.sidebar {
+	float:left;
+	font-size:95%;
+	color:#777;
+	margin-bottom:15px;
+	width:190px;
+}
+
+div.sidebar h4{
+	font-size:100%;
+	margin-bottom:0;
+}
+
+div.sidebar ol,div.sidebar ul{
+	margin-left:.9em;
+	padding-left:.9em;
+}
+div.sidebar ul.sidenav{
+	margin:0;
+	padding:0;
+}
+
+/*------------ Right column -----------------*/
+.itemcolumn {
+	float:right;
+	font-size:95%;
+	color:#777;
+	margin-bottom:15px;
+	margin-left: 5px;
+	margin-right: 20px;
+	margin-top: 20px;
+	width:430px;
+}
+
+.itemcolumn.left {
+	float:left;
+	margin-right: 5px;
+	margin-left: 10px;
+}
+
+.itemcolumn.edit {
+	float:left;
+	margin-right: 20px;
+	margin-left: 10px;
+	width:550px;
+}
+
+.itemcolumn.log {
+	float:left;
+	margin-right: 20px;
+	margin-left: 10px;
+	width:750px;
+}
+
+.itemcolumn.menu {
+	float:left;
+	margin-right: 10px;
+	margin-left: 10px;
+	width:80px;
+}
+
+div.itemcolumn h4{
+	font-size:100%;
+	margin-bottom:0;
+}
+div.itemcolumn ol,div.itemcolumn ul{
+	margin-left:0em;
+	padding-left:0em;
+	margin-top:0em;
+	margin-bottom:0em;
+}
+div.itemcolumn ul.sidenav{
+	margin:0;
+	padding:0;
+}
+
+div.itemcolumn.menu ul {
+    margin:10px;
+    font-size: 110%;
+    text-align: center;
+}
+
+.selected li {
+    font-weight: bold;
+}
+
+/*-------------- Portlet ------------*/
+
+.portlet{
+	margin-bottom:20px;
+	padding:0;
+	width:100%;
+}
+.portlet .header{
+	background:#e8e8e8 url(bg_module_top_v1_e8e8e8_900x27.png) no-repeat top right;
+	color:#333;
+	padding-right:8px;
+}
+.portlet .header h1,.portlet .header h2,.portlet .header h3,.portlet .header h4,.portlet .header h5{
+	background:url(bg_module_top_v1_e8e8e8_900x27.png) no-repeat;
+	padding:5px 5px 5px 10px;
+	margin:0;
+}
+.portlet .content{
+	background:#fff;
+	border:1px solid #3085AF;
+	border-width:0 1px 1px;
+	-moz-border-radius-bottomleft:6px;
+	-moz-border-radius-bottomright:6px;
+	-webkit-border-bottom-left-radius:6px;
+	-webkit-border-bottom-right-radius:6px;
+	border-bottom-left-radius:6px;
+	border-bottom-right-radius:6px;
+	padding:0px 0px 0px 0px;
+	zoom:1;
+	margin-top: 0px;
+}
+.portlet.mod-feat .header,.portlet.mod-feat .header h1,.portlet.mod-feat .header h2,.portlet.mod-feat .header h3,.portlet.mod-feat .header h4,.portlet.mod-feat .header h5{
+	background-color:#3085af;
+	background-image:url(bg_module_top_3085af_900x27.png);
+}
+.portlet.mod-feat .header{
+	color:#fff;
+}
+
+.portlet.mod-feat .header h3 a{
+	color:#FFFFFF;
+}
+
+.itemcolumn table img {
+	border:none;
+}
+
+.catlink a {
+	font-size:200%;
+	text-decoration:underline;	
+}
+
+.catlink.selected a {
+	text-decoration:none;	
+}
+
+/*-------------- Portlet Items ------------*/
+.homeitem {
+	background-image:url(grey_back.png);
+	border:1px solid; 
+	border-color: #EDEDEF #A9A9AA #A9A9AA #EDEDEF;
+	height:40px;
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	-moz-border-radius:6px;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border-radius:6px;
+	padding-left: 5px;
+}
+
+.itemrows {
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+}
+
+.homeitem li{
+	display:block;
+	margin:0;
+	padding: 0;
+	height: 20px;
+	zoom: 1;
+}
+
+li.homeitem a {
+	color: #777777
+}
+
+
+
+.homeiteminfo {
+	font-size:150%;
+	font-weight:bold;
+	position:absolute;
+	margin-left: 3px;
+}
+
+.actions li{
+	font-size: 70%;
+	display:inline;
+	margin:0;
+	padding: 1px;
+	height: 1.4em;
+	zoom: 1;
+	border-color: #EDEDEF #C9C9CA #B9B9BA #EDEDEF;
+	border-style:solid;
+	border-width:1px;
+}
+
+.display {
+	background-color:#B8A374;
+	border-color:#C9C9CA #EDEDEF #EDEDEF #C9C9CA;
+	border-style:solid;
+	border-width:1px;
+color:#000000;
+font-family:sans-serif;
+font-size:85%;
+font-weight:bold;
+margin-bottom:0;
+margin-left:10px;
+min-width:100px;
+padding:1px;
+text-align:center;
+width:100px;
+}
+
+
+/* Item Edit Page Definitions */
+
+.item_details {
+	background-color: #E4E5E6;
+	border:1px solid #505050;
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	-moz-border-radius:6px;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border-radius:6px;
+	padding-left: 0px;
+}
+
+div.item_details ul {
+	list-style:none outside none;
+}
+
+div.item_details table{
+	width:100%
+}
+
+.iheader{
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	background-image:url(grey_back_top.png);
+	width:100%;
+	height:40px;
+	font-size:130%
+}
+.iheader.thin{
+    height:20px;
+}
+
+.classname {
+	font-size:70%;
+}
+
+.footer{
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	background-image:url(grey_back_bottom.png);
+	width:100%;
+	background-position:left bottom;
+	height:40px;
+}
+.footer.thin{
+    height:18px;
+}
+
+.deviderline{
+	background-image:url(grey_back_divider.png);
+	height:2px;
+	width:100%;
+}
+
+.lamp_icon_medium{
+	background-image:url(lamp32.png);
+	background-repeat:no-repeat;
+	width:32px;
+	height:32px;
+}
+
+.header_text {
+	font-size:150%;
+	font-weight:bold;
+	margin-left:3px;
+}
+
+.attributename
+{
+    width:150px;
+	font-size:150%;
+}
+
+.attributenameandvalue
+{
+    width:auto;
+	font-size:150%;
+}
+
+div.row {
+  clear: both;
+  padding-top: 10px;
+  }
+
+div.row span.label {
+  float: left;
+  width: 150px;
+  text-align: right;
+  font-size:150%;
+ }
+
+div.row span.formw {
+  float: right;
+  width: 150px;
+  text-align: left;
+}
+
+.secicon {
+ width:40px;
+ height:36px;
+ background-image:url(web/legoactions32.png);
+ background-repeat:no-repeat;
+ background-position:center;
+}
+
+.secheader {
+  font-size:150%;
+  margin: 4px;
+}
+
+.secicon.settings {
+ background-image:url(web/legoatts32.png);
+}
+
+span.iactions ul {
+	padding:7px 5px;
+}
+
+span.iactions li{
+	font-size: 150%;
+	display:inline;
+	margin: 1px;
+	padding: 1px;
+	height: 1.2em;
+	zoom: 1;
+	border-color: #EDEDEF #C9C9CA #C9C9CA #EDEDEF;
+	border-style:solid;
+	border-width:1px;
+}
+
+.iteminput {
+	border-color: #C9C9CA #EDEDEF #EDEDEF #C9C9CA;
+	border-style:solid;
+	border-width:2px;
+	width:380px;
+}
+
+.iteminputrefs {
+	border-color: #C9C9CA #EDEDEF #EDEDEF #C9C9CA;
+	border-style:solid;
+	border-width:2px;
+	width:347px;
+}
+.iteminputrefsbutton {
+	width:30px;
+}
+
+.iteminputrows {
+    background: none repeat scroll 0 0 white;
+    border-color: #C9C9CA #EDEDEF #EDEDEF #C9C9CA;
+    border-style: solid;
+    border-width: 2px;
+    height: 200px;
+    overflow: auto;
+    width: 380px;
+}
+
+.iteminputrows li {
+    border-style: none;
+    color: black;
+    display: table-row;
+    font-size: 150%;
+}
+
+.iteminputrows h2 {
+    border-style: none;
+    color: black;
+    display: inline-block;
+    font-size: 110%;
+    margin-bottom: 0;
+    margin-top: 15px;
+}
+
+.iteminputrows img {
+    border-style: none;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.ibutton {
+	float:right;
+	margin:5px;
+}
+
+.homeitem-errors {
+	margin: 8px 0;
+	padding: 8px;
+	background-color: red;
+	color: white;
+	font-weight: bold;
+}
+
+.homeitem-error {
+	margin: 0;
+	padding: 4px;
+	background-color: red;
+	color: white;
+	font-weight: bold;
+}
+
+/* ------------------ attribute ------------------ */
+.attributecmd-type {
+	border: 1px solid darkgray;
+	line-height: 24px;
+	height: 100%;
+	font-size: 150%;
+}
+
+.attributecmd-type * {
+	vertical-align: middle;
+}
+
+.attributecmd-item {
+	padding: 0 0em;
+	cursor: pointer;
+	width: 230px;
+}
+
+.attributecmd-itemdim {
+    color: #999999;
+}
+
+.attributecmd-action {
+	padding: 0 0em;
+	cursor: pointer;
+	width: 150px;
+}
+
+.attributecmd-box {
+	border: 0px solid red;
+	background-color: transparent;
+	line-height: 100%;
+	vertical-align: middle;
+	overflow: visible;
+	width: 430px;
+	display: block;
+	z-index: 10000;
+	position: absolute;
+	margin: 0;
+	padding: 0;
+	height: 24px;
+}
+
+.attributecmd-box select {
+	top: 0;
+}
+
+.attributecmd-box * {
+	vertical-align: middle;
+	float: left;
+}
+
+.table_action {
+	vertical-align: top;
+}
+
+.logrows {
+    background: none repeat scroll 0 0 white;
+    border-color: #C9C9CA #EDEDEF #EDEDEF #C9C9CA;
+    color: #000000;
+    border-style: solid;
+    border-width: 2px;
+    height: 400px;
+    overflow: auto;
+    margin: 5px 10px;
+    font-size: 130%;
+}
+
+.logrows.coders {
+    height: 200px;
+}
+
+.logrowsheader {
+    background-color: #F0F0F0;
+    font-weight: bold;
+}
+
+div.graphPanel {
+    display: block;
+    margin: auto;
+    width: 500px;
+}
+
+.graphPanel a {
+	font-size:130%;
+    padding: 5px;
+    background-image:url(calendar.png);
+    background-repeat: no-repeat;
+    line-height: 30px;
+    margin-right: 40px;
+}
+
+.graphPanel a#prev {
+    background-image:url(prev.png);
+}
+
+.graphPanel a#next {
+    background-image:url(next.png);
+    background-position: right;
+}
+
+.graphPanel span {
+    margin-left: 24px;
+}
+
+a.selected {
+    font-weight: bold;
+}
+
+.graphPanel a#next span {
+    margin-left: 0px;
+    margin-right: 24px;
+}
+
+div#chart1 {
+    font-size: 120%;
+    height: 500px;
+    line-height: 20px;
+    margin-top: 10px;
+    position: relative;
+    width: 98%;
+}
