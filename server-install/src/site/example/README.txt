@@ -8,7 +8,7 @@ your own HomeItem plugins.
 To build the example decoder, simply issue the following commands from the 
 command line:
 
-javac -classpath ../../lib/server-1.0-SNAPSHOT.jar;../../lib/utils-1.0-SNAPSHOT.jar Example1.java Example2.java
+javac -classpath ../../lib/server-${NethomeVersion}.jar;../../lib/utils-${utils.version}.jar Example1.java Example2.java
 jar cf ExamplePlugin.jar Example1.class Example2.class
 
 The first line will compile the java source into .class-files and the second line will place those
