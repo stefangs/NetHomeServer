@@ -1,46 +1,96 @@
-/**
- * Copyright (C) 2005-2013, Stefan Strömberg <stefangs@nethome.nu>
- *
- * This file is part of OpenNetHome  (http://www.nethome.nu)
- *
- * OpenNetHome is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * OpenNetHome is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package nu.nethome.home.items.web.servergui;
 
 import nu.nethome.home.system.Event;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ItemEvent {
     private Event event;
-    String content;
-    Date received;
+    private String content;
+    private Date received;
+    private long id;
+    private boolean wasHandled;
+    private static Long idCounter = new Long(0);
+    private static String ignoredAttributeNames[] = {"Type", "UPM.SequenceNumber", "Direction", "Value", "UPM.Primary", "UPM.Secondary", "UPM.LowBattery"};
+    private static Set<String> ignoredAttributes = new HashSet<String>(Arrays.asList(ignoredAttributeNames));
 
+    public ItemEvent(Event event, boolean wasHandled) {
+        id = getNewId();
+        updateEvent(event);
+        content = extractContent(event);
+        this.wasHandled = wasHandled;
+    }
 
-
-    public ItemEvent(Event event) {
+    public void updateEvent(Event event) {
         this.event = event;
         received = new Date();
     }
 
-    // NYI
+    private static long getNewId() {
+        synchronized (idCounter) {
+            idCounter++;
+            return idCounter;
+        }
+    }
+
     public static String extractContent(Event event) {
         String divider="";
         StringBuilder result = new StringBuilder();
+        result.append(stripProtocolSuffix(event.getAttribute("Type")));
+        result.append(":");
         for (String attributeName : event.getAttributeNames()) {
+            String value = event.getAttribute(attributeName);
+            if (!isAttributeIgnored(attributeName, value)) {
+                result.append(divider);
+                result.append(stripNamePrefix(attributeName));
+                result.append("=");
+                result.append(value);
+                divider = ",";
+            }
         }
-        return null;
+        return result.toString();
+    }
+
+    private static String stripProtocolSuffix(String type) {
+        int index = type.indexOf("_");
+        if (index > 0 && index < type.length() - 1) {
+            return type.substring(0, index);
+        }
+        return type;
+    }
+
+    private static String stripNamePrefix(String attributeName) {
+        int index = attributeName.indexOf(".");
+        if (index > 0 && index < attributeName.length() - 1) {
+            return attributeName.substring(index + 1, attributeName.length());
+        }
+        return attributeName;
+    }
+
+    private static boolean isAttributeIgnored(String attributeName, String value) {
+        return ignoredAttributes.contains(attributeName) || value.length() == 0;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public Date getReceived() {
+        return received;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public boolean getWasHandled() {
+        return wasHandled;
     }
 }

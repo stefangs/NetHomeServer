@@ -78,7 +78,7 @@ public class HomeGUI extends HttpServlet implements FinalEventListener, HomeItem
     private String defaultPlanPage = "HomePlan";
     private String defaultLocation = "";
     private String mediaDirectory = "";
-
+    private CreationEventCache creationEvents = new CreationEventCache();
     public HomeGUI() {
     }
 
@@ -136,7 +136,7 @@ public class HomeGUI extends HttpServlet implements FinalEventListener, HomeItem
         pages.add(new PlanPage(localURL, getDefaultPlanAccessor()));
         pages.add(new RoomsPage(localURL, getDefaultLocationAccessor()));
         pages.add(new ServerFloor(localURL));
-        pages.add(new EditItemPage(localURL, homeServer, mediaDirectory));
+        pages.add(new EditItemPage(localURL, homeServer, mediaDirectory, creationEvents));
         pages.add(new SettingsBasePage(localURL, homeServer));
         pages.add(new GraphPage(localURL, homeServer));
         homeServer.registerFinalEventListener(this);
@@ -616,6 +616,10 @@ public class HomeGUI extends HttpServlet implements FinalEventListener, HomeItem
 
     @Override
     public void receiveFinalEvent(Event event, boolean isHandled) {
-        System.out.println((isHandled ? "Handled: " : "Did not handle: ") + event.toString());
+        creationEvents.newEvent(event, isHandled);
+        System.out.println("-----");
+        for (ItemEvent itemEvent : creationEvents.getItemEvents()) {
+            System.out.println((itemEvent.getWasHandled() ? "Handled: " : "Did not handle: ") + itemEvent.getContent());
+        }
     }
 }

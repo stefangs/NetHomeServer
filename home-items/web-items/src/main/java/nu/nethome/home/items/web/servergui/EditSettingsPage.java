@@ -39,7 +39,7 @@ import java.util.List;
  */
 public class EditSettingsPage extends EditItemPage {
     public EditSettingsPage(String mLocalURL, HomeService server) {
-        super(mLocalURL, server, "");
+        super(mLocalURL, server, "", null);
         pageName = "settings";
     }
 

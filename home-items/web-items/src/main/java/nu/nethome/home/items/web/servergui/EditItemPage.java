@@ -58,12 +58,14 @@ public class EditItemPage extends PortletPage {
     protected String bridgeBrokerId;
     protected String pageName = "edit";
     protected Map<String, AttributeTypePrinterInterface> attributeHandlers = new HashMap<String, AttributeTypePrinterInterface>();
+    private SelectClassPage selectClassPage;
 
-    public EditItemPage(String mLocalURL, HomeService server, String mediaDirectory) {
+    public EditItemPage(String mLocalURL, HomeService server, String mediaDirectory, CreationEventCache creationEvents) {
         super(mLocalURL);
         this.server = server;
         bridgeBrokerId = findServerInstanceId();
         initiateAttributePlugins(mediaDirectory);
+        selectClassPage = new SelectClassPage(mLocalURL, server, mediaDirectory, creationEvents);
     }
 
     private void initiateAttributePlugins(String mediaDirectory) {
@@ -122,7 +124,7 @@ public class EditItemPage extends PortletPage {
         EditItemArguments pageArguments = new EditItemArguments(req);
 
         if (isClassSelectionPage(pageArguments)) {
-            printSelectClassPage(res.getWriter(), pageArguments);
+            selectClassPage.printPage(req, res, server);
 
         } else {
             HomeItemProxy item = getEditedHomeItemInstance(pageArguments);
@@ -776,72 +778,6 @@ public class EditItemPage extends PortletPage {
             }
         }
         return result;
-    }
-
-    protected class EditItemArguments extends HomeGUIArguments {
-
-        private final String className;
-        private final String delete;
-        private final String move;
-        private final String room;
-        private final String locationString;
-        private final String newName;
-        private final String saveType;
-
-        public EditItemArguments(HttpServletRequest req) {
-            super(req);
-            newName = fromURL(req.getParameter("new_name"));
-            className = fromURL(req.getParameter("class_name"));
-            delete = req.getParameter("delete");
-            move = req.getParameter("move");
-            room = fromURL(req.getParameter("room"));
-            locationString = req.getParameter("new_location");
-            saveType = req.getParameter("save_type");
-        }
-
-        public boolean hasClassName() {
-            return className != null;
-        }
-
-        public String getRoom() {
-            return room;
-        }
-
-        public String getClassName() {
-            return className;
-        }
-
-        public boolean isItemDelete() {
-            return delete != null;
-        }
-
-        public boolean isItemMove() {
-            return move != null;
-        }
-
-        public String getNewLocation() {
-            return locationString;
-        }
-
-        public boolean hasNewLocation() {
-            return locationString != null;
-        }
-
-        public String getNewName() {
-            return newName;
-        }
-
-        public boolean isSaveTypeCancel() {
-            return (saveType != null) && saveType.equals(CANCEL_BUTTON_TEXT);
-        }
-
-        public boolean isSaveTypeThatReturns() {
-            return (saveType != null) && (saveType.equals(SAVE_BUTTON_TEXT) || isSaveTypeCancel());
-        }
-
-        public boolean hasRoom() {
-            return room != null;
-        }
     }
 
     private HomeUrlBuilder url(String parameter, String value) {
