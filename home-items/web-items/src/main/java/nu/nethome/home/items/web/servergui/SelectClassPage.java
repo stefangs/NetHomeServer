@@ -41,6 +41,8 @@ import java.util.*;
 
 public class SelectClassPage extends PortletPage {
 
+    public static final int MS_PER_SECOND = 1000;
+    public static final int SECONDS_PER_MINUTE = 60;
     protected HomeService server;
     protected String pageName = "select";
     private CreationEventCache creationEvents;
@@ -96,7 +98,7 @@ public class SelectClassPage extends PortletPage {
     private void printEvents(PrintWriter p, EditItemArguments arguments) {
         printEventPanelStart(p, "Received Events");
         for (ItemEvent itemEvent : creationEvents.getItemEvents()) {
-            printEventRow(p, "wave16.png", itemEvent);
+            printEventRow(p, "item_new16.png", itemEvent);
         }
         printEventPanelEnd(p);
     }
@@ -109,7 +111,7 @@ public class SelectClassPage extends PortletPage {
         p.println(" <span class=\"homeiteminfo\">");
         p.println("  <ul>");
         p.println("   <li>Create new Item</li>");
-        p.println("   <li class=\"classname\">Step 1: Select item type</li>");
+        p.println("   <li class=\"classname\">Step 1: Select item type or create from Event</li>");
         p.println("  </ul>");
         p.println(" </span>");
         p.println("</div>");
@@ -132,7 +134,7 @@ public class SelectClassPage extends PortletPage {
         }
         p.println("<table class=\"actions\">");
         p.println(" <tr>");
-        p.println(" <td class=\"actioncolumn\"><input type=\"submit\" value=\"Create new item\"> </td>");
+        p.println(" <td class=\"actioncolumn\"><input type=\"submit\" value=\"Create new item of selected type\"> </td>");
         p.println(" <td><select name=\"class_name\" >");
         p.println("	<option value=\"TCPCommandPort\">- Select Type -</option>");
 
@@ -159,11 +161,19 @@ public class SelectClassPage extends PortletPage {
     }
 
     private void printEventRow(PrintWriter p, String icon, ItemEvent event) {
+        long age = (System.currentTimeMillis() - event.getReceived().getTime()) / MS_PER_SECOND;
+        long ageMinutes = age / SECONDS_PER_MINUTE;
+        long ageSeconds = age % SECONDS_PER_MINUTE;
+        StringBuilder ageString = new StringBuilder();
+        if (ageMinutes > 0) {
+            ageString.append(ageMinutes).append(" Min ");
+        }
+        ageString.append(ageSeconds).append(" Seconds");
         p.println("  <tr>");
-        p.println("   <td><img src=\"web/home/" + icon + "\" /></td>");
+        p.println("   <td><img src=\"web/home/" + (event.getWasHandled() ? "item16.png" : "item_new16.png") + "\" /></td>");
         p.println("   <td>" + event.getContent() + "</td>");
-        p.println("   <td>" + event.getReceived() + "</td>");
-        p.println("   <td>" + (event.getWasHandled() ? "Y" : "N") + "</td>");
+        p.println("   <td>" + ageString + "</td>");
+        p.println("   <td>" + (event.getWasHandled() ? "Existing" : "New") + "</td>");
         p.println("   <td>" + "?" + "</td>");
         p.println("  </tr>");
     }
@@ -179,7 +189,7 @@ public class SelectClassPage extends PortletPage {
         p.println("</div>");
         p.println("<div class=\"logrows coders\">");
         p.println(" <table>");
-        p.println("  <tr class=\"logrowsheader\"><td></td><td>Name</td><td>Type</td><td>Bits</td><td>Manufacturer</td></tr>");
+        p.println("  <tr class=\"logrowsheader\"><td></td><td>Identity</td><td>Time</td><td>Item Exists</td><td>Manufacturer</td></tr>");
 
     }
 
