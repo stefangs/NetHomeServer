@@ -97,9 +97,7 @@ public class SelectClassPage extends PortletPage {
 
     private void printEvents(PrintWriter p, EditItemArguments arguments) {
         printEventPanelStart(p, "Received Events");
-        for (ItemEvent itemEvent : creationEvents.getItemEvents()) {
-            printEventRow(p, "item_new16.png", itemEvent);
-        }
+        printEventsTable(p);
         printEventPanelEnd(p);
     }
 
@@ -160,7 +158,16 @@ public class SelectClassPage extends PortletPage {
         p.println("<div class=\"itemcolumn edit\">");
     }
 
-    private void printEventRow(PrintWriter p, String icon, ItemEvent event) {
+    private void printEventsTable(PrintWriter p) {
+        p.println(" <table>");
+        p.println("  <tr class=\"logrowsheader\"><td></td><td>Identity</td><td>Time</td><td>Item Exists</td><td>Manufacturer</td></tr>");
+        for (ItemEvent itemEvent : creationEvents.getItemEvents()) {
+            printEventRow(p, itemEvent);
+        }
+        p.println(" </table>");
+    }
+
+    private void printEventRow(PrintWriter p, ItemEvent event) {
         long age = (System.currentTimeMillis() - event.getReceived().getTime()) / MS_PER_SECOND;
         long ageMinutes = age / SECONDS_PER_MINUTE;
         long ageSeconds = age % SECONDS_PER_MINUTE;
@@ -188,13 +195,9 @@ public class SelectClassPage extends PortletPage {
         p.println(" </span>");
         p.println("</div>");
         p.println("<div class=\"logrows coders\">");
-        p.println(" <table>");
-        p.println("  <tr class=\"logrowsheader\"><td></td><td>Identity</td><td>Time</td><td>Item Exists</td><td>Manufacturer</td></tr>");
-
     }
 
     private void printEventPanelEnd(PrintWriter p) {
-        p.println(" </table>");
         p.println("</div>");
         p.println("        <div class=\"footer thin\"></div>");
         p.println("    </div>");
