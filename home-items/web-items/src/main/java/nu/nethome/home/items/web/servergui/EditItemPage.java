@@ -102,6 +102,7 @@ public class EditItemPage extends PortletPage {
         List<String> scripts = new ArrayList<String>();
         scripts.add("web/home/js/jquery-1.4.3.min.js");
         scripts.add("web/home/edititempage.js");
+        scripts.add("web/home/createitem.js");
         return scripts;
     }
 

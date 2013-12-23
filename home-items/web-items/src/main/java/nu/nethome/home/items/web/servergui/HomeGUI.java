@@ -53,6 +53,8 @@ import java.util.List;
 @Plugin
 public class HomeGUI extends HttpServlet implements FinalEventListener, HomeItem {
 
+    private static final int MS_PER_SECOND = 1000;
+    private static final int SECONDS_PER_MINUTE = 60;
     private static final String MODEL = ("<?xml version = \"1.0\"?> \n"
             + "<HomeItem Class=\"HomeGUI\" Category=\"GUI\" >"
             + "  <Attribute Name=\"WEBServer\" Type=\"Item\" Get=\"getWEBServer\" 	Set=\"setWEBServer\" />"
@@ -183,8 +185,6 @@ public class HomeGUI extends HttpServlet implements FinalEventListener, HomeItem
         res.setStatus(HttpServletResponse.SC_OK);
         res.setContentType("text/html");
         PrintWriter p = res.getWriter();
-        System.out.print("Service HomeGUI\n");
-
         HomeGUIArguments arguments = new HomeGUIArguments(req);
 
         if (arguments.isAction("ajax")) {
@@ -281,7 +281,9 @@ public class HomeGUI extends HttpServlet implements FinalEventListener, HomeItem
         // Set standard HTTP/1.1 no-cache headers for AJAX requests. IE9 will cache first request otherwise
         res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
 
-        if (funcId != null && funcId.compareToIgnoreCase("gethomeitems") == 0) {
+        if (funcId != null && funcId.equals("eventtable")) {
+            printEventsTable(p);
+        } else if (funcId != null && funcId.compareToIgnoreCase("gethomeitems") == 0) {
             List<DirectoryEntry> names = homeServer.listInstances("");
 
             // Loop through all instances to find all home items
@@ -617,9 +619,34 @@ public class HomeGUI extends HttpServlet implements FinalEventListener, HomeItem
     @Override
     public void receiveFinalEvent(Event event, boolean isHandled) {
         creationEvents.newEvent(event, isHandled);
-        System.out.println("-----");
-        for (ItemEvent itemEvent : creationEvents.getItemEvents()) {
-            System.out.println((itemEvent.getWasHandled() ? "Handled: " : "Did not handle: ") + itemEvent.getContent());
-        }
     }
+
+    private void printEventsTable(PrintWriter p) {
+        p.println(" <table>");
+        p.println("  <tr class=\"logrowsheader\"><td></td><td>Identity</td><td>Time</td><td>Item Exists</td><td>Create</td></tr>");
+        for (ItemEvent itemEvent : creationEvents.getItemEvents()) {
+            printEventRow(p, itemEvent);
+        }
+        p.println(" </table>");
+    }
+
+    private void printEventRow(PrintWriter p, ItemEvent event) {
+        long age = (System.currentTimeMillis() - event.getReceived().getTime()) / MS_PER_SECOND;
+        long ageMinutes = age / SECONDS_PER_MINUTE;
+        long ageSeconds = age % SECONDS_PER_MINUTE;
+        StringBuilder ageString = new StringBuilder();
+        if (ageMinutes > 0) {
+            ageString.append(ageMinutes).append(" Min ");
+        }
+        ageString.append(ageSeconds).append(" Sec");
+        p.println("  <tr>");
+        p.println("   <td><img src=\"web/home/" + (event.getWasHandled() ? "item16.png" : "item_new16.png") + "\" /></td>");
+        p.println("   <td>" + event.getContent() + "</td>");
+        p.println("   <td>" + ageString + "</td>");
+        p.println("   <td>" + (event.getWasHandled() ? "Existing" : "New") + "</td>");
+        p.println("   <td>" + "?" + "</td>");
+        p.println("  </tr>");
+    }
+
+
 }

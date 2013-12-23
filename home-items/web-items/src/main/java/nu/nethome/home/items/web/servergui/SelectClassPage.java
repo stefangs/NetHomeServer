@@ -41,8 +41,6 @@ import java.util.*;
 
 public class SelectClassPage extends PortletPage {
 
-    public static final int MS_PER_SECOND = 1000;
-    public static final int SECONDS_PER_MINUTE = 60;
     protected HomeService server;
     protected String pageName = "select";
     private CreationEventCache creationEvents;
@@ -97,7 +95,7 @@ public class SelectClassPage extends PortletPage {
 
     private void printEvents(PrintWriter p, EditItemArguments arguments) {
         printEventPanelStart(p, "Received Events");
-        printEventsTable(p);
+        p.println("<div id=\"eventsTableHolder\"></div>");
         printEventPanelEnd(p);
     }
 
@@ -156,33 +154,6 @@ public class SelectClassPage extends PortletPage {
     protected void printItemEditColumnStart(PrintWriter p) throws ServletException,
             IOException {
         p.println("<div class=\"itemcolumn edit\">");
-    }
-
-    private void printEventsTable(PrintWriter p) {
-        p.println(" <table>");
-        p.println("  <tr class=\"logrowsheader\"><td></td><td>Identity</td><td>Time</td><td>Item Exists</td><td>Manufacturer</td></tr>");
-        for (ItemEvent itemEvent : creationEvents.getItemEvents()) {
-            printEventRow(p, itemEvent);
-        }
-        p.println(" </table>");
-    }
-
-    private void printEventRow(PrintWriter p, ItemEvent event) {
-        long age = (System.currentTimeMillis() - event.getReceived().getTime()) / MS_PER_SECOND;
-        long ageMinutes = age / SECONDS_PER_MINUTE;
-        long ageSeconds = age % SECONDS_PER_MINUTE;
-        StringBuilder ageString = new StringBuilder();
-        if (ageMinutes > 0) {
-            ageString.append(ageMinutes).append(" Min ");
-        }
-        ageString.append(ageSeconds).append(" Seconds");
-        p.println("  <tr>");
-        p.println("   <td><img src=\"web/home/" + (event.getWasHandled() ? "item16.png" : "item_new16.png") + "\" /></td>");
-        p.println("   <td>" + event.getContent() + "</td>");
-        p.println("   <td>" + ageString + "</td>");
-        p.println("   <td>" + (event.getWasHandled() ? "Existing" : "New") + "</td>");
-        p.println("   <td>" + "?" + "</td>");
-        p.println("  </tr>");
     }
 
     protected void printEventPanelStart(PrintWriter p, String header) {
