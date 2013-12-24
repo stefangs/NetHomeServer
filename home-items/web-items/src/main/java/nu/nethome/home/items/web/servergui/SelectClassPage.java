@@ -28,8 +28,6 @@
  */
 package nu.nethome.home.items.web.servergui;
 
-import nu.nethome.home.item.*;
-import nu.nethome.home.system.DirectoryEntry;
 import nu.nethome.home.system.HomeService;
 
 import javax.servlet.ServletException;
@@ -54,8 +52,7 @@ public class SelectClassPage extends PortletPage {
     @Override
     public List<String> getJavaScriptFileNames() {
         List<String> scripts = new ArrayList<String>();
-        scripts.add("web/home/js/jquery-1.4.3.min.js");
-        scripts.add("web/home/edititempage.js");
+        scripts.add("web/home/createitem.js");
         return scripts;
     }
 
@@ -88,15 +85,16 @@ public class SelectClassPage extends PortletPage {
         printItemEditColumnStart(p);
         printClassSelection(p, arguments);
         p.println("<div class=\"itemcolumn log\">");
-        printEvents(p, arguments);
+//        printClassesListPanel(p, arguments);
+        printEventsPanel(p);
         p.println("</div>");
         printColumnEnd(p);
     }
 
-    private void printEvents(PrintWriter p, EditItemArguments arguments) {
-        printEventPanelStart(p, "Received Events");
+    private void printEventsPanel(PrintWriter p) {
+        printListPanelStart(p, "Received Events");
         p.println("<div id=\"eventsTableHolder\"></div>");
-        printEventPanelEnd(p);
+        printListPanelEnd(p);
     }
 
     private void printClassSelection(PrintWriter p, EditItemArguments arguments) {
@@ -151,27 +149,41 @@ public class SelectClassPage extends PortletPage {
         p.println("</div>");
     }
 
+    private void printClassesListPanel(PrintWriter p, EditItemArguments arguments) {
+        printListPanelStart(p, "Create Item from Event");
+        p.println(" <table>");
+        p.println("  <tr><th></th><th>HomeItem Type</th><th>Category</th><th>Create</th></tr>");
+        for (String itemName : server.listClasses()) {
+            printClassRow(p, itemName);
+        }
+        p.println(" </table>");
+        printListPanelEnd(p);
+    }
+
+    private void printClassRow(PrintWriter p, String event) {
+        p.println("  <tr>");
+        p.println("   <td><img src=\"web/home/item_new16.png\" /></td>");
+        p.println("   <td><a href=\"http://wiki.nethome.nu/doku.php?id=" + event + "\" target=\"new_window\" >" + event + "</a></td>");
+        p.println("   <td>" + "Thermometer" + "</td>");
+        p.println("   <td>" + "?" + "</td>");
+        p.println("  </tr>");
+    }
+
     protected void printItemEditColumnStart(PrintWriter p) throws ServletException,
             IOException {
         p.println("<div class=\"itemcolumn edit\">");
     }
 
-    protected void printEventPanelStart(PrintWriter p, String header) {
-        p.println("<div class=\"item_details\">");
-        p.println("<div class=\"iheader thin\">");
-        p.println(" <span class=\"homeiteminfo\">");
-        p.println("  <ul>");
-        p.println("   <li>" + header + "</li>");
-        p.println("  </ul>");
-        p.println(" </span>");
-        p.println("</div>");
-        p.println("<div class=\"logrows coders\">");
+    protected void printListPanelStart(PrintWriter p, String header) {
+        p.println("<div class=\"panel thin\">");
+        p.println(" <h1>" + header + "</h1>");
+        p.println(" <div class=\"panellist\">");
     }
 
-    private void printEventPanelEnd(PrintWriter p) {
+    private void printListPanelEnd(PrintWriter p) {
+        p.println(" </div>");
+        p.println(" <h5></h5>");
         p.println("</div>");
-        p.println("        <div class=\"footer thin\"></div>");
-        p.println("    </div>");
     }
 
 }
