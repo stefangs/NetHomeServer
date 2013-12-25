@@ -621,10 +621,8 @@ public class HomeServer implements HomeItem, HomeService, ServiceState, ValueIte
     /* (non-Javadoc)
       * @see nu.nethome.home.system.HomeService#listClasses()
       */
-    public List<String> listClasses() {
-        // Here we can hide classes under work, and classes that only work under special conditions from being exposed
-        String showHidden = System.getProperty("nu.nethome.home.ShowHiddenClasses");
-        return factory.listClasses(showHidden != null);
+    public List<HomeItemInfo> listClasses() {
+        return factory.listItemTypes();
     }
 
     public PluginProvider getPluginProvider() {

@@ -640,11 +640,11 @@ public class HomeGUI extends HttpServlet implements FinalEventListener, HomeItem
         }
         ageString.append(ageSeconds).append(" Sec");
         p.println("  <tr>");
-        p.println("   <td><img src=\"web/home/" + (event.getWasHandled() ? "item16.png" : "item_new16.png") + "\" /></td>");
-        p.println("   <td>" + event.getContent() + "</td>");
-        p.println("   <td>" + ageString + "</td>");
-        p.println("   <td>" + (event.getWasHandled() ? "Existing" : "New") + "</td>");
-        p.println("   <td><a href=\"" + localURL + "?page=edit&event=" + Long.toString(event.getId()) + "\">Create Item</a></td>");
+        p.printf ("   <td><img src=\"web/home/%s\" /></td>\n", (event.getWasHandled() ? "item16.png" : "item_new16.png"));
+        p.printf ("   <td>%s</td>\n", event.getContent());
+        p.printf ("   <td>%s</td>\n", ageString);
+        p.printf ("   <td>%s</td>\n", (event.getWasHandled() ? "Existing" : "New"));
+        p.printf ("   <td><a href=\"%s?page=edit&event=%d\">Create Item</a></td>\n", localURL, event.getId());
         p.println("  </tr>");
     }
 

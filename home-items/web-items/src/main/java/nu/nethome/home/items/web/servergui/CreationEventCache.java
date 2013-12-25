@@ -31,6 +31,15 @@ public class CreationEventCache {
         return Collections.unmodifiableList(itemEvents);
     }
 
+    public ItemEvent getItemEvent(long id) {
+        for (ItemEvent event : itemEvents) {
+            if (event.getId() == id) {
+                return event;
+            }
+        }
+        return null;
+    }
+
     private boolean isCreationEvent(Event event) {
         return isInbound(event) && isMessageType(event);
     }

@@ -20,8 +20,10 @@
 package nu.nethome.home.impl;
 
 import nu.nethome.home.item.HomeItem;
+import nu.nethome.home.item.HomeItemInfo;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -55,5 +57,10 @@ public class SingleHomeItemFactory implements HomeItemFactory {
     @Override
     public List<String> listClasses(boolean b) {
         return Arrays.asList(itemClass.getSimpleName());
+    }
+
+    @Override
+    public List<HomeItemInfo> listItemTypes() {
+        return Arrays.asList((HomeItemInfo)(new HomeItemClassInfo(itemClass)));
     }
 }

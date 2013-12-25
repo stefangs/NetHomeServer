@@ -19,10 +19,7 @@
 
 package nu.nethome.home.items.upm;
 
-import nu.nethome.home.item.HomeItem;
-import nu.nethome.home.item.HomeItemAdapter;
-import nu.nethome.home.item.LoggerComponent;
-import nu.nethome.home.item.ValueItem;
+import nu.nethome.home.item.*;
 import nu.nethome.home.system.Event;
 import nu.nethome.home.system.HomeService;
 import nu.nethome.util.plugin.Plugin;
@@ -39,6 +36,7 @@ import java.util.logging.Logger;
  * @author Stefan
  */
 @Plugin
+@HomeItemType(value = "Thermometers", creationEvents = "UPM_Message")
 public class UPMThermometer extends HomeItemAdapter implements HomeItem, ValueItem {
 
     private static final String MODEL = ("<?xml version = \"1.0\"?> \n"

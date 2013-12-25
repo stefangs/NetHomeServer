@@ -21,12 +21,10 @@ package nu.nethome.home.start;
 
 import nu.nethome.home.impl.HomeItemFactory;
 import nu.nethome.home.item.HomeItem;
+import nu.nethome.home.item.HomeItemInfo;
 import nu.nethome.home.items.tellstick.Tellstick;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -39,6 +37,7 @@ public class StaticHomeItemFactory implements HomeItemFactory {
 
     private AbstractMap<String, HomeItemClassInfo> classNameMap = new TreeMap<String, HomeItemClassInfo>();
     private AbstractMap<String, String> renamedClassMap = new TreeMap<String, String>();
+    private List<HomeItemInfo> classInfo = new ArrayList<HomeItemInfo>();
     private static Logger logger = Logger.getLogger(StaticHomeItemFactory.class.getName());
 
     /**
@@ -181,6 +180,7 @@ public class StaticHomeItemFactory implements HomeItemFactory {
     private void addKnownClasses() {
         for (HomeItemClassInfo i : CLASSES_INFO) {
             classNameMap.put(i.getClassName(), i);
+            classInfo.add(new nu.nethome.home.impl.HomeItemClassInfo((Class<? extends HomeItem>) i.getItemClass()));
         }
         for (int i = 0; i < RENAMED_CLASSES.length; i += 2) {
             renamedClassMap.put(RENAMED_CLASSES[i], RENAMED_CLASSES[i + 1]);
@@ -195,5 +195,10 @@ public class StaticHomeItemFactory implements HomeItemFactory {
             }
         }
         return result;
+    }
+
+    @Override
+    public List<HomeItemInfo> listItemTypes() {
+        return Collections.unmodifiableList(classInfo);
     }
 }

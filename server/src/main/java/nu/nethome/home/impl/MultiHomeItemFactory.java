@@ -20,6 +20,7 @@
 package nu.nethome.home.impl;
 
 import nu.nethome.home.item.HomeItem;
+import nu.nethome.home.item.HomeItemInfo;
 
 import java.util.*;
 
@@ -56,6 +57,22 @@ public class MultiHomeItemFactory implements HomeItemFactory {
         }
         ArrayList<String> sortedResult = new ArrayList<String>(result);
         Collections.sort(sortedResult);
+        return sortedResult;
+    }
+
+    @Override
+    public List<HomeItemInfo> listItemTypes() {
+        Set<HomeItemInfo> result = new HashSet<HomeItemInfo>();
+        for (HomeItemFactory factory : itemFactories) {
+            result.addAll(factory.listItemTypes());
+        }
+        ArrayList<HomeItemInfo> sortedResult = new ArrayList<HomeItemInfo>(result);
+        Collections.sort(sortedResult, new Comparator<HomeItemInfo>() {
+            @Override
+            public int compare(HomeItemInfo o1, HomeItemInfo o2) {
+                return o1.getClassName().compareTo(o2.getClassName());
+            }
+        });
         return sortedResult;
     }
 }

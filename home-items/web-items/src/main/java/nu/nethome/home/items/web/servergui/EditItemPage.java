@@ -503,9 +503,9 @@ public class EditItemPage extends PortletPage {
         p.println("	<option value=\"TCPCommandPort\">- Select Type -</option>");
 
         // Print all selectable classes
-        List<String> classNames = server.listClasses();
-        for (String className : classNames) {
-            p.println("	<option value=\"" + className + "\">" + className
+        List<HomeItemInfo> classNames = server.listClasses();
+        for (HomeItemInfo classInfo : classNames) {
+            p.println("	<option value=\"" + classInfo.getClassName() + "\">" + classInfo
                     + "</option>");
         }
         p.println("	</select>");

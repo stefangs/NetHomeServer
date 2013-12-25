@@ -28,6 +28,8 @@
  */
 package nu.nethome.home.items.web.servergui;
 
+import nu.nethome.home.item.HomeItemInfo;
+import nu.nethome.home.system.Event;
 import nu.nethome.home.system.HomeService;
 
 import javax.servlet.ServletException;
@@ -83,11 +85,14 @@ public class SelectClassPage extends PortletPage {
 
         // Print static start of page
         printItemEditColumnStart(p);
-        printClassSelection(p, arguments);
-        p.println("<div class=\"itemcolumn log\">");
-//        printClassesListPanel(p, arguments);
-        printEventsPanel(p);
-        p.println("</div>");
+        if (arguments.hasEvent()) {
+            printClassesListPanel(p, arguments);
+        } else {
+            printClassSelection(p, arguments);
+            p.println("<div class=\"itemcolumn log\">");
+            printEventsPanel(p);
+            p.println("</div>");
+        }
         printColumnEnd(p);
     }
 
@@ -133,9 +138,9 @@ public class SelectClassPage extends PortletPage {
         p.println("	<option value=\"TCPCommandPort\">- Select Type -</option>");
 
         // Print all selectable classes
-        List<String> classNames = server.listClasses();
-        for (String className : classNames) {
-            p.println("	<option value=\"" + className + "\">" + className
+        List<HomeItemInfo> classNames = server.listClasses();
+        for (HomeItemInfo classInfo : classNames) {
+            p.println("	<option value=\"" + classInfo.getClassName() + "\">" + classInfo.getClassName()
                     + "</option>");
         }
         p.println("	</select>");
@@ -150,14 +155,21 @@ public class SelectClassPage extends PortletPage {
     }
 
     private void printClassesListPanel(PrintWriter p, EditItemArguments arguments) {
+        ItemEvent itemEvent = creationEvents.getItemEvent(arguments.getEventId());
         printListPanelStart(p, "Create Item from Event");
         p.println(" <table>");
         p.println("  <tr><th></th><th>HomeItem Type</th><th>Category</th><th>Create</th></tr>");
-        for (String itemName : server.listClasses()) {
-            printClassRow(p, itemName);
+        for (HomeItemInfo itemInfo : server.listClasses()) {
+            if(itemCandBeCreatedFromEvent(itemEvent, itemInfo)) {
+                printClassRow(p, itemInfo.getClassName());
+            }
         }
         p.println(" </table>");
         printListPanelEnd(p);
+    }
+
+    private boolean itemCandBeCreatedFromEvent(ItemEvent itemEvent, HomeItemInfo itemInfo) {
+        return itemInfo.getCreationEventTypes().length > 0 && itemInfo.getCreationEventTypes()[0].equals(itemEvent.getEvent().getAttribute(Event.EVENT_TYPE_ATTRIBUTE));
     }
 
     private void printClassRow(PrintWriter p, String event) {

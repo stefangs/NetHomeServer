@@ -56,5 +56,9 @@ public class HomeItemClassInfo {
         return (HomeItem) clazz.newInstance();
     }
 
+    public Class<?> getItemClass() {
+        return clazz;
+    }
+
 
 }

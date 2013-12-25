@@ -14,6 +14,7 @@ class EditItemArguments extends HomeGUIArguments {
     private final String locationString;
     private final String newName;
     private final String saveType;
+    private final String eventId;
 
     public EditItemArguments(HttpServletRequest req) {
         super(req);
@@ -24,6 +25,7 @@ class EditItemArguments extends HomeGUIArguments {
         room = PortletPage.fromURL(req.getParameter("room"));
         locationString = req.getParameter("new_location");
         saveType = req.getParameter("save_type");
+        eventId = req.getParameter("event");
     }
 
     public boolean hasClassName() {
@@ -68,5 +70,13 @@ class EditItemArguments extends HomeGUIArguments {
 
     public boolean hasRoom() {
         return room != null;
+    }
+
+    public boolean hasEvent() {
+        return eventId != null;
+    }
+
+    public Long getEventId() {
+        return (eventId != null) ? Long.parseLong(eventId) : null;
     }
 }

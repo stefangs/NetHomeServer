@@ -20,6 +20,7 @@
 package nu.nethome.home.impl;
 
 import nu.nethome.home.item.HomeItem;
+import nu.nethome.home.item.HomeItemInfo;
 
 import java.util.List;
 
@@ -42,4 +43,10 @@ public interface HomeItemFactory {
      * @return Class Names
      */
     List<String> listClasses(boolean includeHidden);
+
+    /**
+     * Return a list of info on all supported classes
+     * @return Class Names
+     */
+    List<HomeItemInfo> listItemTypes();
 }

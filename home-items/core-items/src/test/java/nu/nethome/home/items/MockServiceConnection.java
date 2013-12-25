@@ -20,6 +20,7 @@
 package nu.nethome.home.items;
 
 import nu.nethome.home.item.HomeItem;
+import nu.nethome.home.item.HomeItemInfo;
 import nu.nethome.home.item.HomeItemProxy;
 import nu.nethome.home.system.*;
 import nu.nethome.util.plugin.PluginProvider;
@@ -134,7 +135,7 @@ public class MockServiceConnection implements HomeService {
         return false;
     }
 
-    public List<String> listClasses() {
+    public List<HomeItemInfo> listClasses() {
         return null;
     }
 

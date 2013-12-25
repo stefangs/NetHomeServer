@@ -19,6 +19,7 @@
 
 package nu.nethome.home.system;
 
+import nu.nethome.home.item.HomeItemInfo;
 import nu.nethome.home.item.HomeItemProxy;
 import nu.nethome.util.plugin.PluginProvider;
 
@@ -95,7 +96,7 @@ public interface HomeService {
      *
      * @return List of names of HomeItem classes
      */
-    List<String> listClasses();
+    List<HomeItemInfo> listClasses();
 
     /**
      * Get the plugin provider for access to available plugin classes

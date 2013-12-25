@@ -20,6 +20,7 @@
 package nu.nethome.home.items.util;
 
 import nu.nethome.home.item.HomeItem;
+import nu.nethome.home.item.HomeItemInfo;
 import nu.nethome.home.item.HomeItemProxy;
 import nu.nethome.home.system.*;
 import nu.nethome.util.plugin.PluginProvider;
@@ -77,7 +78,7 @@ public class TstHomeService implements HomeService {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public List<String> listClasses() {
+    public List<HomeItemInfo> listClasses() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

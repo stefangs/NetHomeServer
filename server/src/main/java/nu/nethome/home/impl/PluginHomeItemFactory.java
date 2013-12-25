@@ -20,13 +20,11 @@
 package nu.nethome.home.impl;
 
 import nu.nethome.home.item.HomeItem;
+import nu.nethome.home.item.HomeItemInfo;
 import nu.nethome.util.plugin.PluginProvider;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -35,11 +33,13 @@ import java.util.logging.Logger;
 public class PluginHomeItemFactory implements HomeItemFactory {
 
     private Map<String, Class<?>> pluginsClasses = new TreeMap<String, Class<?>>();
+    private List<HomeItemInfo> pluginsClassInfo = new ArrayList<HomeItemInfo>();
     private static Logger logger = Logger.getLogger(PluginHomeItemFactory.class.getName());
 
     public PluginHomeItemFactory(PluginProvider provider) {
-        for (Class<?> c : provider.getPluginsForInterface(HomeItem.class)) {
+        for (Class<? extends HomeItem> c : provider.getPluginsForInterface(HomeItem.class)) {
             pluginsClasses.put(c.getSimpleName(), c);
+            pluginsClassInfo.add(new HomeItemClassInfo(c));
         }
     }
 
@@ -71,5 +71,10 @@ public class PluginHomeItemFactory implements HomeItemFactory {
 
     public List<String> listClasses(boolean includeHidden) {
         return new LinkedList<String>(pluginsClasses.keySet());
+    }
+
+    @Override
+    public List<HomeItemInfo> listItemTypes() {
+        return Collections.unmodifiableList(pluginsClassInfo);
     }
 }

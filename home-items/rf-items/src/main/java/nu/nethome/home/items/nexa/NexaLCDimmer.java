@@ -20,11 +20,13 @@
 package nu.nethome.home.items.nexa;
 
 import nu.nethome.home.item.HomeItem;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.system.Event;
 import nu.nethome.util.plugin.Plugin;
 
 @SuppressWarnings("UnusedDeclaration")
 @Plugin
+@HomeItemType(value = "Lamps", creationEvents = "NexaL_Message")
 public class NexaLCDimmer extends NexaLCLamp implements HomeItem {
 
     private static final double NEXA_DIM_LEVEL_K = (14D / 100D);
