@@ -19,10 +19,7 @@
 
 package nu.nethome.home.items.upm;
 
-import nu.nethome.home.item.HomeItem;
-import nu.nethome.home.item.HomeItemAdapter;
-import nu.nethome.home.item.LoggerComponent;
-import nu.nethome.home.item.ValueItem;
+import nu.nethome.home.item.*;
 import nu.nethome.home.system.Event;
 import nu.nethome.util.plugin.Plugin;
 
@@ -40,6 +37,7 @@ import java.util.logging.Logger;
  * @author Stefan, modified by Fredric
  */
 @Plugin
+@HomeItemType("Gauges")
 public class UPMWindSpeed extends HomeItemAdapter implements HomeItem, ValueItem {
 
 	private final String m_Model = ("<?xml version = \"1.0\"?> \n"

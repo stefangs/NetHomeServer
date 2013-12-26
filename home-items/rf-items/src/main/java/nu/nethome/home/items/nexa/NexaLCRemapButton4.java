@@ -20,6 +20,7 @@
 package nu.nethome.home.items.nexa;
 
 import nu.nethome.home.item.HomeItem;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.system.Event;
 import nu.nethome.util.plugin.Plugin;
 
@@ -33,6 +34,7 @@ import java.util.logging.Logger;
  * @author Stefan
  */
 @Plugin
+@HomeItemType(value = "Controls", creationEvents = "NexaL_Message")
 public class NexaLCRemapButton4 extends NexaLCRemapButton implements HomeItem {
 
     class Button {
