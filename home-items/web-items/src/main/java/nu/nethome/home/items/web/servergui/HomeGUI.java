@@ -142,6 +142,7 @@ public class HomeGUI extends HttpServlet implements FinalEventListener, HomeItem
         pages.add(new SettingsBasePage(localURL, homeServer));
         pages.add(new GraphPage(localURL, homeServer));
         homeServer.registerFinalEventListener(this);
+        creationEvents.addItemInfo(hserver.listClasses());
     }
 
     private DefaultPageIdentity getDefaultLocationAccessor() {
