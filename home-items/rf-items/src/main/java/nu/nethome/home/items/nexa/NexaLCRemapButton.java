@@ -72,9 +72,18 @@ public class NexaLCRemapButton extends RemapButton implements HomeItem {
             //Ok, this event affects us, act on it
             processEvent(event);
             return true;
+        } else {
+            return handleInit(event);
         }
-        return false;
     }
+
+    @Override
+    protected boolean handleInit(Event event) {
+        buttonAddress = event.getAttributeInt("NexaL.Address");
+        buttonId = event.getAttributeInt("NexaL.Button");
+        return true;
+    }
+
 
     @Override
     protected void actOnEvent(Event event) {

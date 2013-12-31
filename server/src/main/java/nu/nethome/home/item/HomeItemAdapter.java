@@ -36,6 +36,19 @@ public abstract class HomeItemAdapter implements HomeItem {
         return false;
     }
 
+    protected boolean handleInit(Event event) {
+        if (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals("Init") &&
+                event.getAttribute("InitId").equals(Long.toString(id))) {
+            return initAttributes(event);
+        } else {
+            return false;
+        }
+    }
+
+    protected boolean initAttributes(Event event) {
+        return false;
+    }
+
     public String getName() {
         return name;
     }

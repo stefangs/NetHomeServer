@@ -127,8 +127,9 @@ public class NexaLCRemapButton4 extends NexaLCRemapButton implements HomeItem {
             //Ok, this event affects us, act on it
             processEvent(event);
             return true;
+        } else {
+            return handleInit(event);
         }
-        return false;
     }
 
     @Override

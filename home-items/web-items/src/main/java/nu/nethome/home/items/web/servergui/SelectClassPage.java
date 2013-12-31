@@ -43,12 +43,12 @@ public class SelectClassPage extends PortletPage {
 
     protected HomeService server;
     protected String pageName = "select";
-    private CreationEventCache creationEvents;
+    private CreationEventCache creationEventCache;
 
-    public SelectClassPage(String mLocalURL, HomeService server, String mediaDirectory, CreationEventCache creationEvents) {
+    public SelectClassPage(String mLocalURL, HomeService server, String mediaDirectory, CreationEventCache creationEventCache) {
         super(mLocalURL);
         this.server = server;
-        this.creationEvents = creationEvents;
+        this.creationEventCache = creationEventCache;
     }
 
     @Override
@@ -155,11 +155,11 @@ public class SelectClassPage extends PortletPage {
     }
 
     private void printClassesListPanel(PrintWriter p, EditItemArguments arguments) {
-        ItemEvent itemEvent = creationEvents.getItemEvent(arguments.getEventId());
+        ItemEvent itemEvent = creationEventCache.getItemEvent(arguments.getEventId());
         printListPanelStart(p, "Create Item from Event");
         p.println(" <table>");
         p.println("  <tr><th></th><th>HomeItem Type</th><th>Category</th><th>Create</th></tr>");
-        for (HomeItemInfo itemInfo : server.listClasses()) {
+        for (HomeItemInfo itemInfo : creationEventCache.getItemsCreatableByEvent(itemEvent.getEvent())) {
             if(itemCandBeCreatedFromEvent(itemEvent, itemInfo)) {
                 printClassRow(p, itemInfo.getClassName());
             }

@@ -28,8 +28,10 @@
  */
 package nu.nethome.home.items.web.servergui;
 
+import nu.nethome.home.impl.InternalEvent;
 import nu.nethome.home.item.*;
 import nu.nethome.home.system.DirectoryEntry;
+import nu.nethome.home.system.Event;
 import nu.nethome.home.system.HomeService;
 
 import javax.servlet.ServletException;
@@ -59,10 +61,12 @@ public class EditItemPage extends PortletPage {
     protected String pageName = "edit";
     protected Map<String, AttributeTypePrinterInterface> attributeHandlers = new HashMap<String, AttributeTypePrinterInterface>();
     private SelectClassPage selectClassPage;
+    private CreationEventCache creationEventCache;
 
     public EditItemPage(String mLocalURL, HomeService server, String mediaDirectory, CreationEventCache creationEvents) {
         super(mLocalURL);
         this.server = server;
+        this.creationEventCache = creationEvents;
         bridgeBrokerId = findServerInstanceId();
         initiateAttributePlugins(mediaDirectory);
         selectClassPage = new SelectClassPage(mLocalURL, server, mediaDirectory, creationEvents);
@@ -276,10 +280,35 @@ public class EditItemPage extends PortletPage {
         HomeItemProxy item;
         if (arguments.isAction("create") && arguments.hasClassName()) {
             item = createInstanceWithNewName(arguments.getClassName());
+            initItemAttributes(item, arguments);
         } else {
             item = this.server.openInstance(arguments.getName()); // NYI Error check
         }
         return item;
+    }
+
+    private void initItemAttributes(HomeItemProxy item, EditItemArguments arguments) {
+        if (arguments.hasEvent()) {
+            Event receivedEvent = creationEventCache.getItemEvent(arguments.getEventId()).getEvent();
+            Event initEvent = createInitEvent(receivedEvent, item);
+            Object itemImpl = item.getInternalRepresentation();
+            if ((itemImpl != null) && (itemImpl instanceof HomeItem)) {
+                ((HomeItem) itemImpl).receiveEvent(initEvent);
+            }
+        }
+    }
+
+    private Event createInitEvent(Event receivedEvent, HomeItemProxy item) {
+        Event result = new InternalEvent("Init");
+        for (String attName : receivedEvent.getAttributeNames()) {
+            if (!attName.equals(Event.EVENT_TYPE_ATTRIBUTE)) {
+                result.setAttribute(attName, receivedEvent.getAttribute(attName));
+            } else {
+                result.setAttribute("OriginalType", receivedEvent.getAttribute(attName));
+            }
+        }
+        result.setAttribute("InitId", item.getAttributeValue(HomeItemProxy.ID_ATTRIBUTE));
+        return result;
     }
 
     private void placeItemInLocation(HomeItemProxy item, EditItemArguments arguments) {

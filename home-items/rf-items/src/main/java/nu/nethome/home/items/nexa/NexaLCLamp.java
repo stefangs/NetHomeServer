@@ -28,12 +28,12 @@ import nu.nethome.util.plugin.Plugin;
 import java.util.logging.Logger;
 
 /**
- * 
- * Represents a switch (typically connected to a lamp) which is controlled by 
- * the NEXA Learning Code RF protocol. The NexaLCLamp requires a port which can 
+ *
+ * Represents a switch (typically connected to a lamp) which is controlled by
+ * the NEXA Learning Code RF protocol. The NexaLCLamp requires a port which can
  * send NEXA protocol messages as RF signals. This is typically done with the
  * {@see nu.nethome.home.items.audio.AudioProtocolTransmitter}.
- * 
+ *
  * @author Stefan
  */
 @Plugin
@@ -49,7 +49,7 @@ public class NexaLCLamp extends HomeItemAdapter implements HomeItem {
 			+ "  <Action Name=\"toggle\" 	Method=\"toggle\" Default=\"true\" />"
 			+ "  <Action Name=\"on\" 	Method=\"on\" />"
 			+ "  <Action Name=\"off\" 	Method=\"off\" />"
-			+ "</HomeItem> "); 
+			+ "</HomeItem> ");
 
 	protected static Logger logger = Logger.getLogger(NexaLCLamp.class.getName());
 
@@ -61,10 +61,7 @@ public class NexaLCLamp extends HomeItemAdapter implements HomeItem {
 
 	public NexaLCLamp() {
 	}
-	
-	/* (non-Javadoc)
-	 * @see ssg.home.HomeItem#receiveEvent(ssg.home.Event)
-	 */
+
 	public boolean receiveEvent(Event event) {
 		// Check if this is an inward event directed to this instance
 		if (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals("NexaL_Message") &&
@@ -74,11 +71,19 @@ public class NexaLCLamp extends HomeItemAdapter implements HomeItem {
 			// In that case, update our state accordingly
 			isOn = (event.getAttributeInt("NexaL.Command") == 1);
             return true;
-		}
-		return false;
+		} else {
+		    return handleInit(event);
+        }
 	}
-	
-	public String getModel() {
+
+    @Override
+    protected boolean handleInit(Event event) {
+        lampAddress = event.getAttributeInt("NexaL.Address");
+        lampButton = event.getAttributeInt("NexaL.Button");
+        return true;
+    }
+
+    public String getModel() {
 		return MODEL;
 	}
 
@@ -92,7 +97,7 @@ public class NexaLCLamp extends HomeItemAdapter implements HomeItem {
 		}
 		return "Off";
 	}
-	
+
 	/**
 	 * @return Returns the m_HouseCode.
 	 */
@@ -111,7 +116,7 @@ public class NexaLCLamp extends HomeItemAdapter implements HomeItem {
 			lampAddress = newAddress;
 		}
 	}
-	
+
 	public void sendCommand(int command) {
 		Event ev = server.createEvent("NexaL_Message", "");
 		ev.setAttribute("Direction", "Out");
