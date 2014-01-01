@@ -471,6 +471,13 @@ div.panel table, div.item_details table{
     text-indent:12px;
 }
 
+.panel h2 {
+    font-size:small;
+    margin:0px;
+    padding:0px;
+    text-indent:12px;
+}
+
 .iheader.thin, .panel.thin h1{
     height:20px;
 }

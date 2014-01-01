@@ -75,6 +75,13 @@ public class HomeUrlBuilder {
         return this;
     }
 
+    public HomeUrlBuilder preserveRoom(EditItemArguments arguments) {
+        if (arguments.hasRoom()) {
+            addParameter("room", arguments.getRoom());
+        }
+        return this;
+    }
+
     public HomeUrlBuilder preserveEditMode(HomeGUIArguments arguments) {
         if (arguments.isEditMode()) {
             addParameter("mode", "edit");

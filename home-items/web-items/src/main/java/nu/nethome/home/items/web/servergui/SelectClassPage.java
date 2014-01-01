@@ -27,6 +27,8 @@
  * 2010-11-12 pela Added support of 'options' attribute type when generating HTML
  */
 package nu.nethome.home.items.web.servergui;
+// TODO New class selection panel also for normal classes
+// TODO Only collect events when on class selection page
 
 import nu.nethome.home.item.HomeItemInfo;
 import nu.nethome.home.system.Event;
@@ -156,14 +158,19 @@ public class SelectClassPage extends PortletPage {
     }
 
     private void printClassesListPanel(PrintWriter p, EditItemArguments arguments, List<HomeItemInfo> itemClasses) {
-        printListPanelStart(p, "Create Item from Event");
+        p.println("<div class=\"panel thin\">");
+        p.println(" <h1>Create Item from Event</h1>");
+        p.println(" <h2>The selected Event can be handled by the following Home Items:</h2>");
+        p.println(" <div class=\"panellist\">");
         p.println(" <table>");
-        p.println("  <tr><th></th><th>HomeItem Type</th><th>Category</th><th>Create</th></tr>");
+        p.println("  <tr><th></th><th>Item Type</th><th>Category</th><th>Create</th></tr>");
         for (HomeItemInfo itemInfo : itemClasses) {
             printClassRow(p, itemInfo, arguments);
         }
         p.println(" </table>");
-        printListPanelEnd(p);
+        p.println(" </div>");
+        p.println(" <h5></h5>");
+        p.println("</div>");
     }
 
     private boolean itemCandBeCreatedFromEvent(ItemEvent itemEvent, HomeItemInfo itemInfo) {
@@ -173,12 +180,12 @@ public class SelectClassPage extends PortletPage {
     private void printClassRow(PrintWriter p, HomeItemInfo event, EditItemArguments arguments) {
         HomeUrlBuilder createLink = new HomeUrlBuilder(localURL);
         createLink.preserveReturnPage(arguments).withPage(pageName).withAction("create")
-                .addParameter("class_name", event.getClassName());
+                .addParameter("class_name", event.getClassName()).preserveRoom(arguments);
         if (arguments.hasEvent()) {
             createLink.addParameter("event", Long.toString(arguments.getEventId()));
         }
         p.println("  <tr>");
-        p.println("   <td><img src=\"web/home/item_new16.png\" /></td>");
+        p.printf ("   <td><img src=\"web/home/%s\" /></td>\n", HomeGUI.itemIcon(event.getCategory(), true)) ;
         p.printf ("   <td><a href=\"http://wiki.nethome.nu/doku.php?id=%s\" target=\"new_window\" >%s</a></td>\n", event.getClassName(), event.getClassName());
         p.printf ("   <td>%s</td>\n", event.getCategory()) ;
         p.printf ("   <td><a href=%s>Create Item</a></td>\n", createLink.toQuotedString()) ;
@@ -201,5 +208,4 @@ public class SelectClassPage extends PortletPage {
         p.println(" <h5></h5>");
         p.println("</div>");
     }
-
 }
