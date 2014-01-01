@@ -93,13 +93,16 @@ public class SelectClassPage extends PortletPage {
         } else {
             printClassSelection(p, arguments);
             p.println("<div class=\"itemcolumn log\">");
-            printEventsPanel(p);
+            printEventsPanel(p, arguments);
             p.println("</div>");
         }
         printColumnEnd(p);
     }
 
-    private void printEventsPanel(PrintWriter p) {
+    private void printEventsPanel(PrintWriter p, EditItemArguments arguments) {
+        HomeUrlBuilder createLink = new HomeUrlBuilder(localURL);
+        createLink.preserveReturnPage(arguments).withPage(pageName).preserveRoom(arguments);
+        p.printf ("<script>homeManager.classUrl=%s;</script>", createLink.toQuotedString()) ;
         printListPanelStart(p, "Received Events");
         p.println("<div id=\"eventsTableHolder\"></div>");
         printListPanelEnd(p);
@@ -185,7 +188,7 @@ public class SelectClassPage extends PortletPage {
             createLink.addParameter("event", Long.toString(arguments.getEventId()));
         }
         p.println("  <tr>");
-        p.printf ("   <td><img src=\"web/home/%s\" /></td>\n", HomeGUI.itemIcon(event.getCategory(), true)) ;
+        p.printf("   <td><img src=\"web/home/%s\" /></td>\n", HomeGUI.itemIcon(event.getCategory(), true)) ;
         p.printf ("   <td><a href=\"http://wiki.nethome.nu/doku.php?id=%s\" target=\"new_window\" >%s</a></td>\n", event.getClassName(), event.getClassName());
         p.printf ("   <td>%s</td>\n", event.getCategory()) ;
         p.printf ("   <td><a href=%s>Create Item</a></td>\n", createLink.toQuotedString()) ;

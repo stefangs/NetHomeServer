@@ -645,7 +645,7 @@ public class HomeGUI extends HttpServlet implements FinalEventListener, HomeItem
         p.printf ("   <td>%s</td>\n", event.getContent());
         p.printf ("   <td>%s</td>\n", ageString);
         p.printf ("   <td>%s</td>\n", (event.getWasHandled() ? "Existing" : "New"));
-        p.printf ("   <td><a href=\"%s?page=edit&event=%d\">Select Item</a></td>\n", localURL, event.getId());
+        p.printf ("   <td><a onclick=\"location.href=homeManager.classUrl + '&event=%d';return false;\" href=\"%s?page=edit&event=%d\">Select Item</a></td>\n", event.getId(), localURL, event.getId());
         p.println("  </tr>");
     }
 
