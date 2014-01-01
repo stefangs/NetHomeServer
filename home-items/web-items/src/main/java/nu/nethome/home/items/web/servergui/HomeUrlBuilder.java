@@ -43,6 +43,16 @@ public class HomeUrlBuilder {
         return this;
     }
 
+    public HomeUrlBuilder withPage(String page) {
+        addParameter("page", page);
+        return this;
+    }
+
+    public HomeUrlBuilder withAction(String action) {
+        addParameter("a", action);
+        return this;
+    }
+
     public HomeUrlBuilder gotoReturnPage(HomeGUIArguments arguments) {
         if (arguments.hasReturnPage()) {
             addParameter("page", arguments.getReturnPage());
@@ -75,5 +85,9 @@ public class HomeUrlBuilder {
     @Override
     public String toString() {
         return result.toString();
+    }
+
+    public String toQuotedString() {
+        return "\"" + result.toString() + "\"";
     }
 }

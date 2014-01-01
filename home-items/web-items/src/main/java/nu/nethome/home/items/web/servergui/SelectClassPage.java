@@ -42,7 +42,7 @@ import java.util.*;
 public class SelectClassPage extends PortletPage {
 
     protected HomeService server;
-    protected String pageName = "select";
+    protected String pageName = "edit";
     private CreationEventCache creationEventCache;
 
     public SelectClassPage(String mLocalURL, HomeService server, String mediaDirectory, CreationEventCache creationEventCache) {
@@ -86,7 +86,8 @@ public class SelectClassPage extends PortletPage {
         // Print static start of page
         printItemEditColumnStart(p);
         if (arguments.hasEvent()) {
-            printClassesListPanel(p, arguments);
+            ItemEvent itemEvent = creationEventCache.getItemEvent(arguments.getEventId());
+            printClassesListPanel(p, arguments, creationEventCache.getItemsCreatableByEvent(itemEvent.getEvent()));
         } else {
             printClassSelection(p, arguments);
             p.println("<div class=\"itemcolumn log\">");
@@ -154,15 +155,12 @@ public class SelectClassPage extends PortletPage {
         p.println("</div>");
     }
 
-    private void printClassesListPanel(PrintWriter p, EditItemArguments arguments) {
-        ItemEvent itemEvent = creationEventCache.getItemEvent(arguments.getEventId());
+    private void printClassesListPanel(PrintWriter p, EditItemArguments arguments, List<HomeItemInfo> itemClasses) {
         printListPanelStart(p, "Create Item from Event");
         p.println(" <table>");
         p.println("  <tr><th></th><th>HomeItem Type</th><th>Category</th><th>Create</th></tr>");
-        for (HomeItemInfo itemInfo : creationEventCache.getItemsCreatableByEvent(itemEvent.getEvent())) {
-            if(itemCandBeCreatedFromEvent(itemEvent, itemInfo)) {
-                printClassRow(p, itemInfo.getClassName());
-            }
+        for (HomeItemInfo itemInfo : itemClasses) {
+            printClassRow(p, itemInfo, arguments);
         }
         p.println(" </table>");
         printListPanelEnd(p);
@@ -172,12 +170,18 @@ public class SelectClassPage extends PortletPage {
         return itemInfo.getCreationEventTypes().length > 0 && itemInfo.getCreationEventTypes()[0].equals(itemEvent.getEvent().getAttribute(Event.EVENT_TYPE_ATTRIBUTE));
     }
 
-    private void printClassRow(PrintWriter p, String event) {
+    private void printClassRow(PrintWriter p, HomeItemInfo event, EditItemArguments arguments) {
+        HomeUrlBuilder createLink = new HomeUrlBuilder(localURL);
+        createLink.preserveReturnPage(arguments).withPage(pageName).withAction("create")
+                .addParameter("class_name", event.getClassName());
+        if (arguments.hasEvent()) {
+            createLink.addParameter("event", Long.toString(arguments.getEventId()));
+        }
         p.println("  <tr>");
         p.println("   <td><img src=\"web/home/item_new16.png\" /></td>");
-        p.println("   <td><a href=\"http://wiki.nethome.nu/doku.php?id=" + event + "\" target=\"new_window\" >" + event + "</a></td>");
-        p.println("   <td>" + "Thermometer" + "</td>");
-        p.println("   <td>" + "?" + "</td>");
+        p.printf ("   <td><a href=\"http://wiki.nethome.nu/doku.php?id=%s\" target=\"new_window\" >%s</a></td>\n", event.getClassName(), event.getClassName());
+        p.printf ("   <td>%s</td>\n", event.getCategory()) ;
+        p.printf ("   <td><a href=%s>Create Item</a></td>\n", createLink.toQuotedString()) ;
         p.println("  </tr>");
     }
 
