@@ -45,7 +45,7 @@ public class HomeItemClassInfo implements HomeItemInfo {
         if (type != null) {
             return type.value();
         } else {
-            return "Lamps";
+            return "Unknown";
         }
     }
 

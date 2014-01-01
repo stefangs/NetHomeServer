@@ -27,8 +27,8 @@
  * 2010-11-12 pela Added support of 'options' attribute type when generating HTML
  */
 package nu.nethome.home.items.web.servergui;
-// TODO New class selection panel also for normal classes
 // TODO Only collect events when on class selection page
+// TODO Add category and auto-create to all items
 
 import nu.nethome.home.item.HomeItemInfo;
 import nu.nethome.home.system.Event;
@@ -84,26 +84,27 @@ public class SelectClassPage extends PortletPage {
      */
     protected void printSelectClassPage(PrintWriter p, EditItemArguments arguments)
             throws ServletException, IOException {
-
-        // Print static start of page
-        printItemEditColumnStart(p);
+        p.println("<div class=\"itemcolumn log\">");
         if (arguments.hasEvent()) {
             ItemEvent itemEvent = creationEventCache.getItemEvent(arguments.getEventId());
-            printClassesListPanel(p, arguments, creationEventCache.getItemsCreatableByEvent(itemEvent.getEvent()));
+            printClassesListPanel(p, arguments, creationEventCache.getItemsCreatableByEvent(itemEvent.getEvent()), "Create new item",
+                    "Select item type from this list of items that can handle the selected event");
         } else {
-            printClassSelection(p, arguments);
-            p.println("<div class=\"itemcolumn log\">");
+            printClassesListPanel(p, arguments, server.listClasses(), "Create new item", "Select item type from this list");
+            p.println("<br>");
             printEventsPanel(p, arguments);
-            p.println("</div>");
         }
-        printColumnEnd(p);
+        p.println("</div>");
     }
 
     private void printEventsPanel(PrintWriter p, EditItemArguments arguments) {
         HomeUrlBuilder createLink = new HomeUrlBuilder(localURL);
         createLink.preserveReturnPage(arguments).withPage(pageName).preserveRoom(arguments);
         p.printf ("<script>homeManager.classUrl=%s;</script>", createLink.toQuotedString()) ;
-        printListPanelStart(p, "Received Events");
+        p.println("<div class=\"panel thin\">");
+        p.println(" <h1>Received Events</h1>");
+        p.println(" <h2>Select an event to create an Item based on that event.</h2>");
+        p.println(" <div class=\"panellist\">");
         p.println("<div id=\"eventsTableHolder\"></div>");
         printListPanelEnd(p);
     }
@@ -160,10 +161,12 @@ public class SelectClassPage extends PortletPage {
         p.println("</div>");
     }
 
-    private void printClassesListPanel(PrintWriter p, EditItemArguments arguments, List<HomeItemInfo> itemClasses) {
+    private void printClassesListPanel(PrintWriter p, EditItemArguments arguments, List<HomeItemInfo> itemClasses, String h1, String h2) {
         p.println("<div class=\"panel thin\">");
-        p.println(" <h1>Create Item from Event</h1>");
-        p.println(" <h2>The selected Event can be handled by the following Home Items:</h2>");
+        p.printf (" <h1>%s</h1>", h1);
+        if (h2 != null) {
+            p.printf (" <h2>%s</h2>", h2);
+        }
         p.println(" <div class=\"panellist\">");
         p.println(" <table>");
         p.println("  <tr><th></th><th>Item Type</th><th>Category</th><th>Create</th></tr>");

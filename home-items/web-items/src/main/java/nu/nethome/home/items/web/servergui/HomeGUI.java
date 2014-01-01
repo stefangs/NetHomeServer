@@ -554,7 +554,7 @@ public class HomeGUI extends HttpServlet implements FinalEventListener, HomeItem
         if (itemType.equals("Infrastructure")) {
             return small ? "infra16.png" : "infra.png";
         }
-        return "item.png";
+        return small ? "item16.png" : "item.png";
     }
 
     /**
@@ -645,7 +645,7 @@ public class HomeGUI extends HttpServlet implements FinalEventListener, HomeItem
         p.printf ("   <td>%s</td>\n", event.getContent());
         p.printf ("   <td>%s</td>\n", ageString);
         p.printf ("   <td>%s</td>\n", (event.getWasHandled() ? "Existing" : "New"));
-        p.printf ("   <td><a onclick=\"location.href=homeManager.classUrl + '&event=%d';return false;\" href=\"%s?page=edit&event=%d\">Select Item</a></td>\n", event.getId(), localURL, event.getId());
+        p.printf ("   <td><a onclick=\"location.href=homeManager.classUrl + '&event=%d';return false;\" href=\"%s?page=edit&event=%d\">Select Event</a></td>\n", event.getId(), localURL, event.getId());
         p.println("  </tr>");
     }
 
