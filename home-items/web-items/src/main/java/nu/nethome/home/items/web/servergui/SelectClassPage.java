@@ -27,7 +27,6 @@
  * 2010-11-12 pela Added support of 'options' attribute type when generating HTML
  */
 package nu.nethome.home.items.web.servergui;
-// TODO Only collect events when on class selection page
 // TODO Add category and auto-create to all items
 
 import nu.nethome.home.item.HomeItemInfo;
@@ -88,9 +87,9 @@ public class SelectClassPage extends PortletPage {
         if (arguments.hasEvent()) {
             ItemEvent itemEvent = creationEventCache.getItemEvent(arguments.getEventId());
             printClassesListPanel(p, arguments, creationEventCache.getItemsCreatableByEvent(itemEvent.getEvent()), "Create new item",
-                    "Select item type from this list of items that can handle the selected event");
+                    "Select Item type from this list. The Item will be initialized to handle the selected event");
         } else {
-            printClassesListPanel(p, arguments, server.listClasses(), "Create new item", "Select item type from this list");
+            printClassesListPanel(p, arguments, server.listClasses(), "Create new Item", "Select Item type from this list");
             p.println("<br>");
             printEventsPanel(p, arguments);
         }

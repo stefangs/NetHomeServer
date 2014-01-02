@@ -9,6 +9,8 @@ import nu.nethome.home.system.Event;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
+import sun.awt.windows.ThemeReader;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.core.Is.is;
@@ -64,6 +66,7 @@ public class CreationEventCacheTest {
                 nexaInfo2,
                 (HomeItemInfo) new HomeItemClassInfo(PortsItem.class),
                 (HomeItemInfo) new HomeItemClassInfo(NoAnnotation.class)));
+        cache.setCollectionTimeout(10);
         nexaEvent = new InternalEvent("NexaL_Message");
         nexaEvent.setAttribute("Direction", "In");
         randomEvent = new InternalEvent("Random_Message");
@@ -83,19 +86,48 @@ public class CreationEventCacheTest {
 
     @Test
     public void unmappedEventGivesNoItemEvent() {
+        cache.getItemEvents();
         cache.newEvent(randomEvent, true);
         assertThat(cache.getItemEvents().size(), is(0));
     }
 
     @Test
     public void mappedEventGivesNewItemEvent() {
+        cache.getItemEvents();
         cache.newEvent(nexaEvent, true);
         assertThat(cache.getItemEvents().size(), Matchers.is(1));
         assertThat(cache.getItemEvents().get(0).getEvent(), is(nexaEvent));
     }
 
     @Test
+    public void mappedEventWithoutAskingGivesNoItemEvent() {
+        cache.newEvent(nexaEvent, true);
+        assertThat(cache.getItemEvents().size(), Matchers.is(0));
+    }
+
+    @Test
+    public void mappedEventAfterTimeoutGivesNoItemEvent() throws InterruptedException {
+        cache.getItemEvents();
+        Thread.sleep(100);
+        cache.newEvent(nexaEvent, true);
+        assertThat(cache.getItemEvents().size(), Matchers.is(0));
+    }
+
+    @Test
+    public void mappedEventAfterClearTimeoutClearsEvents() throws InterruptedException {
+        cache.setClearTimeout(10);
+        cache.setCollectionTimeout(10);
+        cache.getItemEvents();
+        cache.newEvent(nexaEvent, true);
+        assertThat(cache.getItemEvents().size(), Matchers.is(1));
+        Thread.sleep(100);
+        cache.newEvent(nexaEvent, true);
+        assertThat(cache.getItemEvents().size(), Matchers.is(0));
+    }
+
+    @Test
     public void mappedOutboundEventGivesNoItemEvent() {
+        cache.getItemEvents();
         nexaEvent = new InternalEvent("NexaL_Message");
         nexaEvent.setAttribute("Direction", "Out");
         cache.newEvent(nexaEvent, true);

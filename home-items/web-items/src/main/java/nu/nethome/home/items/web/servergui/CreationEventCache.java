@@ -7,8 +7,11 @@ import java.util.*;
 
 public class CreationEventCache {
 
-    List<ItemEvent> itemEvents = new ArrayList<ItemEvent>();
-    Map<String, List<HomeItemInfo>> itemsFromEvents = new HashMap<String, List<HomeItemInfo>>();
+    private List<ItemEvent> itemEvents = new ArrayList<ItemEvent>();
+    private Map<String, List<HomeItemInfo>> itemsFromEvents = new HashMap<String, List<HomeItemInfo>>();
+    private long collectTimeout = 1000 * 60 * 20;
+    private long clearTimeout = 1000 * 60 * 60 * 2;
+    private Date latestCollectionTime = new Date(0);
 
     public void addItemInfo(List<HomeItemInfo> itemInfos) {
         for (HomeItemInfo info : itemInfos) {
@@ -24,7 +27,7 @@ public class CreationEventCache {
     }
 
     public void newEvent(Event event, boolean wasHandled) {
-        if (isCreationEvent(event)) {
+        if (isCollecting() && isCreationEvent(event)) {
             String content = ItemEvent.extractContent(event);
             boolean updated = false;
             for (ItemEvent itemEvent : itemEvents) {
@@ -37,10 +40,24 @@ public class CreationEventCache {
             if (!updated) {
                 itemEvents.add(new ItemEvent(event, wasHandled));
             }
+        } else {
+            clearIfNeeded();
         }
     }
 
+    private void clearIfNeeded() {
+        if ((System.currentTimeMillis() > latestCollectionTime.getTime() + clearTimeout) &&
+                itemEvents.size() > 0) {
+            itemEvents.clear();
+        }
+    }
+
+    private boolean isCollecting() {
+        return latestCollectionTime.getTime() + collectTimeout > System.currentTimeMillis();
+    }
+
     public List<ItemEvent> getItemEvents() {
+        latestCollectionTime = new Date();
         return Collections.unmodifiableList(itemEvents);
     }
 
@@ -68,5 +85,13 @@ public class CreationEventCache {
 
     private boolean isInbound(Event event) {
         return event.getAttribute("Direction").equals("In");
+    }
+
+    public void setCollectionTimeout(long timeoutMs) {
+        this.collectTimeout = timeoutMs;
+    }
+
+    public void setClearTimeout(long clearTimeout) {
+        this.clearTimeout = clearTimeout;
     }
 }
