@@ -21,6 +21,7 @@ package nu.nethome.home.items.deltronic;
 
 import nu.nethome.home.item.HomeItem;
 import nu.nethome.home.item.HomeItemAdapter;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.system.Event;
 import nu.nethome.util.plugin.Plugin;
 
@@ -37,6 +38,7 @@ import java.util.logging.Logger;
  * @author Stefan
  */
 @Plugin
+@HomeItemType(value="Lamps", creationEvents = "Deltronic_Message")
 public class DeltronicLamp extends HomeItemAdapter implements HomeItem {
 
     private static final String MODEL = ("<?xml version = \"1.0\"?> \n"
@@ -66,13 +68,21 @@ public class DeltronicLamp extends HomeItemAdapter implements HomeItem {
             // In that case, update our state accordingly
             state = (event.getAttributeInt("Deltronic.Command") == 1);
             return true;
+        } else {
+            return handleInit(event);
         }
-        return false;
+    }
+
+    @Override
+    protected boolean initAttributes(Event event) {
+        targetAddress = event.getAttributeInt("Deltronic.Address");
+        targetButton = "" + (char)(event.getAttributeInt("Deltronic.Button") + ((int) 'A'));
+        return true;
     }
 
     /* (non-Javadoc)
-      * @see ssg.home.HomeItem#getModel()
-      */
+          * @see ssg.home.HomeItem#getModel()
+          */
     public String getModel() {
         return MODEL;
     }
@@ -107,7 +117,7 @@ public class DeltronicLamp extends HomeItemAdapter implements HomeItem {
     }
 
     /**
-     * @return Returns the m_HouseCode.
+     * @return Returns the houseCode.
      */
     @SuppressWarnings("UnusedDeclaration")
     public String getAddress() {

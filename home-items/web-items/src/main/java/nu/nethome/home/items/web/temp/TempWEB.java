@@ -21,6 +21,7 @@ package nu.nethome.home.items.web.temp;
 
 import nu.nethome.home.item.HomeItem;
 import nu.nethome.home.item.HomeItemProxy;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.items.web.HomeWebServer;
 import nu.nethome.home.system.Event;
 import nu.nethome.home.system.HomeService;
@@ -51,6 +52,7 @@ import java.util.*;
  */
 @SuppressWarnings("UnusedDeclaration")
 @Plugin
+@HomeItemType("GUI")
 public class TempWEB extends HttpServlet implements HomeItem {
 
     private static final String MODEL = ("<?xml version = \"1.0\"?> \n"

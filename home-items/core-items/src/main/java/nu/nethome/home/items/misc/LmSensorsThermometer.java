@@ -19,10 +19,7 @@
 
 package nu.nethome.home.items.misc;
 
-import nu.nethome.home.item.HomeItem;
-import nu.nethome.home.item.HomeItemAdapter;
-import nu.nethome.home.item.LoggerComponent;
-import nu.nethome.home.item.ValueItem;
+import nu.nethome.home.item.*;
 import nu.nethome.util.plugin.Plugin;
 
 import java.io.IOException;
@@ -41,6 +38,7 @@ import java.util.logging.Logger;
  * @author Stefan
  */
 @Plugin
+@HomeItemType("Thermometers")
 public class LmSensorsThermometer extends HomeItemAdapter implements HomeItem, ValueItem {
 
 	private final String m_Model = ("<?xml version = \"1.0\"?> \n"

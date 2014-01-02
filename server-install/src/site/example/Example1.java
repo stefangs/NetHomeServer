@@ -20,6 +20,7 @@
 import nu.nethome.home.item.HomeItem;
 import nu.nethome.home.item.HomeItemAdapter;
 import nu.nethome.util.plugin.Plugin;
+import nu.nethome.home.item.HomeItemType;
 
 /**
  * This is a simple example of a HomeItem. It demonstrates the model string used by the server
@@ -33,6 +34,7 @@ import nu.nethome.util.plugin.Plugin;
  *
  */
 @Plugin
+@HomeItemType("Controls")
 public class Example1 extends HomeItemAdapter implements HomeItem {
 
     private static final String MODEL = ("<?xml version = \"1.0\"?> \n"

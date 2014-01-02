@@ -85,7 +85,7 @@ public class NexaRemapButton extends RemapButton implements HomeItem {
     }
 
     /**
-     * @return Returns the m_DeviceCode.
+     * @return Returns the deviceCode.
      */
     @SuppressWarnings("UnusedDeclaration")
     public String getButton() {
@@ -93,7 +93,7 @@ public class NexaRemapButton extends RemapButton implements HomeItem {
     }
 
     /**
-     * @param deviceCode The m_DeviceCode to set.
+     * @param deviceCode The deviceCode to set.
      */
     @SuppressWarnings("UnusedDeclaration")
     public void setButton(String deviceCode) {
@@ -108,7 +108,7 @@ public class NexaRemapButton extends RemapButton implements HomeItem {
     }
 
     /**
-     * @return Returns the m_HouseCode.
+     * @return Returns the houseCode.
      */
     @SuppressWarnings("UnusedDeclaration")
     public String getHouseCode() {

@@ -20,6 +20,7 @@
 package nu.nethome.home.items.pronto;
 
 import nu.nethome.home.item.HomeItem;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.util.plugin.Plugin;
 
 import java.util.Queue;
@@ -30,6 +31,7 @@ import java.util.logging.Logger;
 
 @SuppressWarnings("UnusedDeclaration")
 @Plugin
+@HomeItemType("Controls")
 public class ProntoDevice extends ProntoLamp implements HomeItem {
 
     private static Logger logger = Logger.getLogger(ProntoDevice.class.getName());

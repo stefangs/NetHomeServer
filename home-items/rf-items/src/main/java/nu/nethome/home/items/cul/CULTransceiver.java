@@ -24,6 +24,7 @@ import nu.nethome.coders.encoders.Encoders;
 import nu.nethome.coders.encoders.ShortBeepEncoder;
 import nu.nethome.home.item.HomeItem;
 import nu.nethome.home.item.HomeItemAdapter;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.system.Event;
 import nu.nethome.home.system.HomeService;
 import nu.nethome.home.util.EncoderFactory;
@@ -41,6 +42,7 @@ import java.util.logging.Logger;
  * @author Stefan
  */
 @Plugin
+@HomeItemType("Hardware")
 public class CULTransceiver extends HomeItemAdapter implements HomeItem, ProtocolDecoderSink {
 
     private final String m_Model = ("<?xml version = \"1.0\"?> \n"

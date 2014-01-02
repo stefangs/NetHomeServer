@@ -20,6 +20,7 @@
 package nu.nethome.home.items.risingsun;
 
 import nu.nethome.home.item.HomeItem;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.items.nexa.NexaLamp;
 import nu.nethome.home.system.Event;
 import nu.nethome.util.plugin.Plugin;
@@ -37,6 +38,7 @@ import java.util.logging.Logger;
 * @author Stefan
 */
 @Plugin
+@HomeItemType(value = "Controls", creationEvents = RisingSunLamp.RISING_SUN_PROTOCOL_NAME)
 public class RisingSunLamp extends NexaLamp implements HomeItem {
 
     private static final String MODEL = ("<?xml version = \"1.0\"?> \n"
@@ -49,7 +51,7 @@ public class RisingSunLamp extends NexaLamp implements HomeItem {
   				+ "  <Action Name=\"toggle\" 	Method=\"toggle\" Default=\"true\" />"
   				+ "</HomeItem> ");
 
-    private static final String RISING_SUN_PROTOCOL_NAME = "RisingSun_Message";
+    public static final String RISING_SUN_PROTOCOL_NAME = "RisingSun_Message";
     private static final String RISING_SUN_HOUSE_CODE_NAME = "RisingSun.Channel";
     private static final String RISING_SUN_BUTTON_NAME = "RisingSun.Button";
     private static final String RISING_SUN_COMMAND_NAME = "RisingSun.Command";

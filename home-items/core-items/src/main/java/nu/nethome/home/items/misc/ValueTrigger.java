@@ -22,6 +22,7 @@ package nu.nethome.home.items.misc;
 import nu.nethome.home.impl.CommandLineExecutor;
 import nu.nethome.home.item.HomeItem;
 import nu.nethome.home.item.HomeItemAdapter;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.item.IllegalValueException;
 import nu.nethome.home.system.Event;
 import nu.nethome.home.system.HomeService;
@@ -36,6 +37,7 @@ import java.util.logging.Logger;
  * @author Stefan
  */
 @Plugin
+@HomeItemType("Controls")
 public class ValueTrigger extends HomeItemAdapter implements HomeItem {
 
     private final String m_Model = ("<?xml version = \"1.0\"?> \n"

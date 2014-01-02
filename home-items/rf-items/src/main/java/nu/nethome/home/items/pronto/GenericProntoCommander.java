@@ -22,6 +22,7 @@ package nu.nethome.home.items.pronto;
 
 import nu.nethome.home.item.HomeItem;
 import nu.nethome.home.item.HomeItemAdapter;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.system.Event;
 import nu.nethome.util.plugin.Plugin;
 
@@ -42,6 +43,7 @@ import java.util.logging.Logger;
  * @author Stefan
  */
 @Plugin
+@HomeItemType("Controls")
 public class GenericProntoCommander extends HomeItemAdapter implements HomeItem {
 	
 	private static final int MAX_ACTIONS = 20;

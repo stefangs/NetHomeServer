@@ -77,7 +77,7 @@ public class NexaLCLamp extends HomeItemAdapter implements HomeItem {
 	}
 
     @Override
-    protected boolean handleInit(Event event) {
+    protected boolean initAttributes(Event event) {
         lampAddress = event.getAttributeInt("NexaL.Address");
         lampButton = event.getAttributeInt("NexaL.Button");
         return true;
@@ -99,7 +99,7 @@ public class NexaLCLamp extends HomeItemAdapter implements HomeItem {
 	}
 
 	/**
-	 * @return Returns the m_HouseCode.
+	 * @return Returns the houseCode.
 	 */
 	@SuppressWarnings("UnusedDeclaration")
     public String getAddress() {
@@ -107,7 +107,7 @@ public class NexaLCLamp extends HomeItemAdapter implements HomeItem {
 	}
 
 	/**
-	 * @param houseCode The m_HouseCode to set.
+	 * @param houseCode The houseCode to set.
 	 */
 	@SuppressWarnings("UnusedDeclaration")
     public void setAddress(String houseCode) {

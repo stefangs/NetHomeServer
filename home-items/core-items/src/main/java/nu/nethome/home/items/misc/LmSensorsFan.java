@@ -19,6 +19,9 @@
 
 package nu.nethome.home.items.misc;
 
+import nu.nethome.home.item.HomeItemType;
+import nu.nethome.util.plugin.Plugin;
+
 /**
  * 
  * LmSensorsFan. This module is a part of the NetHomeServer. 
@@ -30,6 +33,8 @@ package nu.nethome.home.items.misc;
  * 
  * @author Stefan
  */
+@Plugin
+@HomeItemType("Gauges")
 public class LmSensorsFan extends LmSensorsThermometer {
 
 	private final String m_Model = ("<?xml version = \"1.0\"?> \n"

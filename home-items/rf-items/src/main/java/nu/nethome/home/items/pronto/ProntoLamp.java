@@ -21,6 +21,7 @@ package nu.nethome.home.items.pronto;
 
 import nu.nethome.home.item.HomeItem;
 import nu.nethome.home.item.HomeItemAdapter;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.system.Event;
 import nu.nethome.util.plugin.Plugin;
 
@@ -31,6 +32,7 @@ import java.util.logging.Logger;
  * @author Stefan
  */
 @Plugin
+@HomeItemType("Lamps")
 public class ProntoLamp extends HomeItemAdapter implements HomeItem {
 
 	private static final String MODEL = ("<?xml version = \"1.0\"?> \n"

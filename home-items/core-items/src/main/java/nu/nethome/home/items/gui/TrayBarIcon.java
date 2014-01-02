@@ -21,6 +21,7 @@ package nu.nethome.home.items.gui;
 
 import nu.nethome.home.item.HomeItem;
 import nu.nethome.home.item.HomeItemAdapter;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.util.plugin.Plugin;
 
 import javax.swing.*;
@@ -33,6 +34,7 @@ import java.util.logging.Logger;
 
 @SuppressWarnings("UnusedDeclaration")
 @Plugin
+@HomeItemType("GUI")
 public class TrayBarIcon extends HomeItemAdapter implements HomeItem {
 
     private static Logger logger = Logger.getLogger(TrayBarIcon.class.getName());

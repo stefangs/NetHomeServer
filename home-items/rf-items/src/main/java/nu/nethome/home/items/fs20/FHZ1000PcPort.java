@@ -21,7 +21,9 @@ package nu.nethome.home.items.fs20;
 
 import nu.nethome.home.item.HomeItem;
 import nu.nethome.home.item.HomeItemAdapter;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.system.Event;
+import nu.nethome.util.plugin.Plugin;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -33,6 +35,8 @@ import java.util.logging.Logger;
  * 
  * @author Stefan
  */
+@Plugin
+@HomeItemType("Hardware")
 public class FHZ1000PcPort extends HomeItemAdapter implements HomeItem, FS20EventListener {
 
 	public static final String EVENT_TYPE_FS20_COMMAND = "FS20Command";

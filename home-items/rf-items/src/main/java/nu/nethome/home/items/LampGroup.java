@@ -19,10 +19,7 @@
 
 package nu.nethome.home.items;
 
-import nu.nethome.home.item.ExecutionFailure;
-import nu.nethome.home.item.HomeItem;
-import nu.nethome.home.item.HomeItemAdapter;
-import nu.nethome.home.item.HomeItemProxy;
+import nu.nethome.home.item.*;
 import nu.nethome.util.plugin.Plugin;
 
 import java.util.ArrayList;
@@ -33,6 +30,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * Created by Stefan 2013-11-17
  */
 @Plugin
+@HomeItemType("Controls")
 public class LampGroup extends HomeItemAdapter implements HomeItem {
 
     private static final String MODEL = ("<?xml version = \"1.0\"?> \n"

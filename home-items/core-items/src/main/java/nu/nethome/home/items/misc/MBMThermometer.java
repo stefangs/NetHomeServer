@@ -19,11 +19,9 @@
 
 package nu.nethome.home.items.misc;
 
-import nu.nethome.home.item.HomeItem;
-import nu.nethome.home.item.HomeItemAdapter;
-import nu.nethome.home.item.LoggerComponent;
-import nu.nethome.home.item.ValueItem;
+import nu.nethome.home.item.*;
 import nu.nethome.home.system.Event;
+import nu.nethome.util.plugin.Plugin;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,9 +31,9 @@ import java.util.logging.Logger;
 /**
  * @author Stefan
  *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
+@Plugin
+@HomeItemType("Thermometers")
 public class MBMThermometer extends HomeItemAdapter implements HomeItem, ValueItem {
 
 	

@@ -22,6 +22,7 @@ package nu.nethome.home.items.tellstick;
 import nu.nethome.coders.encoders.Encoders;
 import nu.nethome.home.item.HomeItem;
 import nu.nethome.home.item.HomeItemAdapter;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.system.Event;
 import nu.nethome.home.util.EncoderFactory;
 import nu.nethome.util.plugin.Plugin;
@@ -36,6 +37,7 @@ import java.util.logging.Logger;
 
 @SuppressWarnings("UnusedDeclaration")
 @Plugin
+@HomeItemType("Hardware")
 public class Tellstick extends HomeItemAdapter implements HomeItem, ProtocolDecoderSink {
 
     public static final String RECIEVED_MESSAGE = "+W";

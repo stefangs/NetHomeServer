@@ -67,30 +67,34 @@ public class UPMHygrometer extends HomeItemAdapter implements HomeItem, ValueIte
       * @see ssg.home.HomeItem#receiveEvent(ssg.home.Event)
       */
     public boolean receiveEvent(Event event) {
-        if (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals("UPM_Message")) {
-            if (event.getAttributeInt("UPM.HouseCode") == Integer.parseInt(itemHouseCode) &&
-                    event.getAttributeInt("UPM.DeviceCode") == Integer.parseInt(itemDeviceCode)) {
-                humidity = event.getAttributeInt("UPM.Secondary") * constantK + constantM;
-                boolean newBatteryLevel = event.getAttributeInt("UPM.LowBattery") != 0;
-                if (lowBattery == 0 && newBatteryLevel) {
-                    logger.warning("Low battery for " + name);
-                }
-                lowBattery = newBatteryLevel ? 1 : 0;
-                logger.finer("Hygrometer update: " + humidity + " %");
-                // Format and store the current time.
-                SimpleDateFormat formatter
-                        = new SimpleDateFormat("HH:mm:ss yyyy.MM.dd ");
-                Date currentTime = new Date();
-                lastUpdateString = formatter.format(currentTime);
-                return true;
+        if (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals("UPM_Message") &&
+                event.getAttributeInt("UPM.HouseCode") == Integer.parseInt(itemHouseCode) &&
+                event.getAttributeInt("UPM.DeviceCode") == Integer.parseInt(itemDeviceCode)) {
+            humidity = event.getAttributeInt("UPM.Secondary") * constantK + constantM;
+            boolean newBatteryLevel = event.getAttributeInt("UPM.LowBattery") != 0;
+            if (lowBattery == 0 && newBatteryLevel) {
+                logger.warning("Low battery for " + name);
             }
+            lowBattery = newBatteryLevel ? 1 : 0;
+            logger.finer("Hygrometer update: " + humidity + " %");
+            // Format and store the current time.
+            SimpleDateFormat formatter
+                    = new SimpleDateFormat("HH:mm:ss yyyy.MM.dd ");
+            Date currentTime = new Date();
+            lastUpdateString = formatter.format(currentTime);
+            return true;
+        } else {
+            return handleInit(event);
         }
-        return false;
     }
 
-    /* (non-Javadoc)
-      * @see ssg.home.HomeItem#getModel()
-      */
+    @Override
+    protected boolean initAttributes(Event event) {
+        itemHouseCode = event.getAttribute("UPM.HouseCode");
+        itemDeviceCode = event.getAttribute("UPM.DeviceCode");
+        return true;
+    }
+
     public String getModel() {
         return MODEL;
     }
@@ -117,7 +121,7 @@ public class UPMHygrometer extends HomeItemAdapter implements HomeItem, ValueIte
     }
 
     /**
-     * @return Returns the m_DeviceCode.
+     * @return Returns the deviceCode.
      */
     @SuppressWarnings("UnusedDeclaration")
     public String getDeviceCode() {

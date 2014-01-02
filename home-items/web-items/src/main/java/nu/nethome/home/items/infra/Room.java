@@ -22,6 +22,7 @@ package nu.nethome.home.items.infra;
 
 import nu.nethome.home.item.HomeItem;
 import nu.nethome.home.item.HomeItemAdapter;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.util.plugin.Plugin;
 
 import java.util.logging.Logger;
@@ -33,6 +34,7 @@ import java.util.logging.Logger;
  * @author Stefan
  */
 @Plugin
+@HomeItemType("Infrastructure")
 public class Room extends HomeItemAdapter implements HomeItem {
 
 	private static final String MODEL = ("<?xml version = \"1.0\"?> \n"

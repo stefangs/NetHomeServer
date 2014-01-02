@@ -23,7 +23,9 @@ import nu.nethome.home.impl.CommandLineExecutor;
 import nu.nethome.home.item.HomeItem;
 import nu.nethome.home.item.HomeItemAdapter;
 import nu.nethome.home.item.HomeItemProxy;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.system.HomeService;
+import nu.nethome.util.plugin.Plugin;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
@@ -40,6 +42,8 @@ import java.util.logging.Logger;
  * 
  * @author Peter Lagerhem 2010-03-15
  */
+@Plugin
+@HomeItemType("Ports")
 public class SatelliteCommander extends HomeItemAdapter implements HomeItem {
 
 	private final String m_Model = ("<?xml version = \"1.0\"?> \n"

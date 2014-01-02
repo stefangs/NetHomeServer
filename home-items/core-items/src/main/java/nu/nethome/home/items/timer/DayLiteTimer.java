@@ -27,6 +27,7 @@ import com.jtheory.jdring.AlarmListener;
 import com.jtheory.jdring.PastDateException;
 import nu.nethome.home.item.ExecutionFailure;
 import nu.nethome.home.item.HomeItem;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.item.IllegalValueException;
 import nu.nethome.home.items.timer.FlexableAlarm.AlarmItem;
 import nu.nethome.home.system.HomeService;
@@ -60,6 +61,7 @@ import java.util.logging.Logger;
  * @see AlarmItem
  */
 @Plugin
+@HomeItemType("Timers")
 public class DayLiteTimer extends WeekTimer implements HomeItem{
 
 	private static Logger logger = Logger.getLogger(DayLiteTimer.class

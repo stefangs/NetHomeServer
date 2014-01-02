@@ -21,6 +21,7 @@ package nu.nethome.home.items.web;
 
 import nu.nethome.home.item.HomeItem;
 import nu.nethome.home.item.HomeItemAdapter;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.system.HomeService;
 import nu.nethome.util.plugin.Plugin;
 import org.mortbay.jetty.Server;
@@ -47,6 +48,7 @@ import java.util.logging.Logger;
  */
 @SuppressWarnings("UnusedDeclaration")
 @Plugin
+@HomeItemType("GUI")
 public class JettyWEB extends HomeItemAdapter implements HomeItem, HomeWebServer {
 
     public static class HelloServlet extends HttpServlet {

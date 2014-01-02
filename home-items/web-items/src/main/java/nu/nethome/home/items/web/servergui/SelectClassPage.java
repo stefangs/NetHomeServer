@@ -27,7 +27,6 @@
  * 2010-11-12 pela Added support of 'options' attribute type when generating HTML
  */
 package nu.nethome.home.items.web.servergui;
-// TODO Add category and auto-create to all items
 
 import nu.nethome.home.item.HomeItemInfo;
 import nu.nethome.home.system.Event;

@@ -20,8 +20,10 @@
 package nu.nethome.home.items.fs20;
 
 import nu.nethome.home.item.HomeItem;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.items.RemapButton;
 import nu.nethome.home.system.Event;
+import nu.nethome.util.plugin.Plugin;
 
 
 /**
@@ -32,6 +34,8 @@ import nu.nethome.home.system.Event;
  * @author Stefan Str�mberg
  */
 @SuppressWarnings("UnusedDeclaration")
+@Plugin
+@HomeItemType(value="Controls", creationEvents = FHZ1000PcPort.EVENT_TYPE_FS20_EVENT)
 public class FS20RemapButton extends RemapButton implements HomeItem {
 
 	private static final String MODEL = ("<?xml version = \"1.0\"?> \n"
@@ -74,16 +78,23 @@ public class FS20RemapButton extends RemapButton implements HomeItem {
 
 	public boolean receiveEvent(Event event) {
 		// Check the events and see if they affect our current state.
-		if (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals(FHZ1000PcPort.EVENT_TYPE_FS20_EVENT)){
-			if (event.getAttribute(FHZ1000PcPort.EVENT_HOUSECODE_ATTRIBUTE).equals(houseCode) &&
+		if (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals(FHZ1000PcPort.EVENT_TYPE_FS20_EVENT) &&
+                event.getAttribute(FHZ1000PcPort.EVENT_HOUSECODE_ATTRIBUTE).equals(houseCode) &&
 				event.getAttribute(FHZ1000PcPort.EVENT_DEVICECODE_ATTRIBUTE).equals(deviceCode)) {
-				processEvent(event);
-                return true;
-			}
-		}
-		return false;
-	}
-	
+		    processEvent(event);
+            return true;
+        } else {
+            return handleInit(event);
+        }
+    }
+
+    @Override
+    protected boolean initAttributes(Event event) {
+        houseCode = event.getAttribute(FHZ1000PcPort.EVENT_HOUSECODE_ATTRIBUTE);
+        deviceCode = event.getAttribute(FHZ1000PcPort.EVENT_DEVICECODE_ATTRIBUTE);
+        return true;
+    }
+
 	public void actOnEvent(Event event) {
         byte command = (byte)event.getAttributeInt(Event.EVENT_VALUE_ATTRIBUTE);
 		switch (command) {

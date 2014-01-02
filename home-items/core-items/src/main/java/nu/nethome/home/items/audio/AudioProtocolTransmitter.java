@@ -23,6 +23,7 @@ import nu.nethome.coders.encoders.Encoders;
 import nu.nethome.coders.encoders.ShortBeepEncoder;
 import nu.nethome.home.item.HomeItem;
 import nu.nethome.home.item.HomeItemAdapter;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.system.Event;
 import nu.nethome.home.util.EncoderFactory;
 import nu.nethome.util.plugin.Plugin;
@@ -45,6 +46,7 @@ import java.util.logging.Logger;
  * @author Stefan
  */
 @Plugin
+@HomeItemType("Hardware")
 public class AudioProtocolTransmitter extends HomeItemAdapter implements HomeItem {
 
     private final String m_Model_1 = ("<?xml version = \"1.0\"?> \n"

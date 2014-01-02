@@ -23,9 +23,11 @@ import nu.nethome.coders.encoders.Encoders;
 import nu.nethome.coders.encoders.ShortBeepEncoder;
 import nu.nethome.home.item.HomeItem;
 import nu.nethome.home.item.HomeItemAdapter;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.system.Event;
 import nu.nethome.home.system.HomeService;
 import nu.nethome.home.util.EncoderFactory;
+import nu.nethome.util.plugin.Plugin;
 import nu.nethome.util.ps.BadMessageException;
 import nu.nethome.util.ps.Message;
 import nu.nethome.util.ps.ProtocolEncoder;
@@ -33,6 +35,8 @@ import nu.nethome.util.ps.impl.RFBitBangerPort;
 
 import java.util.logging.Logger;
 
+@Plugin
+@HomeItemType("Hardware")
 public class RFBitBangerTransmitter extends HomeItemAdapter implements HomeItem {
 
     private final String MODEL = ("<?xml version = \"1.0\"?> \n"

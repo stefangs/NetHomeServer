@@ -51,6 +51,7 @@ import java.util.List;
  */
 @SuppressWarnings("UnusedDeclaration")
 @Plugin
+@HomeItemType("GUI")
 public class HomeGUI extends HttpServlet implements FinalEventListener, HomeItem {
 
     private static final int MS_PER_SECOND = 1000;

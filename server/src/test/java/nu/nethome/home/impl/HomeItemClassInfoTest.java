@@ -73,8 +73,8 @@ public class HomeItemClassInfoTest {
     }
 
     @Test
-    public void noAnnotationGivesLampCategory() {
-        assertThat(noAnno.getCategory(), is("Lamps"));
+    public void noAnnotationGivesUnknownCategory() {
+        assertThat(noAnno.getCategory(), is("Unknown"));
     }
 
     @Test

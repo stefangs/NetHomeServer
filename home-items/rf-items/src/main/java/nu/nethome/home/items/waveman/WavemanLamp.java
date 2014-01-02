@@ -20,6 +20,7 @@
 package nu.nethome.home.items.waveman;
 
 import nu.nethome.home.item.HomeItem;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.items.nexa.NexaLamp;
 import nu.nethome.util.plugin.Plugin;
 
@@ -37,6 +38,7 @@ import java.util.logging.Logger;
 * @author Stefan
 */
 @Plugin
+@HomeItemType(value = "Lamps", creationEvents = "Waveman_Message")
 public class WavemanLamp extends NexaLamp implements HomeItem {
 
 	public WavemanLamp() {

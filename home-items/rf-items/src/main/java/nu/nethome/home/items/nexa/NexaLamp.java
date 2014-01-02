@@ -67,9 +67,6 @@ public class NexaLamp extends HomeItemAdapter implements HomeItem {
 	public NexaLamp() {
 	}
 	
-	/* (non-Javadoc)
-	 * @see ssg.home.HomeItem#receiveEvent(ssg.home.Event)
-	 */
 	public boolean receiveEvent(Event event) {
 		// Check if this is an inward event directed to this instance
 		if (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals(getProtocolName()) &&
@@ -79,14 +76,19 @@ public class NexaLamp extends HomeItemAdapter implements HomeItem {
 			// In that case, update our state accordingly
 			state = (event.getAttributeInt(getCommandName()) == 1);
             return true;
-		}
-		return false;
+		} else {
+		    return handleInit(event);
+        }
 	}
-	
-	/* (non-Javadoc)
-	 * @see ssg.home.HomeItem#getModel()
-	 */
-	public String getModel() {
+
+    @Override
+    protected boolean initAttributes(Event event) {
+        lampHouseCode = "" + (char)(event.getAttributeInt(getHouseCodeName() + ((int)'A')));
+        lampButton = event.getAttributeInt(getButtonName());
+        return true;
+    }
+
+    public String getModel() {
 		return MODEL;
 	}
 
@@ -119,14 +121,14 @@ public class NexaLamp extends HomeItemAdapter implements HomeItem {
 	}
 	
 	/**
-	 * @return Returns the m_HouseCode.
+	 * @return Returns the houseCode.
 	 */
 	@SuppressWarnings("UnusedDeclaration")
     public String getHouseCode() {
 		return lampHouseCode;
 	}
 	/**
-	 * @param houseCode The m_HouseCode to set.
+	 * @param houseCode The houseCode to set.
 	 */
 	@SuppressWarnings("UnusedDeclaration")
     public void setHouseCode(String houseCode) {

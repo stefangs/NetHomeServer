@@ -29,7 +29,6 @@ import java.util.Date;
 import java.util.logging.Logger;
 
 /**
- *
  * @author Stefan
  */
 @Plugin
@@ -79,21 +78,28 @@ public class UPMSoilMoisture extends HomeItemAdapter implements HomeItem, ValueI
         // Check if the event is an UPM_Message and in that case check if it is
         // intended for this item (by House Code and Device Code).
         // See http://wiki.nethome.nu/doku.php/events#upm_message
-        if (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals("UPM_Message")) {
-            if (event.getAttribute("UPM.HouseCode").equals(itemHouseCode) &&
-                    event.getAttribute("UPM.DeviceCode").equals(itemDeviceCode)) {
-                maxRawValue = Math.max(maxRawValue, event.getAttributeInt("UPM.Primary"));
-                minRawValue = Math.min(minRawValue, event.getAttributeInt("UPM.Primary"));
-                moisture = calculateMoisture(event.getAttributeInt("UPM.Primary"));
-                batteryIsLow = event.getAttributeInt("UPM.LowBattery") != 0;
-                logger.finer("Moisture update: " + moisture + " %");
-                // Format and store the current time.
-                latestUpdateOrCreation = new Date();
-                hasBeenUpdated = true;
-                return true;
-            }
+        if (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals("UPM_Message") &&
+                event.getAttribute("UPM.HouseCode").equals(itemHouseCode) &&
+                event.getAttribute("UPM.DeviceCode").equals(itemDeviceCode)) {
+            maxRawValue = Math.max(maxRawValue, event.getAttributeInt("UPM.Primary"));
+            minRawValue = Math.min(minRawValue, event.getAttributeInt("UPM.Primary"));
+            moisture = calculateMoisture(event.getAttributeInt("UPM.Primary"));
+            batteryIsLow = event.getAttributeInt("UPM.LowBattery") != 0;
+            logger.finer("Moisture update: " + moisture + " %");
+            // Format and store the current time.
+            latestUpdateOrCreation = new Date();
+            hasBeenUpdated = true;
+            return true;
+        } else {
+            return handleInit(event);
         }
-        return false;
+    }
+
+    @Override
+    protected boolean initAttributes(Event event) {
+        itemHouseCode = event.getAttribute("UPM.HouseCode");
+        itemDeviceCode = event.getAttribute("UPM.DeviceCode");
+        return true;
     }
 
     private double calculateMoisture(int rawValue) {

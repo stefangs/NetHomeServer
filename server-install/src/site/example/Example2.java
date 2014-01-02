@@ -22,6 +22,7 @@ import nu.nethome.home.item.HomeItemAdapter;
 import nu.nethome.home.system.Event;
 import nu.nethome.home.system.HomeService;
 import nu.nethome.util.plugin.Plugin;
+import nu.nethome.home.item.HomeItemType;
 
 /**
  * This is a simple example of a HomeItem. It demonstrates how to receive and send events.
@@ -36,6 +37,7 @@ import nu.nethome.util.plugin.Plugin;
  *
  */
 @Plugin
+@HomeItemType("Controls")
 public class Example2 extends HomeItemAdapter implements HomeItem {
 
     private static final String MODEL = ("<?xml version = \"1.0\"?> \n"

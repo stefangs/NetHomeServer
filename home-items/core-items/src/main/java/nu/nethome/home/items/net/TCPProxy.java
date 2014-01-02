@@ -21,6 +21,7 @@ package nu.nethome.home.items.net;
 
 import nu.nethome.home.item.HomeItem;
 import nu.nethome.home.item.HomeItemAdapter;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.system.Event;
 import nu.nethome.util.plugin.Plugin;
 
@@ -38,6 +39,7 @@ import java.util.logging.Logger;
  */
 @SuppressWarnings("UnusedDeclaration")
 @Plugin
+@HomeItemType("Ports")
 public class TCPProxy extends HomeItemAdapter implements Runnable, HomeItem {
 
     private class ProxyThread extends Thread {

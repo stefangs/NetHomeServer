@@ -73,24 +73,31 @@ public class UPMThermometer extends HomeItemAdapter implements HomeItem, ValueIt
         // Check if the event is an UPM_Message and in that case check if it is
         // intended for this thermometer (by House Code and Device Code).
         // See http://wiki.nethome.nu/doku.php/events#upm_message
-        if (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals("UPM_Message")) {
-            if (event.getAttribute("UPM.HouseCode").equals(itemHouseCode) &&
-                    event.getAttribute("UPM.DeviceCode").equals(itemDeviceCode)) {
-                // Recalculate the raw temperature value to Celsius Degrees
-                temperature = constantK * event.getAttributeInt("UPM.Primary") + constantM;
-                boolean newBatteryLevel = event.getAttributeInt("UPM.LowBattery") != 0;
-                if (!batteryIsLow && newBatteryLevel) {
-                    logger.warning("Low battery for " + name);
-                }
-                batteryIsLow = newBatteryLevel;
-                logger.finer("Temperature update: " + temperature + " degrees");
-                // Format and store the current time.
-                latestUpdateOrCreation = new Date();
-                hasBeenUpdated = true;
-                return true;
+        if (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals("UPM_Message") &&
+                event.getAttribute("UPM.HouseCode").equals(itemHouseCode) &&
+                event.getAttribute("UPM.DeviceCode").equals(itemDeviceCode)) {
+            // Recalculate the raw temperature value to Celsius Degrees
+            temperature = constantK * event.getAttributeInt("UPM.Primary") + constantM;
+            boolean newBatteryLevel = event.getAttributeInt("UPM.LowBattery") != 0;
+            if (!batteryIsLow && newBatteryLevel) {
+                logger.warning("Low battery for " + name);
             }
+            batteryIsLow = newBatteryLevel;
+            logger.finer("Temperature update: " + temperature + " degrees");
+            // Format and store the current time.
+            latestUpdateOrCreation = new Date();
+            hasBeenUpdated = true;
+            return true;
+        } else {
+            return handleInit(event);
         }
-        return false;
+    }
+
+    @Override
+    protected boolean initAttributes(Event event) {
+        itemHouseCode = event.getAttribute("UPM.HouseCode");
+        itemDeviceCode = event.getAttribute("UPM.DeviceCode");
+        return true;
     }
 
     public String getModel() {

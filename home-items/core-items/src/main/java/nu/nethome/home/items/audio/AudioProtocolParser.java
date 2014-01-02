@@ -22,6 +22,7 @@ package nu.nethome.home.items.audio;
 import nu.nethome.coders.decoders.*;
 import nu.nethome.home.item.HomeItem;
 import nu.nethome.home.item.HomeItemAdapter;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.system.Event;
 import nu.nethome.util.plugin.Plugin;
 import nu.nethome.util.ps.FieldValue;
@@ -47,6 +48,7 @@ import java.util.logging.Logger;
  */
 @SuppressWarnings("UnusedDeclaration")
 @Plugin
+@HomeItemType("Hardware")
 public class AudioProtocolParser extends HomeItemAdapter implements HomeItem, ProtocolDecoderSink {
 
     private final static String MODEL_1 = ("<?xml version = \"1.0\"?> \n"

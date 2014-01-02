@@ -20,6 +20,7 @@
 package nu.nethome.home.items.deltronic;
 
 import nu.nethome.home.item.HomeItem;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.items.RemapButton;
 import nu.nethome.home.system.Event;
 import nu.nethome.util.plugin.Plugin;
@@ -30,6 +31,7 @@ import java.util.logging.Logger;
  * @author Stefan
  */
 @Plugin
+@HomeItemType(value="Controls", creationEvents = "Deltronic_Message")
 public class DeltronicRemapButton extends RemapButton implements HomeItem {
 
     private final static String MODEL = ("<?xml version = \"1.0\"?> \n"
@@ -63,8 +65,16 @@ public class DeltronicRemapButton extends RemapButton implements HomeItem {
 
             processEvent(event);
             return true;
+        } else {
+            return handleInit(event);
         }
-        return false;
+    }
+
+    @Override
+    protected boolean initAttributes(Event event) {
+        itemAddress = event.getAttributeInt("Deltronic.Address");
+        itemButton = event.getAttributeInt("Deltronic.Button");
+        return true;
     }
 
     @Override
@@ -81,7 +91,7 @@ public class DeltronicRemapButton extends RemapButton implements HomeItem {
     }
 
     /**
-     * @return Returns the m_DeviceCode.
+     * @return Returns the deviceCode.
      */
 
     @SuppressWarnings("UnusedDeclaration")

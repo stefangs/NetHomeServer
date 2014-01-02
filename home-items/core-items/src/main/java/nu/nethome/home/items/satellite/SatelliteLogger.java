@@ -31,6 +31,7 @@ package nu.nethome.home.items.satellite;
 import nu.nethome.home.item.HomeItem;
 import nu.nethome.home.item.HomeItemAdapter;
 import nu.nethome.home.item.HomeItemProxy;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.util.plugin.Plugin;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
@@ -48,6 +49,7 @@ import java.util.logging.Logger;
  * 
  */
 @Plugin
+@HomeItemType("Ports")
 public class SatelliteLogger extends HomeItemAdapter implements HomeItem {
 
 	private static final String MODEL = ("<?xml version = \"1.0\" encoding=\"UTF-8\"?> \n"

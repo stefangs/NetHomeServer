@@ -21,6 +21,7 @@ package nu.nethome.home.items.zhejiang;
 
 import nu.nethome.home.item.HomeItem;
 import nu.nethome.home.item.HomeItemAdapter;
+import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.system.Event;
 import nu.nethome.util.plugin.Plugin;
 
@@ -36,6 +37,7 @@ import java.util.logging.Logger;
  * @author Stefan
  */
 @Plugin
+@HomeItemType(value = "Lamps", creationEvents = "Zhejiang_Message")
 public class ZhejiangLamp extends HomeItemAdapter implements HomeItem {
 
     private static final String MODEL = ("<?xml version = \"1.0\"?> \n"
@@ -65,8 +67,16 @@ public class ZhejiangLamp extends HomeItemAdapter implements HomeItem {
             // In that case, update our state accordingly
             state = (event.getAttributeInt("Zhejiang.Command") == 1);
             return true;
+        } else {
+            return handleInit(event);
         }
-        return false;
+    }
+
+    @Override
+    protected boolean initAttributes(Event event) {
+        targetButton = "" + (char) (event.getAttributeInt("Zhejiang.Button" + ((int) 'A')));
+        targetAddress = event.getAttributeInt("Zhejiang.Address");
+        return true;
     }
 
 
