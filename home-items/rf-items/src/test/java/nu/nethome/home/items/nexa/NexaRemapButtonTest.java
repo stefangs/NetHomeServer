@@ -19,11 +19,14 @@
 
 package nu.nethome.home.items.nexa;
 
+import nu.nethome.home.impl.InternalEvent;
 import nu.nethome.home.items.util.TstHomeItemProxy;
 import nu.nethome.home.items.util.TstHomeService;
 import nu.nethome.home.system.Event;
 import nu.nethome.home.system.HomeService;
 import org.apache.xerces.parsers.SAXParser;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.core.Is;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +36,9 @@ import org.xml.sax.SAXException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -60,7 +65,7 @@ public class NexaRemapButtonTest {
 	}
 
 	@Test
-	public void testGetModel() throws SAXException, IOException {
+	public void canGetModel() throws SAXException, IOException {
 		SAXParser parser = new SAXParser();
 		ByteArrayInputStream byteStream = new ByteArrayInputStream(m_testItem.getModel().getBytes());
 		InputSource source = new InputSource(byteStream);
@@ -69,28 +74,28 @@ public class NexaRemapButtonTest {
 	}
 
 	@Test
-	public void testSetName() {
+	public void canSetName() {
 		m_testItem.setName("FooBar");
 		assertTrue(m_testItem.getName().equals("FooBar"));
 	}
 
 
 	@Test
-	public void testGetSetOnCommand() {
+	public void canGetSetOnCommand() {
 		assertTrue(m_testItem.getOnCommand().equals(""));
 		m_testItem.setOnCommand("FooBar");
 		assertTrue(m_testItem.getOnCommand().equals("FooBar"));
 	}
 
 	@Test
-	public void testGetOffCommand() {
+	public void canGetOffCommand() {
 		assertTrue(m_testItem.getOffCommand().equals(""));
 		m_testItem.setOffCommand("FieBar");
 		assertTrue(m_testItem.getOffCommand().equals("FieBar"));
 	}
 
 	@Test
-	public void testGetSetHouseCode() {
+	public void canGetSetHouseCode() {
 		assertEquals("A", m_testItem.getHouseCode());
 		m_testItem.setHouseCode("C");
 		assertEquals("C", m_testItem.getHouseCode());
@@ -103,7 +108,7 @@ public class NexaRemapButtonTest {
 	}
 
 	@Test
-	public void testGetSetDeviceCode() {
+	public void canGetSetDeviceCode() {
 		assertEquals("1", m_testItem.getButton());
 		m_testItem.setButton("3");
 		assertEquals("3", m_testItem.getButton());
@@ -116,7 +121,7 @@ public class NexaRemapButtonTest {
 	}
 
 	@Test
-	public void testReceiveOnCommand() throws InterruptedException {
+	public void canReceiveOnCommand() throws InterruptedException {
 		// Set up the remap button
 		m_testItem.setOnCommand("call,Foo,OnMethod");
 		m_testItem.setButton("1");
@@ -140,7 +145,7 @@ public class NexaRemapButtonTest {
 	}
 
 	@Test
-	public void testReceiveOffCommand() throws InterruptedException {
+	public void canReceiveOffCommand() throws InterruptedException {
 		// Set up the remap button
 		m_testItem.setOffCommand("call,Foo,OffMethod");
 		m_testItem.setButton("7");
@@ -163,4 +168,16 @@ public class NexaRemapButtonTest {
 		m_testItem.stop();
 	}
 
+    @Test
+    public void canConfigureFromInitEvent() throws InterruptedException {
+        Event initEvent = new InternalEvent("Init");
+        initEvent.setAttribute("InitId", (int)m_testItem.getItemId());
+        initEvent.setAttribute("Direction", "In");
+        initEvent.setAttribute("Nexa.Command", "1");
+        initEvent.setAttribute("Nexa.Button", "5");
+        initEvent.setAttribute("Nexa.HouseCode", "2");
+        m_testItem.receiveEvent(initEvent);
+        MatcherAssert.assertThat(m_testItem.getButton(), Is.is("5"));
+        MatcherAssert.assertThat(m_testItem.getHouseCode(), Is.is("C"));
+    }
 }

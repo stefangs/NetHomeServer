@@ -67,8 +67,16 @@ public class NexaRemapButton extends RemapButton implements HomeItem {
 
             processEvent(event);
             return true;
+        } else {
+            return handleInit(event);
         }
-        return false;
+    }
+
+    @Override
+    protected boolean initAttributes(Event event) {
+        buttonHouseCode = event.getAttributeInt("Nexa.HouseCode");
+        buttonNumber = event.getAttributeInt("Nexa.Button");
+        return true;
     }
 
     @Override
@@ -129,5 +137,4 @@ public class NexaRemapButton extends RemapButton implements HomeItem {
             buttonHouseCode = (int) hc.charAt(0) - (int) 'A';
         }
     }
-
 }

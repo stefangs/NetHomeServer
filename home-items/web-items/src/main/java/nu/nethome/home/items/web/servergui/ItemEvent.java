@@ -19,13 +19,13 @@ public class ItemEvent {
 
     public ItemEvent(Event event, boolean wasHandled) {
         id = getNewId();
-        updateEvent(event);
+        updateEvent(event, wasHandled);
         content = extractContent(event);
-        this.wasHandled = wasHandled;
     }
 
-    public void updateEvent(Event event) {
+    public void updateEvent(Event event, boolean wasHandled) {
         this.event = event;
+        this.wasHandled = wasHandled;
         received = new Date();
     }
 

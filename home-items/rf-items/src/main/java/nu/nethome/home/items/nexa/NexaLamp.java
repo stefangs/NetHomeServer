@@ -83,7 +83,7 @@ public class NexaLamp extends HomeItemAdapter implements HomeItem {
 
     @Override
     protected boolean initAttributes(Event event) {
-        lampHouseCode = "" + (char)(event.getAttributeInt(getHouseCodeName() + ((int)'A')));
+        lampHouseCode = "" + (char)(event.getAttributeInt(getHouseCodeName()) + ((int)'A'));
         lampButton = event.getAttributeInt(getButtonName());
         return true;
     }

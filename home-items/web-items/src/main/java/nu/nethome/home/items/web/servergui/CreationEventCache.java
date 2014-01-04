@@ -32,7 +32,7 @@ public class CreationEventCache {
             boolean updated = false;
             for (ItemEvent itemEvent : itemEvents) {
                 if (itemEvent.getContent().equals(content)) {
-                    itemEvent.updateEvent(event);
+                    itemEvent.updateEvent(event, wasHandled);
                     updated = true;
                     break;
                 }

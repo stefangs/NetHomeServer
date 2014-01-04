@@ -21,7 +21,9 @@ package nu.nethome.home.items.nexa;
 
 import nu.nethome.coders.decoders.NexaDecoder;
 import nu.nethome.coders.encoders.Encoders;
+import nu.nethome.home.impl.InternalEvent;
 import nu.nethome.home.items.util.TstHomeService;
+import nu.nethome.home.system.Event;
 import nu.nethome.home.util.EncoderFactory;
 import nu.nethome.util.ps.BadMessageException;
 import nu.nethome.util.ps.Message;
@@ -69,4 +71,16 @@ public class NexaLampScenarioTest {
         assertThat(player.getMessageField(0, "Command"), is(1));
     }
 
+    @Test
+    public void initEvent() throws BadMessageException {
+        Event initEvent = new InternalEvent("Init");
+        initEvent.setAttribute("InitId", (int)lamp.getItemId());
+        initEvent.setAttribute("Direction", "In");
+        initEvent.setAttribute("Nexa.Command", "1");
+        initEvent.setAttribute("Nexa.Button", "1");
+        initEvent.setAttribute("Nexa.HouseCode", "2");
+        lamp.receiveEvent(initEvent);
+        assertThat(lamp.getButton(), is("1"));
+        assertThat(lamp.getHouseCode(), is("C"));
+    }
 }
