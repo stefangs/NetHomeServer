@@ -19,6 +19,7 @@
 
 package nu.nethome.home.impl.relation;
 
+import nu.nethome.home.impl.LocalHomeItemProxy;
 import nu.nethome.home.impl.ModelException;
 import nu.nethome.home.item.Attribute;
 import nu.nethome.home.item.HomeItem;

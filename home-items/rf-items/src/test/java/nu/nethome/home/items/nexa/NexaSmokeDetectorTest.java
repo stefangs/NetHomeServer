@@ -19,7 +19,7 @@
 
 package nu.nethome.home.items.nexa;
 
-import nu.nethome.home.impl.InternalHomeItemProxy;
+import nu.nethome.home.impl.LocalHomeItemProxy;
 import nu.nethome.home.item.ExecutionFailure;
 import nu.nethome.home.item.HomeItemProxy;
 import nu.nethome.home.item.IllegalValueException;
@@ -52,7 +52,7 @@ public class NexaSmokeDetectorTest {
 		server = new TstHomeService();
 		testItem = new NexaSmokeDetector();
         testItem.activate(server);
-		testProxy = new InternalHomeItemProxy(testItem, null);
+		testProxy = new LocalHomeItemProxy(testItem, null);
 	}
 
 	@After

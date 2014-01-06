@@ -117,7 +117,7 @@ public class StaticHomeItemModel implements HomeItemModel {
 
     private void parseAttributeModel(Node attributeNode, Class<? extends HomeItem> aClass) {
         NamedNodeMap nodeAttributes = attributeNode.getAttributes();
-        String name = getNodeAttributeValue(nodeAttributes, InternalHomeItemProxy.NAME_ATTRIBUTE);
+        String name = getNodeAttributeValue(nodeAttributes, HomeItemProxy.NAME_ATTRIBUTE);
         String getMethod = getNodeAttributeValue(nodeAttributes, "Get");
         String setMethod = getNodeAttributeValue(nodeAttributes, "Set");
         String initMethod = getNodeAttributeValue(nodeAttributes, "Init");
@@ -162,7 +162,7 @@ public class StaticHomeItemModel implements HomeItemModel {
 
     private void parseActionModel(Node actionNode, Class<? extends HomeItem> aClass) {
         NamedNodeMap attributes = actionNode.getAttributes();
-        String name = getNodeAttributeValue(attributes, InternalHomeItemProxy.NAME_ATTRIBUTE);
+        String name = getNodeAttributeValue(attributes, HomeItemProxy.NAME_ATTRIBUTE);
         String method = getNodeAttributeValue(attributes, "Method");
         if (name != null && method != null) {
             try {

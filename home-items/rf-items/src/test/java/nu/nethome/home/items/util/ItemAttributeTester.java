@@ -19,7 +19,8 @@
 
 package nu.nethome.home.items.util;
 
-import nu.nethome.home.impl.InternalHomeItemProxy;
+import nu.nethome.home.impl.ModelException;
+import nu.nethome.home.impl.LocalHomeItemProxy;
 import nu.nethome.home.item.HomeItem;
 import nu.nethome.home.item.HomeItemProxy;
 import nu.nethome.home.item.IllegalValueException;
@@ -28,8 +29,8 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class ItemAttributeTester {
-    public static void testAttributes(HomeItem item, String... attributes) throws IllegalValueException {
-        HomeItemProxy proxy = new InternalHomeItemProxy(item, null);
+    public static void testAttributes(HomeItem item, String... attributes) throws IllegalValueException, ModelException {
+        HomeItemProxy proxy = new LocalHomeItemProxy(item, null);
 
         for (String attributeValuePair : attributes) {
             String attributeAndValue[] = attributeValuePair.split("=");

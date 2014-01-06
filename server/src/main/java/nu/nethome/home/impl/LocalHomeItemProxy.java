@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nu.nethome.home.impl.relation;
+package nu.nethome.home.impl;
 
 import nu.nethome.home.impl.AttributeModel;
 import nu.nethome.home.impl.ModelException;

@@ -19,7 +19,8 @@
 
 package nu.nethome.home.items.upm;
 
-import nu.nethome.home.impl.InternalHomeItemProxy;
+import nu.nethome.home.impl.ModelException;
+import nu.nethome.home.impl.LocalHomeItemProxy;
 import nu.nethome.home.item.HomeItemProxy;
 import nu.nethome.home.item.IllegalValueException;
 import nu.nethome.home.items.util.ItemAttributeTester;
@@ -48,14 +49,14 @@ public class UPMThermometerTest {
     public void setUp() throws Exception {
         temp = new UPMThermometer();
         server = new TstHomeService();
-        proxy = new InternalHomeItemProxy(temp, null);
+        proxy = new LocalHomeItemProxy(temp, null);
         temp.setHouseCode("4");
         temp.setDeviceCode("3");
         temp.activate(server);
     }
 
     @Test
-    public void attributes() throws IllegalValueException {
+    public void attributes() throws IllegalValueException, ModelException {
         ItemAttributeTester.testAttributes(temp, "HouseCode=1", "DeviceCode=1", "LogFile=foo", "K=1.0", "M=1.0");
     }
 

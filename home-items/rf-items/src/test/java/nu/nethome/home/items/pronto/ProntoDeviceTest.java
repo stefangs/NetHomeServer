@@ -21,7 +21,8 @@ package nu.nethome.home.items.pronto;
 
 import com.sun.org.apache.xerces.internal.parsers.SAXParser;
 import nu.nethome.home.impl.HomeServer;
-import nu.nethome.home.impl.InternalHomeItemProxy;
+import nu.nethome.home.impl.ModelException;
+import nu.nethome.home.impl.LocalHomeItemProxy;
 import nu.nethome.home.item.ExecutionFailure;
 import nu.nethome.home.item.HomeItemProxy;
 import nu.nethome.home.item.IllegalValueException;
@@ -152,14 +153,15 @@ public class ProntoDeviceTest {
     }
 
     @Test
-    public void callMethodCallsMethod() throws IllegalValueException, ExecutionFailure {
+    public void callMethodCallsMethod() throws IllegalValueException, ExecutionFailure, ModelException {
         ProntoDevice item = new ProntoDevice();
         item.activate(realServer);
-        HomeItemProxy proxy = new InternalHomeItemProxy(item, realServer);
+        HomeItemProxy proxy = new LocalHomeItemProxy(item, realServer);
 
         for (int i = 0; i < ProntoDevice.COMMAND_COUNT; i++) {
             proxy.setAttributeValue("Command" + Integer.toString(i), "CommandName" + Integer.toString(i));
             proxy.setAttributeValue("CommandCode" + Integer.toString(i), "CommandPronto" + Integer.toString(i));
+            proxy = new LocalHomeItemProxy(item, realServer);
             proxy.callAction(proxy.getAttributeValue("Command" + Integer.toString(i)));
             verify(sentEvent, times(1)).setAttribute("Pronto.Message", proxy.getAttributeValue("CommandCode" + Integer.toString(i)));
             verify(realServer, times(i + 1)).send(sentEvent);

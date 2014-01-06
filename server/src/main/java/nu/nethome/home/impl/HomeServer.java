@@ -19,13 +19,10 @@
 
 package nu.nethome.home.impl;
 
-import nu.nethome.home.impl.relation.LocalHomeItemProxy;
 import nu.nethome.home.item.*;
 import nu.nethome.home.system.*;
 import nu.nethome.util.plugin.PluginProvider;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;

@@ -20,7 +20,7 @@
 package nu.nethome.home.start;
 
 import nu.nethome.home.impl.ModelException;
-import nu.nethome.home.impl.relation.LocalHomeItemProxy;
+import nu.nethome.home.impl.LocalHomeItemProxy;
 import nu.nethome.home.item.Action;
 import nu.nethome.home.item.Attribute;
 import nu.nethome.home.item.HomeItemInfo;
@@ -33,7 +33,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.logging.Level;
 
 /**
  * Created by Stefan 2014-01-05
