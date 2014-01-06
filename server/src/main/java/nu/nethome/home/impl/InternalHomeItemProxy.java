@@ -36,6 +36,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * This class is replaced by LocalHomeItemProxy
+ */
+@Deprecated
 public class InternalHomeItemProxy implements HomeItemProxy {
 
     // Name constants from the XML file specification

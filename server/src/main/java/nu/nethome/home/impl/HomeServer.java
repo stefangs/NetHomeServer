@@ -67,7 +67,6 @@ public class HomeServer implements HomeItem, HomeService, ServiceState, ValueIte
                 + "  <Action Name=\"SaveItems\" Method=\"saveItems\" />"
                 + "  <Action Name=\"StopServer\" Method=\"stopServer\" />"
                 + "  <Action Name=\"UpgradeServer\" Method=\"upgradeServer\" />"
-                + "  <Action Name=\"GenerateDoc\" Method=\"generateDoc\" />"
                 + "  <Action Name=\"ResetStatistics\" Method=\"resetStatistics\" />"
                 + "</HomeItem> ");
     }
@@ -567,60 +566,6 @@ public class HomeServer implements HomeItem, HomeService, ServiceState, ValueIte
         }
     }
 
-    public void generateDoc() {
-        for (String className : factory.listClasses(true)) {
-            HomeItemProxy pr = null;
-            try {
-                pr = new LocalHomeItemProxy(factory.createInstance(className), this);
-            } catch (ModelException e) {
-                continue;
-            }
-            Iterator<Attribute> atts = pr.getAttributeValues().iterator();
-            Iterator<Action> actions = pr.getModel().getActions().iterator();
-            try {
-                BufferedWriter out = new BufferedWriter(new FileWriter("c:\\doc\\" + className + ".txt", true));
-                out.write("{{port64.png|}}");
-                out.newLine();
-                out.write("====== " + className + " ======");
-                out.newLine();
-                out.write("This module is a part of the [[NetHomeServer]]. The " + className + " is not yet documented.");
-                out.newLine();
-                out.write("===== Attributes =====");
-                out.newLine();
-                while (atts.hasNext()) {
-                    Attribute att = atts.next();
-                    out.write("  * **" + att.getName() + "** //[get]");
-                    if (!att.isReadOnly()) {
-                        out.write(" [set]");
-                    }
-                    if (att.isReadOnly() && att.isCanInit()) {
-                        out.write(" [init]");
-                    }
-                    out.write("// ");
-                    out.newLine();
-                }
-                out.write("===== Actions =====");
-                out.newLine();
-                while (actions.hasNext()) {
-                    Action action = actions.next();
-                    out.write("  * **" + action.getName() + "**  ");
-                    out.newLine();
-                }
-                out.write("==== See also ====");
-                out.newLine();
-                out.write("[[NetHomeServer]]");
-                out.newLine();
-                out.flush();
-                out.close();
-            } catch (IOException e) {
-                logger.log(Level.WARNING, "Failed generating doc", e);
-            }
-        }
-    }
-
-    /* (non-Javadoc)
-      * @see nu.nethome.home.system.HomeService#listClasses()
-      */
     public List<HomeItemInfo> listClasses() {
         return factory.listItemTypes();
     }
@@ -718,5 +663,4 @@ public class HomeServer implements HomeItem, HomeService, ServiceState, ValueIte
     public void setLogFile(String logfile) {
         eventCountlogger.setFileName(logfile);
     }
-
 }
