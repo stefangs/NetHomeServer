@@ -62,6 +62,12 @@
             <artifactId>coders</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20131018</version>
+        </dependency>
+
         <!--<dependency>-->
             <!--<groupId>net.java.dev</groupId>-->
             <!--<artifactId>jd2xx</artifactId>-->
