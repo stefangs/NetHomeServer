@@ -24,12 +24,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 /**
  *
@@ -61,5 +62,52 @@ public class PhilipsHueBridgeTest {
         ArgumentCaptor<JSONObject> captor = ArgumentCaptor.forClass(JSONObject.class);
         verify(restClient, times(1)).put(eq("http://1.1.1.1"), eq("/api/test/lights/2/state"), captor.capture());
         assertThat(captor.getValue().getBoolean("on"), is(false));
+    }
+
+
+    private static String REST_RESPONSE = "{\n" +
+            "    \"state\": {\n" +
+            "        \"on\": false,\n" +
+            "        \"bri\": 254,\n" +
+            "        \"hue\": 0,\n" +
+            "        \"sat\": 17,\n" +
+            "        \"xy\": [\n" +
+            "            0.3804,\n" +
+            "            0.3768\n" +
+            "        ],\n" +
+            "        \"ct\": 248,\n" +
+            "        \"alert\": \"none\",\n" +
+            "        \"effect\": \"none\",\n" +
+            "        \"colormode\": \"hs\",\n" +
+            "        \"reachable\": true\n" +
+            "    },\n" +
+            "    \"type\": \"Extended color light\",\n" +
+            "    \"name\": \"Soffbordet\",\n" +
+            "    \"modelid\": \"LCT001\",\n" +
+            "    \"swversion\": \"66009663\",\n" +
+            "    \"pointsymbol\": {\n" +
+            "        \"1\": \"none\",\n" +
+            "        \"2\": \"none\",\n" +
+            "        \"3\": \"none\",\n" +
+            "        \"4\": \"none\",\n" +
+            "        \"5\": \"none\",\n" +
+            "        \"6\": \"none\",\n" +
+            "        \"7\": \"none\",\n" +
+            "        \"8\": \"none\"\n" +
+            "    } }";
+
+    @Test
+    public void canGetLamp() throws Exception {
+        when(restClient.get(anyString(), anyString(), any(JSONObject.class))).thenReturn(new JSONData(REST_RESPONSE));
+        Light result = api.getLight(USER_NAME, "2");
+        verify(restClient, times(1)).get(eq("http://1.1.1.1"), eq("/api/test/lights/2"), any(JSONObject.class));
+        assertThat(result.getState().isOn(), is(false));
+        assertThat(result.getState().getBrightness(), is(254));
+        assertThat(result.getState().getHue(), is(0));
+        assertThat(result.getState().getSaturation(), is(17));
+        assertThat(result.getModelid(), is("LCT001"));
+        assertThat(result.getName(), is("Soffbordet"));
+        assertThat(result.getSwversion(), is("66009663"));
+        assertThat(result.getType(), is("Extended color light"));
     }
 }

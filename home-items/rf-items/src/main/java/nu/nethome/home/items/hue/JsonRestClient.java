@@ -28,16 +28,16 @@ import java.net.URL;
 
 public class JsonRestClient {
 
-    public JSONObject get(String baseUrl, String resource, JSONObject argument) throws Exception {
-        return new JSONObject(performRequest(baseUrl, resource, argument != null ?argument.toString() : "", "GET"));
+    public JSONData get(String baseUrl, String resource, JSONObject argument) throws Exception {
+        return new JSONData(performRequest(baseUrl, resource, argument != null ?argument.toString() : "", "GET"));
     }
 
-    public JSONArray put(String baseUrl, String resource, JSONObject argument) throws Exception {
-        return new JSONArray(performRequest(baseUrl, resource, argument != null ?argument.toString() : "", "PUT"));
+    public JSONData put(String baseUrl, String resource, JSONObject argument) throws Exception {
+        return new JSONData(performRequest(baseUrl, resource, argument != null ?argument.toString() : "", "PUT"));
     }
 
-    public JSONArray post(String baseUrl, String resource, JSONObject argument) throws Exception {
-        return new JSONArray(performRequest(baseUrl, resource, argument != null ?argument.toString() : "", "POST"));
+    public JSONData post(String baseUrl, String resource, JSONObject argument) throws Exception {
+        return new JSONData(performRequest(baseUrl, resource, argument != null ?argument.toString() : "", "POST"));
     }
 
     private String performRequest(String baseUrl, String resource, String body, String method) throws Exception {
