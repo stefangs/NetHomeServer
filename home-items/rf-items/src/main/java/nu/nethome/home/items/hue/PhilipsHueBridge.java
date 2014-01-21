@@ -51,9 +51,22 @@ public class PhilipsHueBridge {
         }
         String resource = String.format("/api/%s/lights/%s/state", user, lamp);
         try {
-            JSONArray result = client.put(url, resource, stateParameter);
+            JSONData result = client.put(url, resource, stateParameter);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Light getLight(String user, String lamp) {
+        String resource = String.format("/api/%s/lights/%s", user, lamp);
+        try {
+            JSONData result = client.get(url, resource, null);
+            if (result.isObject()) {
+                return new Light(result.getObject());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

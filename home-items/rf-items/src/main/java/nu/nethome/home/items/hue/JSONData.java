@@ -19,48 +19,38 @@
 
 package nu.nethome.home.items.hue;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  *
  */
-public class LightState {
-    private boolean isOn;
-    private int brightness;
-    private int hue;
-    private int saturation;
+public class JSONData {
+    private final JSONObject object;
+    private final JSONArray array;
 
-    public LightState(int brightness, int hue, int saturation) {
-        isOn = true;
-        this.brightness = brightness;
-        this.hue = hue;
-        this.saturation = saturation;
+    public JSONData(String data) {
+        if (data.trim().startsWith("[")) {
+            array = new JSONArray(data);
+            object = null;
+        } else if (data.trim().startsWith("{")) {
+            object = new JSONObject(data);
+            array = null;
+        } else {
+            throw new JSONException("Data not object or array");
+        }
     }
 
-    public LightState() {
-        isOn = false;
+    public boolean isObject() {
+        return object != null;
     }
 
-    public LightState(JSONObject state) {
-        isOn = state.getBoolean("on") && state.getBoolean("reachable");
-        brightness = state.getInt("bri");
-        hue = state.getInt("hue");
-        saturation = state.getInt("sat");
+    public JSONObject getObject() {
+        return object;
     }
 
-    public boolean isOn() {
-        return isOn;
-    }
-
-    public int getBrightness() {
-        return brightness;
-    }
-
-    public int getHue() {
-        return hue;
-    }
-
-    public int getSaturation() {
-        return saturation;
+    public JSONArray getArray() {
+        return array;
     }
 }
