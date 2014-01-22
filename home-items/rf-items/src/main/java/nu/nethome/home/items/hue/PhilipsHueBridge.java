@@ -19,6 +19,7 @@
 
 package nu.nethome.home.items.hue;
 
+import nu.nethome.home.system.Event;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

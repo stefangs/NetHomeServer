@@ -39,7 +39,9 @@ public class HueLamp extends HomeItemAdapter implements HomeItem {
             + "<HomeItem Class=\"HueLamp\" Category=\"Lamps\" >"
             + "  <Attribute Name=\"State\" Type=\"String\" Get=\"getState\" Default=\"true\" />"
             + "  <Attribute Name=\"Identity\" Type=\"String\" Get=\"getLampId\" 	Set=\"setLampId\" />"
-            + "  <Attribute Name=\"Button\" Type=\"String\" Get=\"getButton\" 	Set=\"setButton\" />"
+            + "  <Attribute Name=\"LampModel\" Type=\"String\" Get=\"getLampModel\" 	Init=\"setLampModel\" />"
+            + "  <Attribute Name=\"Type\" Type=\"String\" Get=\"getLampType\" 	Init=\"setLampType\" />"
+            + "  <Attribute Name=\"Version\" Type=\"String\" Get=\"getLampVersion\" 	Init=\"setLampVersion\" />"
             + "  <Attribute Name=\"Brightness\" Type=\"String\" Get=\"getBrightness\" 	Set=\"setBrightness\" />"
             + "  <Attribute Name=\"Colour\" Type=\"String\" Get=\"getColour\" 	Set=\"setColour\" />"
             + "  <Action Name=\"toggle\" 	Method=\"toggle\" Default=\"true\" />"
@@ -47,11 +49,34 @@ public class HueLamp extends HomeItemAdapter implements HomeItem {
             + "  <Action Name=\"off\" 	Method=\"off\" />"
             + "</HomeItem> ");
 
+    private String lampModel = "";
+    private String lampType = "";
+    private String lampVersion = "";
+
     public HueLamp() {
     }
 
     public String getModel() {
         return MODEL;
+    }
+
+    @Override
+    public boolean receiveEvent(Event event) {
+        if (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals("Hue_Message") &&
+                event.getAttribute("Direction").equals("In") &&
+                event.getAttribute("Hue.Lamp").equals(lampId)) {
+            String command = event.getAttribute("Hue.Command");
+            if (command.equals("On")) {
+                isOn = true;
+            } else if (command.equals("Off")) {
+                isOn = false;
+            }
+            lampModel = event.getAttribute("Hue.Model");
+            lampType = event.getAttribute("Hue.Type");
+            lampVersion = event.getAttribute("Hue.Version");
+
+        }
+        return true;
     }
 
     protected void sendOnCommand(int brightness, int hue, int saturation) {
@@ -139,5 +164,37 @@ public class HueLamp extends HomeItemAdapter implements HomeItem {
 
     public void setColour(String colour) {
         this.colour = colour;
+    }
+
+    public String getState() {
+        return isOn ? "On" : "Off";
+    }
+
+    public boolean isOn() {
+        return isOn;
+    }
+
+    public String getLampModel() {
+        return lampModel;
+    }
+
+    public void setLampModel(String lampModel) {
+        this.lampModel = lampModel;
+    }
+
+    public String getLampType() {
+        return lampType;
+    }
+
+    public void setLampType(String lampType) {
+        this.lampType = lampType;
+    }
+
+    public String getLampVersion() {
+        return lampVersion;
+    }
+
+    public void setLampVersion(String lampVersion) {
+        this.lampVersion = lampVersion;
     }
 }
