@@ -68,9 +68,22 @@ public class HueBridge extends HomeItemAdapter {
             } else if (command.equals("Off")) {
                 turnLampOff(lampId);
             }
-
+            fetchLampState(lampId);
         }
         return true;
+    }
+
+    private void fetchLampState(String lampId) {
+        Light light = hueBridge.getLight(userName, lampId);
+        Event event = server.createEvent("Hue_Message", "");
+        event.setAttribute("Direction", "In");
+        event.setAttribute("Hue.Lamp", lampId);
+        event.setAttribute("Hue.Command", light.getState().isOn() ? "On" : "Off");
+        event.setAttribute("Hue.Name", light.getName());
+        event.setAttribute("Hue.Model", light.getModelid());
+        event.setAttribute("Hue.Type", light.getType());
+        event.setAttribute("Hue.Version", light.getSwversion());
+        server.send(event);
     }
 
     private void turnLampOff(String lampId) {
