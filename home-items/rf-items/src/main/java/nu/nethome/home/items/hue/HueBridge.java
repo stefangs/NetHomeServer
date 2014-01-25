@@ -24,6 +24,8 @@ import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.system.Event;
 import nu.nethome.util.plugin.Plugin;
 
+import java.util.List;
+
 @SuppressWarnings("UnusedDeclaration")
 @Plugin
 @HomeItemType("Hardware")
@@ -33,8 +35,9 @@ public class HueBridge extends HomeItemAdapter {
             + "<HomeItem Class=\"HueBridge\"  Category=\"Hardware\" >"
             + "  <Attribute Name=\"State\" Type=\"String\" Get=\"getState\" Default=\"true\" />"
             + "  <Attribute Name=\"IpAddress\" Type=\"String\" Get=\"getIp\" Set=\"setIp\" />"
-            + "  <Attribute Name=\"Identity\" Type=\"String\" Get=\"getBridgeIdentity\" Set=\"setBridgeIdentity\" />"
+            + "  <Attribute Name=\"Identity\" Type=\"String\" Get=\"getBridgeIdentity\" Init=\"setBridgeIdentity\" />"
             + "  <Attribute Name=\"UserName\" Type=\"String\" Get=\"getUserName\" Set=\"setUserName\" />"
+            + "  <Action Name=\"findBridge\" Method=\"reconnect\" />"
             + "  <Action Name=\"registerUser\" Method=\"registerUser\" />"
             + "</HomeItem> ");
 
@@ -54,6 +57,15 @@ public class HueBridge extends HomeItemAdapter {
         hueBridge = new PhilipsHueBridge(ip);
     }
 
+    public void reconnect() {
+        List<PhilipsHueBridge.Identity> bridges = PhilipsHueBridge.listLocalPhilipsHueBridges ();
+        if (bridges.size() > 0) {
+            this.ip = bridges.get(0).address;
+            this.bridgeIdentity = bridges.get(0).id;
+            this.hueBridge = new PhilipsHueBridge(bridges.get(0));
+        }
+    }
+
     @Override
     public boolean receiveEvent(Event event) {
         if (!isActivated()) {
@@ -63,17 +75,23 @@ public class HueBridge extends HomeItemAdapter {
                 event.getAttribute("Direction").equals("Out")) {
             String lampId = event.getAttribute("Hue.Lamp");
             String command = event.getAttribute("Hue.Command");
-            if (command.equals("On")) {
+            if (command.equals("On") && lampId.length() > 0) {
                 turnLampOn(lampId, event);
-            } else if (command.equals("Off")) {
+                reportLampState(lampId);
+            } else if (command.equals("Off") && lampId.length() > 0) {
                 turnLampOff(lampId);
+                reportLampState(lampId);
             }
-            fetchLampState(lampId);
+        } else if (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals("ReportItems")) {
+            List<LightId> ids = hueBridge.listLights(userName);
+            for (LightId id : ids) {
+                reportLampState(id.getLampId());
+            }
         }
         return true;
     }
 
-    private void fetchLampState(String lampId) {
+    private void reportLampState(String lampId) {
         Light light = hueBridge.getLight(userName, lampId);
         Event event = server.createEvent("Hue_Message", "");
         event.setAttribute("Direction", "In");

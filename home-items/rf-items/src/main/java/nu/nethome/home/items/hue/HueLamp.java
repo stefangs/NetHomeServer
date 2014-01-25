@@ -27,7 +27,7 @@ import nu.nethome.util.plugin.Plugin;
 
 @SuppressWarnings("UnusedDeclaration")
 @Plugin
-@HomeItemType(value = "Lamps")
+@HomeItemType(value = "Lamps", creationEvents = "Hue_Message")
 public class HueLamp extends HomeItemAdapter implements HomeItem {
 
     private String lampId = "";
@@ -71,11 +71,22 @@ public class HueLamp extends HomeItemAdapter implements HomeItem {
             } else if (command.equals("Off")) {
                 isOn = false;
             }
-            lampModel = event.getAttribute("Hue.Model");
-            lampType = event.getAttribute("Hue.Type");
-            lampVersion = event.getAttribute("Hue.Version");
-
+            updateAttributes(event);
+            return true;
         }
+        return handleInit(event);
+    }
+
+    private void updateAttributes(Event event) {
+        lampModel = event.getAttribute("Hue.Model");
+        lampType = event.getAttribute("Hue.Type");
+        lampVersion = event.getAttribute("Hue.Version");
+    }
+
+    @Override
+    protected boolean initAttributes(Event event) {
+        lampId = event.getAttribute("Hue.Lamp");
+        updateAttributes(event);
         return true;
     }
 

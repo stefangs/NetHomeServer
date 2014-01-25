@@ -23,16 +23,40 @@ import nu.nethome.home.system.Event;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  *
  */
 public class PhilipsHueBridge {
 
-    String url = "http://192.168.1.174";
+    public static final String WWW_MEETHUE_COM_API = "http://www.meethue.com";
+    public static final String HUE_NUPNP = "/api/nupnp";
+
+    public static class Identity {
+        public final String id;
+        public final String address;
+
+        public Identity(String id, String address) {
+            this.id = id;
+            this.address = address;
+        }
+    }
+
+    private String url = "http://192.168.1.174";
+    private String id = "";
+
     JsonRestClient client = new JsonRestClient();
 
     public PhilipsHueBridge(String address) {
         this.url = "http://" + address;
+    }
+
+    public PhilipsHueBridge(Identity id) {
+        this.url = "http://" + id.address;
+        this.id = id.id;
     }
 
     PhilipsHueBridge(JsonRestClient client, String address) {
@@ -64,6 +88,28 @@ public class PhilipsHueBridge {
             JSONData result = client.get(url, resource, null);
             if (result.isObject()) {
                 return new Light(result.getObject());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<LightId> listLights(String user) {
+        return Collections.EMPTY_LIST; // TODO: Implement!
+    }
+
+    public static List<Identity> listLocalPhilipsHueBridges() {
+        JsonRestClient client = new JsonRestClient();
+        try {
+            JSONData result = client.get(WWW_MEETHUE_COM_API, HUE_NUPNP, null);
+            if (!result.isObject()) {
+                List<Identity> list = new ArrayList<Identity>();
+                for (int i = 0; i < result.getArray().length(); i++) {
+                    JSONObject id = result.getArray().getJSONObject(i);
+                    list.add(new Identity(id.getString("id"), id.getString("internalipaddress")));
+                }
+                return list;
             }
         } catch (Exception e) {
             e.printStackTrace();
