@@ -52,7 +52,7 @@ public class CreationEventCache {
         }
     }
 
-    private boolean isCollecting() {
+    public boolean isCollecting() {
         return latestCollectionTime.getTime() + collectTimeout > System.currentTimeMillis();
     }
 

@@ -31,7 +31,7 @@ import nu.nethome.util.plugin.Plugin;
 public class HueLamp extends HomeItemAdapter implements HomeItem {
 
     private String lampId = "";
-    private int brightness = 0;
+    private int brightness = 100;
     private String colour = "";
     private boolean isOn;
 

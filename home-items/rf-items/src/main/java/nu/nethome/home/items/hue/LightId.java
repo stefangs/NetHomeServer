@@ -24,9 +24,37 @@ package nu.nethome.home.items.hue;
  */
 public class LightId {
 
-    private String lampId;
+    public final String lampId;
+    public final String lampName;
+
+    public LightId(String lampId, String lampName) {
+        this.lampId = lampId;
+        this.lampName = lampName;
+    }
 
     public String getLampId() {
         return lampId;
+    }
+
+    public String getLampName() {
+        return lampName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LightId lightId = (LightId) o;
+
+        if (!lampId.equals(lightId.lampId)) return false;
+        if (!lampName.equals(lightId.lampName)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return lampId.hashCode();
     }
 }

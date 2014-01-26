@@ -82,13 +82,15 @@ public class HueBridge extends HomeItemAdapter {
                 turnLampOff(lampId);
                 reportLampState(lampId);
             }
+            return true;
         } else if (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals("ReportItems")) {
             List<LightId> ids = hueBridge.listLights(userName);
             for (LightId id : ids) {
                 reportLampState(id.getLampId());
             }
+            return true;
         }
-        return true;
+        return false;
     }
 
     private void reportLampState(String lampId) {

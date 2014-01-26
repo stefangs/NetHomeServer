@@ -96,8 +96,27 @@ public class PhilipsHueBridge {
     }
 
     public List<LightId> listLights(String user) {
-        return Collections.EMPTY_LIST; // TODO: Implement!
+        String resource = String.format("/api/%s/lights", user);
+        try {
+            JSONData result = client.get(url, resource, null);
+            if (result.isObject()) {
+                List<LightId> list = new ArrayList<LightId>();
+                for (String lampId : getFieldNames(result.getObject())) {
+                    list.add(new LightId(lampId, result.getObject().getJSONObject(lampId).getString("name")));
+                }
+                return list;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+
+    private String[] getFieldNames(JSONObject object) {
+        String [] result = JSONObject.getNames(object);
+        return result == null ? new String[0] : result;
+    }
+
 
     public static List<Identity> listLocalPhilipsHueBridges() {
         JsonRestClient client = new JsonRestClient();
