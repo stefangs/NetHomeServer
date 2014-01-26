@@ -624,12 +624,17 @@ public class HomeGUI extends HttpServlet implements FinalEventListener, HomeItem
     }
 
     private void printEventsTable(PrintWriter p) {
+        boolean startedCollectingNow = !creationEvents.isCollecting();
         p.println(" <table>");
         p.println("  <tr><th></th><th>Identity</th><th>Time since</th><th>Item Exists</th><th>Create</th></tr>");
         for (ItemEvent itemEvent : creationEvents.getItemEvents()) {
             printEventRow(p, itemEvent);
         }
         p.println(" </table>");
+        if (startedCollectingNow) {
+            Event reportEvent = homeServer.createEvent("ReportItems", "");
+            homeServer.send(reportEvent);
+        }
     }
 
     private void printEventRow(PrintWriter p, ItemEvent event) {

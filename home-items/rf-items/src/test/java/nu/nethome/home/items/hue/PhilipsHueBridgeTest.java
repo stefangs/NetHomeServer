@@ -24,8 +24,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
+import java.util.List;
+
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsCollectionContaining.hasItems;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -65,7 +68,7 @@ public class PhilipsHueBridgeTest {
     }
 
 
-    private static String REST_RESPONSE = "{\n" +
+    private static String LAMP_REST_RESPONSE = "{\n" +
             "    \"state\": {\n" +
             "        \"on\": false,\n" +
             "        \"bri\": 254,\n" +
@@ -98,7 +101,7 @@ public class PhilipsHueBridgeTest {
 
     @Test
     public void canGetLamp() throws Exception {
-        when(restClient.get(anyString(), anyString(), any(JSONObject.class))).thenReturn(new JSONData(REST_RESPONSE));
+        when(restClient.get(anyString(), anyString(), any(JSONObject.class))).thenReturn(new JSONData(LAMP_REST_RESPONSE));
         Light result = api.getLight(USER_NAME, "2");
         verify(restClient, times(1)).get(eq("http://1.1.1.1"), eq("/api/test/lights/2"), any(JSONObject.class));
         assertThat(result.getState().isOn(), is(false));
@@ -109,5 +112,33 @@ public class PhilipsHueBridgeTest {
         assertThat(result.getName(), is("Soffbordet"));
         assertThat(result.getSwversion(), is("66009663"));
         assertThat(result.getType(), is("Extended color light"));
+    }
+
+    private static String LAMP_LIST_REST_RESPONSE = "{\n" +
+            "    \"1\": {\n" +
+            "        \"name\": \"Bedroom\"\n" +
+            "    },\n" +
+            "    \"2\": {\n" +
+            "        \"name\": \"Kitchen\"\n" +
+            "    }\n" +
+            "}";
+
+    @Test
+    public void canListLamps() throws Exception {
+        when(restClient.get(anyString(), anyString(), any(JSONObject.class))).thenReturn(new JSONData(LAMP_LIST_REST_RESPONSE));
+        List<LightId> result = api.listLights(USER_NAME);
+        verify(restClient, times(1)).get(eq("http://1.1.1.1"), eq("/api/test/lights"), any(JSONObject.class));
+        assertThat(result.size(), is(2));
+        LightId id1 = new LightId("1", "Bedroom");
+        LightId id2 = new LightId("2", "Kitchen");
+        assertThat(result, hasItems(id1, id2));
+    }
+
+    @Test
+    public void canListNoLamps() throws Exception {
+        when(restClient.get(anyString(), anyString(), any(JSONObject.class))).thenReturn(new JSONData("{}"));
+        List<LightId> result = api.listLights(USER_NAME);
+        verify(restClient, times(1)).get(eq("http://1.1.1.1"), eq("/api/test/lights"), any(JSONObject.class));
+        assertThat(result.size(), is(0));
     }
 }
