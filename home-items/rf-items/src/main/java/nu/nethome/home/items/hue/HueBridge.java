@@ -99,6 +99,7 @@ public class HueBridge extends HomeItemAdapter {
         event.setAttribute("Direction", "In");
         event.setAttribute("Hue.Lamp", lampId);
         event.setAttribute("Hue.Command", light.getState().isOn() ? "On" : "Off");
+        event.setAttribute("Hue.Brightness", light.getState().getBrightness());
         event.setAttribute("Hue.Name", light.getName());
         event.setAttribute("Hue.Model", light.getModelid());
         event.setAttribute("Hue.Type", light.getType());

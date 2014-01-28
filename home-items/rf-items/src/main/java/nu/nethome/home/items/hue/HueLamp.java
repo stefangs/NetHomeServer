@@ -30,10 +30,18 @@ import nu.nethome.util.plugin.Plugin;
 @HomeItemType(value = "Lamps", creationEvents = "Hue_Message")
 public class HueLamp extends HomeItemAdapter implements HomeItem {
 
+    public static final int DIM_STEP = 20;
     private String lampId = "";
-    private int brightness = 100;
-    private String colour = "";
+    private int onBrightness = 100;
+    private int currentBrightness = 100;
+    int hue = 0;
+    int saturation = 0;
     private boolean isOn;
+    private int dimLevel1 = 0;
+    private int dimLevel2 = 33;
+    private int dimLevel3 = 66;
+    private int dimLevel4 = 100;
+
 
     private static final String MODEL = ("<?xml version = \"1.0\"?> \n"
             + "<HomeItem Class=\"HueLamp\" Category=\"Lamps\" >"
@@ -42,11 +50,22 @@ public class HueLamp extends HomeItemAdapter implements HomeItem {
             + "  <Attribute Name=\"LampModel\" Type=\"String\" Get=\"getLampModel\" 	Init=\"setLampModel\" />"
             + "  <Attribute Name=\"Type\" Type=\"String\" Get=\"getLampType\" 	Init=\"setLampType\" />"
             + "  <Attribute Name=\"Version\" Type=\"String\" Get=\"getLampVersion\" 	Init=\"setLampVersion\" />"
-            + "  <Attribute Name=\"Brightness\" Type=\"String\" Get=\"getBrightness\" 	Set=\"setBrightness\" />"
+            + "  <Attribute Name=\"Brightness\" Type=\"String\" Get=\"getCurrentBrightness\"  />"
+            + "  <Attribute Name=\"OnBrightness\" Type=\"String\" Get=\"getBrightness\" 	Set=\"setBrightness\" />"
             + "  <Attribute Name=\"Colour\" Type=\"String\" Get=\"getColour\" 	Set=\"setColour\" />"
+            + "  <Attribute Name=\"DimLevel1\" Type=\"String\" Get=\"getDimLevel1\" 	Set=\"setDimLevel1\" />"
+            + "  <Attribute Name=\"DimLevel2\" Type=\"String\" Get=\"getDimLevel2\" 	Set=\"setDimLevel2\" />"
+            + "  <Attribute Name=\"DimLevel3\" Type=\"String\" Get=\"getDimLevel3\" 	Set=\"setDimLevel3\" />"
+            + "  <Attribute Name=\"DimLevel4\" Type=\"String\" Get=\"getDimLevel4\" 	Set=\"setDimLevel4\" />"
             + "  <Action Name=\"toggle\" 	Method=\"toggle\" Default=\"true\" />"
             + "  <Action Name=\"on\" 	Method=\"on\" />"
             + "  <Action Name=\"off\" 	Method=\"off\" />"
+            + "  <Action Name=\"bright\" 	Method=\"bright\" />"
+            + "  <Action Name=\"dim\" 	Method=\"dim\" />"
+            + "  <Action Name=\"dim1\" 	Method=\"dim1\" />"
+            + "  <Action Name=\"dim2\" 	Method=\"dim2\" />"
+            + "  <Action Name=\"dim3\" 	Method=\"dim3\" />"
+            + "  <Action Name=\"dim4\" 	Method=\"dim4\" />"
             + "</HomeItem> ");
 
     private String lampModel = "";
@@ -92,6 +111,7 @@ public class HueLamp extends HomeItemAdapter implements HomeItem {
 
     protected void sendOnCommand(int brightness, int hue, int saturation) {
         Event ev = createEvent();
+        currentBrightness = brightness;
         ev.setAttribute("Hue.Command", "On");
         ev.setAttribute("Hue.Brightness", percentToHue(brightness));
         ev.setAttribute("Hue.Saturation", saturation);
@@ -108,7 +128,7 @@ public class HueLamp extends HomeItemAdapter implements HomeItem {
         Event ev = createEvent();
         ev.setAttribute("Hue.Command", "Off");
         server.send(ev);
-        isOn = true;
+        isOn = false;
     }
 
     private Event createEvent() {
@@ -119,14 +139,7 @@ public class HueLamp extends HomeItemAdapter implements HomeItem {
     }
 
     public void on() {
-        int hue = 0;
-        int saturation = 0;
-        String[] colourParts = colour.split(",");
-        if (colourParts.length == 2) {
-            hue = Integer.parseInt(colourParts[0]);
-            saturation = Integer.parseInt(colourParts[1]);
-        }
-        sendOnCommand(brightness, hue, saturation);
+        sendOnCommand(onBrightness, hue, saturation);
         isOn = true;
     }
 
@@ -145,11 +158,11 @@ public class HueLamp extends HomeItemAdapter implements HomeItem {
 
     public void setBrightness(String level) {
         if (level.length() == 0) {
-            brightness = 100;
+            onBrightness = 100;
         } else {
             int newDimLevel = Integer.parseInt(level);
             if ((newDimLevel >= 0) && (newDimLevel <= 100)) {
-                brightness = newDimLevel;
+                onBrightness = newDimLevel;
                 if (isOn) {
                     on();
                 }
@@ -158,7 +171,7 @@ public class HueLamp extends HomeItemAdapter implements HomeItem {
     }
 
     public String getBrightness() {
-        return Integer.toString(brightness);
+        return Integer.toString(onBrightness);
     }
 
     public String getLampId() {
@@ -170,11 +183,15 @@ public class HueLamp extends HomeItemAdapter implements HomeItem {
     }
 
     public String getColour() {
-        return colour;
+        return String.format("%d,%d", hue, saturation);
     }
 
     public void setColour(String colour) {
-        this.colour = colour;
+        String[] colourParts = colour.split(",");
+        if (colourParts.length == 2) {
+            hue = Integer.parseInt(colourParts[0]);
+            saturation = Integer.parseInt(colourParts[1]);
+        }
     }
 
     public String getState() {
@@ -207,5 +224,85 @@ public class HueLamp extends HomeItemAdapter implements HomeItem {
 
     public void setLampVersion(String lampVersion) {
         this.lampVersion = lampVersion;
+    }
+
+    public void dim1() {
+        sendOnCommand(dimLevel1, hue, saturation);
+    }
+
+    public void dim2() {
+        sendOnCommand(dimLevel2, hue, saturation);
+    }
+
+    public void dim3() {
+        sendOnCommand(dimLevel3, hue, saturation);
+    }
+
+    public void dim4() {
+        sendOnCommand(dimLevel4, hue, saturation);
+    }
+
+    public String getDimLevel1() {
+        return Integer.toString(dimLevel1);
+    }
+
+    public void setDimLevel1(String mDimLevel1) {
+        int newDimLevel = Integer.parseInt(mDimLevel1);
+        if ((newDimLevel >= 0) && (newDimLevel <= 100)) {
+            dimLevel1 = newDimLevel;
+        }
+    }
+
+    public String getDimLevel2() {
+        return Integer.toString(dimLevel2);
+    }
+
+    public void setDimLevel2(String mDimLevel2) {
+        int newDimLevel = Integer.parseInt(mDimLevel2);
+        if ((newDimLevel >= 0) && (newDimLevel <= 100)) {
+            dimLevel2 = newDimLevel;
+        }
+    }
+
+    public String getDimLevel3() {
+        return Integer.toString(dimLevel3);
+    }
+
+    public void setDimLevel3(String mDimLevel3) {
+        int newDimLevel = Integer.parseInt(mDimLevel3);
+        if ((newDimLevel >= 0) && (newDimLevel <= 100)) {
+            dimLevel3 = newDimLevel;
+        }
+    }
+
+    public String getDimLevel4() {
+        return Integer.toString(dimLevel4);
+    }
+
+    public void setDimLevel4(String mDimLevel4) {
+        int newDimLevel = Integer.parseInt(mDimLevel4);
+        if ((newDimLevel >= 0) && (newDimLevel <= 100)) {
+            dimLevel4 = newDimLevel;
+        }
+    }
+
+    public void bright() {
+        currentBrightness += DIM_STEP;
+        if (currentBrightness > 100) {
+            currentBrightness = 100;
+        }
+        sendOnCommand(currentBrightness, hue, saturation);
+    }
+
+    public void dim() {
+        currentBrightness -= DIM_STEP;
+        if (currentBrightness < 0) {
+            currentBrightness = 0;
+        }
+        sendOnCommand(currentBrightness, hue, saturation);
+    }
+
+    public String getCurrentBrightness() {
+        return Integer.toString(currentBrightness);
     }
 }
