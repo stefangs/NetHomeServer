@@ -47,7 +47,7 @@ public class UPMHygrometer extends HomeItemAdapter implements HomeItem, ValueIte
             + "  <Attribute Name=\"K\" Type=\"String\" Get=\"getConstantK\" 	Set=\"setConstantK\" />"
             + "  <Attribute Name=\"M\" Type=\"String\" Get=\"getConstantM\" 	Set=\"setConstantM\" />"
             + "</HomeItem> ");
-
+    private static final int BACKWARDS_COMPATIBILITY = 2;
     private static Logger logger = Logger.getLogger(UPMHygrometer.class.getName());
     private LoggerComponent moistureLoggerComponent = new LoggerComponent(this);
 
@@ -57,7 +57,7 @@ public class UPMHygrometer extends HomeItemAdapter implements HomeItem, ValueIte
     private String itemDeviceCode = "1";
     private String lastUpdateString = "";
     private int lowBattery = 0;
-    private double constantK = 1.0;
+    private double constantK = 0.5;
     private double constantM = 0;
 
     public UPMHygrometer() {
@@ -70,7 +70,7 @@ public class UPMHygrometer extends HomeItemAdapter implements HomeItem, ValueIte
         if (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals("UPM_Message") &&
                 event.getAttributeInt("UPM.HouseCode") == Integer.parseInt(itemHouseCode) &&
                 event.getAttributeInt("UPM.DeviceCode") == Integer.parseInt(itemDeviceCode)) {
-            humidity = event.getAttributeInt("UPM.Secondary") * constantK + constantM;
+            humidity = event.getAttributeInt("UPM.Secondary") * constantK  * BACKWARDS_COMPATIBILITY + constantM;
             boolean newBatteryLevel = event.getAttributeInt("UPM.LowBattery") != 0;
             if (lowBattery == 0 && newBatteryLevel) {
                 logger.warning("Low battery for " + name);
