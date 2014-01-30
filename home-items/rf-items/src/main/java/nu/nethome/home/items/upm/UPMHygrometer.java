@@ -57,7 +57,7 @@ public class UPMHygrometer extends HomeItemAdapter implements HomeItem, ValueIte
     private String itemDeviceCode = "1";
     private String lastUpdateString = "";
     private int lowBattery = 0;
-    private double constantK = 0.5;
+    private double constantK = 1.0;
     private double constantM = 0;
 
     public UPMHygrometer() {

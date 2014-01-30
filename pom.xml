@@ -12,7 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <NethomeVersion>1.0-SNAPSHOT</NethomeVersion>
         <utils.version>1.0</utils.version>
-        <coders.version>1.0</coders.version>
+        <coders.version>1.1-SNAPSHOT</coders.version>
     </properties>
     <build>
         <plugins>

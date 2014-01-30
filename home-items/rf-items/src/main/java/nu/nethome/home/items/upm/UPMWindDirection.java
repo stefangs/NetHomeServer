@@ -48,7 +48,7 @@ public class UPMWindDirection extends HomeItemAdapter implements HomeItem, Value
 
     protected static final int WINDMETER_HOUSE_CODE = 10;
     protected static final int WINDMETER_DEVICE_CODE = 2;
-    protected static final double WIND_DIR_CONV_FACTOR = 11.25; //Convert to deg.
+    protected static final double WIND_DIR_CONV_FACTOR = 22.5; //Convert to deg.
     private static Logger logger = Logger.getLogger(UPMWindDirection.class.getName());
     protected LoggerComponent m_WindDirectionLogger = new LoggerComponent(this);
 
