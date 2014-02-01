@@ -31,7 +31,6 @@ public class NexaLCDimmer extends NexaLCLamp implements HomeItem {
 
     private static final double NEXA_DIM_LEVEL_K = (14D / 100D);
     private static final double NEXA_DIM_LEVEL_M = 0.5;
-    private boolean dimmedToPresetLevel = false;
 
     // Public attributes
     private int onDimLevel = 0;
@@ -39,6 +38,8 @@ public class NexaLCDimmer extends NexaLCLamp implements HomeItem {
     private int dimLevel2 = 50;
     private int dimLevel3 = 75;
     private int dimLevel4 = 100;
+    private int currentDimLevel = 0;
+    private int dimStep = 10;
 
     private static final String MODEL = ("<?xml version = \"1.0\"?> \n"
             + "<HomeItem Class=\"NexaLCDimmer\" Category=\"Lamps\" >"
@@ -46,18 +47,23 @@ public class NexaLCDimmer extends NexaLCLamp implements HomeItem {
             + "  <Attribute Name=\"Address\" Type=\"String\" Get=\"getAddress\" 	Set=\"setAddress\" />"
             + "  <Attribute Name=\"Button\" Type=\"String\" Get=\"getButton\" 	Set=\"setButton\" />"
             + "  <Attribute Name=\"OnDimLevel\" Type=\"String\" Get=\"getOnDimLevel\" 	Set=\"setOnDimLevel\" />"
+            + "  <Attribute Name=\"Level\" Type=\"String\" Get=\"getCurrentDimLevel\"  />"
             + "  <Attribute Name=\"DimLevel1\" Type=\"String\" Get=\"getDimLevel1\" 	Set=\"setDimLevel1\" />"
             + "  <Attribute Name=\"DimLevel2\" Type=\"String\" Get=\"getDimLevel2\" 	Set=\"setDimLevel2\" />"
             + "  <Attribute Name=\"DimLevel3\" Type=\"String\" Get=\"getDimLevel3\" 	Set=\"setDimLevel3\" />"
             + "  <Attribute Name=\"DimLevel4\" Type=\"String\" Get=\"getDimLevel4\" 	Set=\"setDimLevel4\" />"
+            + "  <Attribute Name=\"DimStep\" Type=\"String\" Get=\"getDimStep\" 	Set=\"setDimStep\" />"
             + "  <Attribute Name=\"TransmissionRepeats\" Type=\"String\" Get=\"getRepeats\" 	Set=\"setRepeats\" />"
             + "  <Action Name=\"toggle\" 	Method=\"toggle\" Default=\"true\" />"
             + "  <Action Name=\"on\" 	Method=\"on\" />"
             + "  <Action Name=\"off\" 	Method=\"off\" />"
+            + "  <Action Name=\"dim\" 	Method=\"dim\" />"
+            + "  <Action Name=\"bright\" 	Method=\"bright\" />"
             + "  <Action Name=\"dim1\" 	Method=\"dim1\" />"
             + "  <Action Name=\"dim2\" 	Method=\"dim2\" />"
             + "  <Action Name=\"dim3\" 	Method=\"dim3\" />"
             + "  <Action Name=\"dim4\" 	Method=\"dim4\" />"
+            + "  <Action Name=\"store\" 	Method=\"store\" />"
             + "</HomeItem> ");
 
     @SuppressWarnings("UnusedDeclaration")
@@ -77,6 +83,7 @@ public class NexaLCDimmer extends NexaLCLamp implements HomeItem {
     protected void sendDimCommand(int dimLevel) {
         if (dimLevel == 0) {
             off();
+            currentDimLevel = 0;
         } else {
             Event ev = server.createEvent("NexaL_Message", "");
             ev.setAttribute("Direction", "Out");
@@ -89,6 +96,7 @@ public class NexaLCDimmer extends NexaLCLamp implements HomeItem {
             }
             server.send(ev);
             isOn = true;
+            currentDimLevel = dimLevel;
         }
     }
 
@@ -98,18 +106,18 @@ public class NexaLCDimmer extends NexaLCLamp implements HomeItem {
 
     @Override
     public void on() {
-        dimmedToPresetLevel = false;
         if (onDimLevel > 0) {
             sendDimCommand(onDimLevel);
         } else {
             super.on();
+            currentDimLevel = 100;
         }
     }
 
     @Override
     public void off() {
-        dimmedToPresetLevel = false;
         super.off();
+        currentDimLevel = 0;
     }
 
     /**
@@ -118,7 +126,6 @@ public class NexaLCDimmer extends NexaLCLamp implements HomeItem {
     @SuppressWarnings("UnusedDeclaration")
     public void dim1() {
         sendDimCommand(dimLevel1);
-        dimmedToPresetLevel = true;
     }
 
     /**
@@ -127,7 +134,6 @@ public class NexaLCDimmer extends NexaLCLamp implements HomeItem {
     @SuppressWarnings("UnusedDeclaration")
     public void dim2() {
         sendDimCommand(dimLevel2);
-        dimmedToPresetLevel = true;
     }
 
     /**
@@ -136,7 +142,6 @@ public class NexaLCDimmer extends NexaLCLamp implements HomeItem {
     @SuppressWarnings("UnusedDeclaration")
     public void dim3() {
         sendDimCommand(dimLevel3);
-        dimmedToPresetLevel = true;
     }
 
     /**
@@ -145,7 +150,6 @@ public class NexaLCDimmer extends NexaLCLamp implements HomeItem {
     @SuppressWarnings("UnusedDeclaration")
     public void dim4() {
         sendDimCommand(dimLevel4);
-        dimmedToPresetLevel = true;
     }
 
     /**
@@ -153,7 +157,6 @@ public class NexaLCDimmer extends NexaLCLamp implements HomeItem {
      *
      * @return current dim level setting
      */
-    @SuppressWarnings("UnusedDeclaration")
     public String getDimLevel1() {
         return Integer.toString(dimLevel1);
     }
@@ -163,12 +166,22 @@ public class NexaLCDimmer extends NexaLCLamp implements HomeItem {
      *
      * @param mDimLevel1 dimLevel level in % of full power, 0 = off, 100 = full power
      */
-    @SuppressWarnings("UnusedDeclaration")
     public void setDimLevel1(String mDimLevel1) {
-        int newDimLevel = Integer.parseInt(mDimLevel1);
-        if ((newDimLevel >= 0) && (newDimLevel <= 100)) {
-            dimLevel1 = newDimLevel;
+        dimLevel1 = stringToDimLevel(mDimLevel1);
+    }
+
+    private int stringToDimLevel(String level) {
+        int newDimLevel = Integer.parseInt(level);
+        return toDimLevel(newDimLevel);
+    }
+
+    private int toDimLevel(int newDimLevel) {
+        if (newDimLevel < 0) {
+            return 0;
+        } else if (newDimLevel > 100) {
+            return 100;
         }
+        return newDimLevel;
     }
 
 
@@ -177,7 +190,6 @@ public class NexaLCDimmer extends NexaLCLamp implements HomeItem {
      *
      * @return current dim level setting
      */
-    @SuppressWarnings("UnusedDeclaration")
     public String getDimLevel2() {
         return Integer.toString(dimLevel2);
     }
@@ -187,12 +199,8 @@ public class NexaLCDimmer extends NexaLCLamp implements HomeItem {
      *
      * @param mDimLevel2 dimLevel level in % of full power, 0 = off, 100 = full power
      */
-    @SuppressWarnings("UnusedDeclaration")
     public void setDimLevel2(String mDimLevel2) {
-        int newDimLevel = Integer.parseInt(mDimLevel2);
-        if ((newDimLevel >= 0) && (newDimLevel <= 100)) {
-            dimLevel2 = newDimLevel;
-        }
+        dimLevel2 = stringToDimLevel(mDimLevel2);
     }
 
     /**
@@ -200,7 +208,6 @@ public class NexaLCDimmer extends NexaLCLamp implements HomeItem {
      *
      * @return current dim level setting
      */
-    @SuppressWarnings("UnusedDeclaration")
     public String getDimLevel3() {
         return Integer.toString(dimLevel3);
     }
@@ -210,12 +217,8 @@ public class NexaLCDimmer extends NexaLCLamp implements HomeItem {
      *
      * @param mDimLevel3 dimLevel level in % of full power, 0 = off, 100 = full power
      */
-    @SuppressWarnings("UnusedDeclaration")
     public void setDimLevel3(String mDimLevel3) {
-        int newDimLevel = Integer.parseInt(mDimLevel3);
-        if ((newDimLevel >= 0) && (newDimLevel <= 100)) {
-            dimLevel3 = newDimLevel;
-        }
+        dimLevel3 = stringToDimLevel(mDimLevel3);
     }
 
     /**
@@ -223,7 +226,6 @@ public class NexaLCDimmer extends NexaLCLamp implements HomeItem {
      *
      * @return current dim level setting
      */
-    @SuppressWarnings("UnusedDeclaration")
     public String getDimLevel4() {
         return Integer.toString(dimLevel4);
     }
@@ -233,12 +235,8 @@ public class NexaLCDimmer extends NexaLCLamp implements HomeItem {
      *
      * @param mDimLevel4 dimLevel level in % of full power, 0 = off, 100 = full power
      */
-    @SuppressWarnings("UnusedDeclaration")
     public void setDimLevel4(String mDimLevel4) {
-        int newDimLevel = Integer.parseInt(mDimLevel4);
-        if ((newDimLevel >= 0) && (newDimLevel <= 100)) {
-            dimLevel4 = newDimLevel;
-        }
+        dimLevel4 = stringToDimLevel(mDimLevel4);
     }
 
     /**
@@ -246,7 +244,6 @@ public class NexaLCDimmer extends NexaLCLamp implements HomeItem {
      *
      * @return current dim level setting
      */
-    @SuppressWarnings("UnusedDeclaration")
     public String getOnDimLevel() {
         if (onDimLevel == 0) {
             return "";
@@ -259,22 +256,38 @@ public class NexaLCDimmer extends NexaLCLamp implements HomeItem {
      *
      * @param level dimLevel level in % of full power, 0 = off, 100 = full power
      */
-    @SuppressWarnings("UnusedDeclaration")
     public void setOnDimLevel(String level) {
         if (level.length() == 0) {
             onDimLevel = 0;
         } else {
-            int newDimLevel = Integer.parseInt(level);
-            if ((newDimLevel >= 0) && (newDimLevel <= 100)) {
-                onDimLevel = newDimLevel;
-                if (trackDimLevel()) {
-                    sendDimCommand(onDimLevel);
-                }
+            onDimLevel = stringToDimLevel(level);
+            if (isOn) {
+                sendDimCommand(onDimLevel);
             }
         }
     }
 
-    private boolean trackDimLevel() {
-        return !dimmedToPresetLevel && isOn;
+    public void dim() {
+        sendDimCommand(toDimLevel(currentDimLevel - dimStep));
+    }
+
+    public void bright() {
+        sendDimCommand(toDimLevel(currentDimLevel + dimStep));
+    }
+
+    public void store() {
+        onDimLevel = currentDimLevel;
+    }
+
+    public String getDimStep() {
+        return Integer.toString(dimStep);
+    }
+
+    public void setDimStep(String dimStep) {
+        this.dimStep = stringToDimLevel(dimStep);
+    }
+
+    public String getCurrentDimLevel() {
+        return Integer.toString(currentDimLevel);
     }
 }
