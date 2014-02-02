@@ -112,7 +112,7 @@ public class PhilipsHueBridge {
                 List<PhilipsHueBridge> list = new ArrayList<PhilipsHueBridge>();
                 for (int i = 0; i < result.getArray().length(); i++) {
                     JSONObject id = result.getArray().getJSONObject(i);
-                    list.add(new PhilipsHueBridge(id.getString("internalipaddress"), id.getString("id")));
+                    list.add(new PhilipsHueBridge("http://" + id.getString("internalipaddress"), id.getString("id")));
                 }
                 return list;
             }
