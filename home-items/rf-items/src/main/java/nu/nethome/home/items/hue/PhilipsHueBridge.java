@@ -55,8 +55,12 @@ public class PhilipsHueBridge {
         if (state.isOn()) {
             stateParameter.put("on", true);
             stateParameter.put("bri", state.getBrightness());
-            stateParameter.put("hue", state.getHue());
-            stateParameter.put("sat", state.getSaturation());
+            if (state.getColorTemperature() > 0) {
+                stateParameter.put("ct", state.getColorTemperature());
+            } else {
+                stateParameter.put("hue", state.getHue());
+                stateParameter.put("sat", state.getSaturation());
+            }
         } else {
             stateParameter.put("on", false);
         }
@@ -99,7 +103,7 @@ public class PhilipsHueBridge {
     }
 
     private String[] getFieldNames(JSONObject object) {
-        String [] result = JSONObject.getNames(object);
+        String[] result = JSONObject.getNames(object);
         return result == null ? new String[0] : result;
     }
 

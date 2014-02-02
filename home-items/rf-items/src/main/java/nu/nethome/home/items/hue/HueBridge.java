@@ -120,9 +120,16 @@ public class HueBridge extends HomeItemAdapter {
 
     private void turnLampOn(String lampId, Event event) {
         int brightness = event.getAttributeInt("Hue.Brightness");
+        int temperature = event.getAttributeInt("Hue.Temperature");
         int hue = event.getAttributeInt("Hue.Hue");
         int saturation = event.getAttributeInt("Hue.Saturation");
-        hueBridge.setLightState(userName, lampId, new LightState(brightness, hue, saturation));
+        LightState state;
+        if (temperature > 0) {
+            state = new LightState(brightness, temperature);
+        } else {
+            state = new LightState(brightness, hue, saturation);
+        }
+        hueBridge.setLightState(userName, lampId, state);
     }
 
     public String getUserName() {

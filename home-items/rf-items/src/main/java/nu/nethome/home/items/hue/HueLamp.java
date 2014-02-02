@@ -34,8 +34,10 @@ public class HueLamp extends HomeItemAdapter implements HomeItem {
     private String lampId = "";
     private int onBrightness = 100;
     private int currentBrightness = 100;
-    int hue = 0;
-    int saturation = 0;
+    private int hue = 0;
+    private int saturation = 0;
+    private int colorTemperature = 0;
+    private String color;
     private boolean isOn;
     private int dimLevel1 = 0;
     private int dimLevel2 = 33;
@@ -52,7 +54,7 @@ public class HueLamp extends HomeItemAdapter implements HomeItem {
             + "  <Attribute Name=\"Version\" Type=\"String\" Get=\"getLampVersion\" 	Init=\"setLampVersion\" />"
             + "  <Attribute Name=\"Brightness\" Type=\"String\" Get=\"getCurrentBrightness\"  />"
             + "  <Attribute Name=\"OnBrightness\" Type=\"String\" Get=\"getBrightness\" 	Set=\"setBrightness\" />"
-            + "  <Attribute Name=\"Colour\" Type=\"String\" Get=\"getColour\" 	Set=\"setColour\" />"
+            + "  <Attribute Name=\"Color\" Type=\"String\" Get=\"getColor\" 	Set=\"setColor\" />"
             + "  <Attribute Name=\"DimLevel1\" Type=\"String\" Get=\"getDimLevel1\" 	Set=\"setDimLevel1\" />"
             + "  <Attribute Name=\"DimLevel2\" Type=\"String\" Get=\"getDimLevel2\" 	Set=\"setDimLevel2\" />"
             + "  <Attribute Name=\"DimLevel3\" Type=\"String\" Get=\"getDimLevel3\" 	Set=\"setDimLevel3\" />"
@@ -114,8 +116,12 @@ public class HueLamp extends HomeItemAdapter implements HomeItem {
         currentBrightness = brightness;
         ev.setAttribute("Hue.Command", "On");
         ev.setAttribute("Hue.Brightness", percentToHue(brightness));
-        ev.setAttribute("Hue.Saturation", saturation);
-        ev.setAttribute("Hue.Hue", hue);
+        if (colorTemperature != 0) {
+            ev.setAttribute("Hue.Temperature", colorTemperature);
+        } else {
+            ev.setAttribute("Hue.Saturation", saturation);
+            ev.setAttribute("Hue.Hue", hue);
+        }
         server.send(ev);
         isOn = true;
     }
@@ -182,16 +188,20 @@ public class HueLamp extends HomeItemAdapter implements HomeItem {
         this.lampId = lampId;
     }
 
-    public String getColour() {
-        return String.format("%d,%d", hue, saturation);
+    public String getColor() {
+        return color;
     }
 
-    public void setColour(String colour) {
-        String[] colourParts = colour.split(",");
+    public void setColor(String color) {
+        String[] colourParts = color.split(",");
         if (colourParts.length == 2) {
             hue = Integer.parseInt(colourParts[0]);
             saturation = Integer.parseInt(colourParts[1]);
+            colorTemperature = 0;
+        } else {
+            colorTemperature = Integer.parseInt(color);
         }
+        this.color = color;
     }
 
     public String getState() {

@@ -29,12 +29,22 @@ public class LightState {
     private int brightness;
     private int hue;
     private int saturation;
+    private int colorTemperature;
 
     public LightState(int brightness, int hue, int saturation) {
         isOn = true;
         this.brightness = brightness;
         this.hue = hue;
         this.saturation = saturation;
+        this.colorTemperature = 0;
+    }
+
+    public LightState(int brightness, int colorTemperature) {
+        isOn = true;
+        this.brightness = brightness;
+        this.hue = -1;
+        this.saturation = -1;
+        this.colorTemperature = colorTemperature;
     }
 
     public LightState() {
@@ -46,6 +56,9 @@ public class LightState {
         brightness = state.getInt("bri");
         hue = state.getInt("hue");
         saturation = state.getInt("sat");
+        if (state.getString("colormode").equals("ct")) {
+            this.colorTemperature = state.getInt("ct");
+        }
     }
 
     public boolean isOn() {
@@ -62,5 +75,9 @@ public class LightState {
 
     public int getSaturation() {
         return saturation;
+    }
+
+    public int getColorTemperature() {
+        return colorTemperature;
     }
 }
