@@ -41,12 +41,16 @@ public class LampGroup extends HomeItemAdapter implements HomeItem {
             + "  <Action Name=\"on\" 	Method=\"performOn\" />"
             + "  <Action Name=\"off\" 	Method=\"performOff\" />"
             + "  <Action Name=\"recall\" 	Method=\"performRecall\" />"
+            + "  <Action Name=\"dim1\" 	Method=\"performDim1\" />"
+            + "  <Action Name=\"dim2\" 	Method=\"performDim2\" />"
+            + "  <Action Name=\"dim3\" 	Method=\"performDim3\" />"
+            + "  <Action Name=\"dim4\" 	Method=\"performDim4\" />"
             + "</HomeItem> ");
 
     private static final int MAX_QUEUE_SIZE = 10;
     public static final String QUIT_COMMAND = "quit";
     private enum Command {
-        quit, on, off, recall;
+        quit, on, off, recall, dim1, dim2, dim3, dim4;
     }
 
     private String lamps = "";
@@ -73,11 +77,39 @@ public class LampGroup extends HomeItemAdapter implements HomeItem {
                     case recall:
                         recall();
                         break;
+                    case dim1:
+                        dim1();
+                        break;
+                    case dim2:
+                        dim3();
+                        break;
+                    case dim3:
+                        dim3();
+                        break;
+                    case dim4:
+                        dim4();
+                        break;
                 }
             } catch (InterruptedException e) {
                 // Do Dinada
             }
         }
+    }
+
+    private void dim1() {
+        tryPerformActionOnItems(lamps, "dim1", "on");
+    }
+
+    private void dim2() {
+        tryPerformActionOnItems(lamps, "dim2", "on");
+    }
+
+    private void dim3() {
+        tryPerformActionOnItems(lamps, "dim3", "on");
+    }
+
+    private void dim4() {
+        tryPerformActionOnItems(lamps, "dim4", "on");
     }
 
     @Override
@@ -138,6 +170,22 @@ public class LampGroup extends HomeItemAdapter implements HomeItem {
         commandQueue.add(Command.recall);
     }
 
+    public void performDim1() {
+        commandQueue.add(Command.dim1);
+    }
+
+    public void performDim2() {
+        commandQueue.add(Command.dim2);
+    }
+
+    public void performDim3() {
+        commandQueue.add(Command.dim3);
+    }
+
+    public void performDim4() {
+        commandQueue.add(Command.dim4);
+    }
+
     private void on() {
         performActionOnItems(lamps, "on");
     }
@@ -170,6 +218,23 @@ public class LampGroup extends HomeItemAdapter implements HomeItem {
         for (HomeItemProxy item : getAsItems(items)) {
             try {
                 item.callAction(action);
+                Thread.sleep(delay);
+            } catch (ExecutionFailure executionFailure) {
+                // fail silently
+            } catch (InterruptedException e) {
+                // fail silently
+            }
+        }
+    }
+
+    private void tryPerformActionOnItems(String items, String action, String fallbackAction) {
+        for (HomeItemProxy item : getAsItems(items)) {
+            try {
+                if (item.getModel().hasAction(action)) {
+                    item.callAction(action);
+                } else {
+                    item.callAction(fallbackAction);
+                }
                 Thread.sleep(delay);
             } catch (ExecutionFailure executionFailure) {
                 // fail silently
