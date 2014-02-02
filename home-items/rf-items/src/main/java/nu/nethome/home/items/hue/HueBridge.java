@@ -26,6 +26,11 @@ import nu.nethome.util.plugin.Plugin;
 
 import java.util.List;
 
+/**
+ * Represents a Philips Hue bridge and handles communications with it
+ * TODO: Report items after creation or regularly updates
+ * TODO: Registration of user
+ */
 @SuppressWarnings("UnusedDeclaration")
 @Plugin
 @HomeItemType("Hardware")
@@ -41,7 +46,7 @@ public class HueBridge extends HomeItemAdapter {
             + "  <Action Name=\"registerUser\" Method=\"registerUser\" />"
             + "</HomeItem> ");
 
-    String userName = "stefanstromberg";
+    String userName = "";
     String ip = "192.168.1.174";
     String bridgeIdentity = "";
     PhilipsHueBridge hueBridge;

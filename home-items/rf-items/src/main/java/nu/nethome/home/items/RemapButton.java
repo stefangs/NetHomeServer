@@ -42,6 +42,7 @@ public abstract class RemapButton extends HomeItemAdapter {
     private static Logger logger = Logger.getLogger(NexaRemapButton.class.getName());
     private CommandLineExecutor commandExecutor;
     private volatile AtomicBoolean inHoldOff = new AtomicBoolean(false);
+    private long holdOffStart;
     private Event latestHoldOffEvent;
     private long latestReceivedEventTime;
     private Timer holdOffTimer = new Timer("RemapHoldOffTimer", true);
@@ -59,6 +60,7 @@ public abstract class RemapButton extends HomeItemAdapter {
             latestReceivedEventTime = System.currentTimeMillis();
             if (inHoldOff.compareAndSet(false, true)) {
                 startHoldoffTimer();
+                holdOffStart = System.currentTimeMillis();
             }
         } else {
             actOnEvent(event);
@@ -173,5 +175,13 @@ public abstract class RemapButton extends HomeItemAdapter {
 
     public void disable() {
         isEnabled = false;
+    }
+
+    public boolean isInHoldOff() {
+        return inHoldOff.get();
+    }
+
+    public long getHoldOffStart() {
+        return holdOffStart;
     }
 }

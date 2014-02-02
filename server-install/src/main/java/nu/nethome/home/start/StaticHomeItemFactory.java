@@ -119,6 +119,7 @@ public class StaticHomeItemFactory implements HomeItemFactory {
             new HomeItemClassInfo("NexaLCLamp", nu.nethome.home.items.nexa.NexaLCLamp.class),
             new HomeItemClassInfo("NexaLCDimmer", nu.nethome.home.items.nexa.NexaLCDimmer.class),
             new HomeItemClassInfo("NexaLCRemapButton", nu.nethome.home.items.nexa.NexaLCRemapButton.class),
+            new HomeItemClassInfo("NexaLCAdvancedRemapButton", nu.nethome.home.items.nexa.NexaLCAdvancedRemapButton.class),
             new HomeItemClassInfo("NexaLCRemapButton4", nu.nethome.home.items.nexa.NexaLCRemapButton4.class),
             new HomeItemClassInfo("NexaSmokeDetector", nu.nethome.home.items.nexa.NexaSmokeDetector.class),
             new HomeItemClassInfo("DeltronicLamp", nu.nethome.home.items.deltronic.DeltronicLamp.class),
