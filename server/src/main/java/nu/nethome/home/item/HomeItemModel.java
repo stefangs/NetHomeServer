@@ -50,6 +50,10 @@ public interface HomeItemModel {
 
     String getDefaultAttribute();
 
+    boolean hasAttribute(String attributeName);
+
+    boolean hasAction(String actionName);
+
     /**
      * Returns a list of all supported actions of the current HomeItem instance.
      *

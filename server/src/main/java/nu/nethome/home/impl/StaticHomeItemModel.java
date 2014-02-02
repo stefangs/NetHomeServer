@@ -251,6 +251,16 @@ public class StaticHomeItemModel implements HomeItemModel {
         return defaultAttribute != null ? defaultAttribute.getName() : "";
     }
 
+    @Override
+    public boolean hasAttribute(String attributeName) {
+        return attributes.get(attributeName) != null;
+    }
+
+    @Override
+    public boolean hasAction(String actionName) {
+        return actions.get(actionName) != null;
+    }
+
     public ActionModel getAction(String name) throws ModelException {
         ActionModel action = actions.get(name);
         if (action == null) {
