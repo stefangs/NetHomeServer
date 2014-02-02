@@ -28,8 +28,10 @@ import java.util.List;
 
 /**
  * Represents a Philips Hue bridge and handles communications with it
- * TODO: Report items after creation or regularly updates
  * TODO: Registration of user
+ * TODO: Refresh of Hue Lamps
+ * TODO: Error handling/exceptions
+ * TODO: Connection state
  */
 @SuppressWarnings("UnusedDeclaration")
 @Plugin
@@ -39,7 +41,7 @@ public class HueBridge extends HomeItemAdapter {
     private static final String MODEL = ("<?xml version = \"1.0\"?> \n"
             + "<HomeItem Class=\"HueBridge\"  Category=\"Hardware\" >"
             + "  <Attribute Name=\"State\" Type=\"String\" Get=\"getState\" Default=\"true\" />"
-            + "  <Attribute Name=\"IpAddress\" Type=\"String\" Get=\"getIp\" Set=\"setIp\" />"
+            + "  <Attribute Name=\"Address\" Type=\"String\" Get=\"getUrl\" Set=\"setUrl\" />"
             + "  <Attribute Name=\"Identity\" Type=\"String\" Get=\"getBridgeIdentity\" Init=\"setBridgeIdentity\" />"
             + "  <Attribute Name=\"UserName\" Type=\"String\" Get=\"getUserName\" Set=\"setUserName\" />"
             + "  <Action Name=\"findBridge\" Method=\"reconnect\" />"
@@ -47,7 +49,7 @@ public class HueBridge extends HomeItemAdapter {
             + "</HomeItem> ");
 
     String userName = "";
-    String ip = "192.168.1.174";
+    String url = "http://192.168.1.174";
     String bridgeIdentity = "";
     PhilipsHueBridge hueBridge;
 
@@ -59,15 +61,15 @@ public class HueBridge extends HomeItemAdapter {
 
     @Override
     public void activate() {
-        hueBridge = new PhilipsHueBridge(ip);
+        hueBridge = new PhilipsHueBridge(url, bridgeIdentity);
     }
 
     public void reconnect() {
-        List<PhilipsHueBridge.Identity> bridges = PhilipsHueBridge.listLocalPhilipsHueBridges ();
+        List<PhilipsHueBridge> bridges = PhilipsHueBridge.listLocalPhilipsHueBridges ();
         if (bridges.size() > 0) {
-            this.ip = bridges.get(0).address;
-            this.bridgeIdentity = bridges.get(0).id;
-            this.hueBridge = new PhilipsHueBridge(bridges.get(0));
+            this.url = bridges.get(0).getUrl();
+            this.bridgeIdentity = bridges.get(0).getId();
+            this.hueBridge = bridges.get(0);
         }
     }
 
@@ -131,13 +133,13 @@ public class HueBridge extends HomeItemAdapter {
         this.userName = userName;
     }
 
-    public String getIp() {
-        return ip;
+    public String getUrl() {
+        return url;
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
-        hueBridge = new PhilipsHueBridge(ip);
+    public void setUrl(String url) {
+        this.url = url;
+        hueBridge = new PhilipsHueBridge(url, "");
     }
 
     public String getBridgeIdentity() {
