@@ -65,6 +65,8 @@ public class HomeGUI extends HttpServlet implements FinalEventListener, HomeItem
             + "  <Attribute Name=\"PlanPage\" Type=\"Item\" Get=\"getPlanPage\" 	Set=\"setPlanPage\" />"
             + "  <Attribute Name=\"Location\" Type=\"Item\" Get=\"getDefaultLocation\" 	Set=\"setDefaultLocation\" />"
             + "</HomeItem> ");
+    public static final int REPORT_ITEMS_PERIOD_MS = 60000;
+    public static final int MAX_EVENT_ID_LENGTH = 60;
 
     protected HomeService homeServer;
 
@@ -82,6 +84,8 @@ public class HomeGUI extends HttpServlet implements FinalEventListener, HomeItem
     private String defaultLocation = "";
     private String mediaDirectory = "";
     private CreationEventCache creationEvents = new CreationEventCache();
+    private long lastItemReportTime = 0L;
+
     public HomeGUI() {
     }
 
@@ -624,16 +628,16 @@ public class HomeGUI extends HttpServlet implements FinalEventListener, HomeItem
     }
 
     private void printEventsTable(PrintWriter p) {
-        boolean startedCollectingNow = !creationEvents.isCollecting();
         p.println(" <table>");
         p.println("  <tr><th></th><th>Identity</th><th>Time since</th><th>Item Exists</th><th>Create</th></tr>");
         for (ItemEvent itemEvent : creationEvents.getItemEvents()) {
             printEventRow(p, itemEvent);
         }
         p.println(" </table>");
-        if (startedCollectingNow) {
+        if (System.currentTimeMillis() - lastItemReportTime > REPORT_ITEMS_PERIOD_MS) {
             Event reportEvent = homeServer.createEvent("ReportItems", "");
             homeServer.send(reportEvent);
+            lastItemReportTime = System.currentTimeMillis();
         }
     }
 
@@ -648,7 +652,11 @@ public class HomeGUI extends HttpServlet implements FinalEventListener, HomeItem
         ageString.append(ageSeconds).append(" Sec");
         p.println("  <tr>");
         p.printf ("   <td><img src=\"web/home/%s\" /></td>\n", (event.getWasHandled() ? "item16.png" : "item_new16.png"));
-        p.printf ("   <td>%s</td>\n", event.getContent());
+        if (event.getContent().length() < MAX_EVENT_ID_LENGTH) {
+            p.printf ("   <td>%s</td>\n", event.getContent());
+        } else  {
+            p.printf ("   <td title=\"%s\">%s...</td>\n", event.getContent(), event.getContent().substring(0, MAX_EVENT_ID_LENGTH));
+        }
         p.printf ("   <td>%s</td>\n", ageString);
         p.printf ("   <td>%s</td>\n", (event.getWasHandled() ? "Existing" : "New"));
         p.printf ("   <td><a onclick=\"location.href=homeManager.classUrl + '&event=%d';return false;\" href=\"%s?page=edit&event=%d\">Select Event</a></td>\n", event.getId(), localURL, event.getId());

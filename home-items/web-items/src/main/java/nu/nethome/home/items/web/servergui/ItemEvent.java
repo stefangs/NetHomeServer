@@ -14,7 +14,8 @@ public class ItemEvent {
     private long id;
     private boolean wasHandled;
     private static Long idCounter = new Long(0);
-    private static String ignoredAttributeNames[] = {"Type", "UPM.SequenceNumber", "Direction", "Value", "UPM.Primary", "UPM.Secondary", "UPM.LowBattery"};
+    private static String ignoredAttributeNames[] = {"Type", "UPM.SequenceNumber", "Direction", "Value", "UPM.Primary",
+            "UPM.Secondary", "UPM.LowBattery", "Hue.Brightness", "Hue.Command"};
     private static Set<String> ignoredAttributes = new HashSet<String>(Arrays.asList(ignoredAttributeNames));
 
     public ItemEvent(Event event, boolean wasHandled) {

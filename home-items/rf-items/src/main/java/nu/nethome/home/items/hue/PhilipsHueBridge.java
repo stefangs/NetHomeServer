@@ -35,28 +35,14 @@ public class PhilipsHueBridge {
     public static final String WWW_MEETHUE_COM_API = "http://www.meethue.com";
     public static final String HUE_NUPNP = "/api/nupnp";
 
-    public static class Identity {
-        public final String id;
-        public final String address;
-
-        public Identity(String id, String address) {
-            this.id = id;
-            this.address = address;
-        }
-    }
-
     private String url = "http://192.168.1.174";
     private String id = "";
 
     JsonRestClient client = new JsonRestClient();
 
-    public PhilipsHueBridge(String address) {
-        this.url = "http://" + address;
-    }
-
-    public PhilipsHueBridge(Identity id) {
-        this.url = "http://" + id.address;
-        this.id = id.id;
+    public PhilipsHueBridge(String url, String identity) {
+        this.url = url;
+        this.id = identity;
     }
 
     PhilipsHueBridge(JsonRestClient client, String address) {
@@ -118,15 +104,15 @@ public class PhilipsHueBridge {
     }
 
 
-    public static List<Identity> listLocalPhilipsHueBridges() {
+    public static List<PhilipsHueBridge> listLocalPhilipsHueBridges() {
         JsonRestClient client = new JsonRestClient();
         try {
             JSONData result = client.get(WWW_MEETHUE_COM_API, HUE_NUPNP, null);
             if (!result.isObject()) {
-                List<Identity> list = new ArrayList<Identity>();
+                List<PhilipsHueBridge> list = new ArrayList<PhilipsHueBridge>();
                 for (int i = 0; i < result.getArray().length(); i++) {
                     JSONObject id = result.getArray().getJSONObject(i);
-                    list.add(new Identity(id.getString("id"), id.getString("internalipaddress")));
+                    list.add(new PhilipsHueBridge(id.getString("internalipaddress"), id.getString("id")));
                 }
                 return list;
             }
@@ -134,5 +120,13 @@ public class PhilipsHueBridge {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public String getId() {
+        return id;
     }
 }
