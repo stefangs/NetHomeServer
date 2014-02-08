@@ -102,11 +102,29 @@ public class PhilipsHueBridge {
         return null;
     }
 
+    public String registerUser(String deviceType, String user) {
+        JSONObject parameter = new JSONObject();
+        parameter.put("devicetype", deviceType);
+        if (user != null && user.length() > 0) {
+            parameter.put("username", user);
+        }
+        try {
+            JSONData result = client.post(url, "/api", parameter);
+            if (!result.isObject()) {
+                JSONObject resultObject = result.getArray().getJSONObject(0);
+                JSONObject resultData = resultObject.getJSONObject("success");
+                return resultData.getString("username");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
     private String[] getFieldNames(JSONObject object) {
         String[] result = JSONObject.getNames(object);
         return result == null ? new String[0] : result;
     }
-
 
     public static List<PhilipsHueBridge> listLocalPhilipsHueBridges() {
         JsonRestClient client = new JsonRestClient();

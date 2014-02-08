@@ -134,6 +134,8 @@ public class PhilipsHueBridgeTest {
         assertThat(result, hasItems(id1, id2));
     }
 
+    private static final String REGISTER_USER_OK = "[{\"success\":{\"username\": \"1234567890\"}}]";
+
     @Test
     public void canListNoLamps() throws Exception {
         when(restClient.get(anyString(), anyString(), any(JSONObject.class))).thenReturn(new JSONData("{}"));
@@ -141,4 +143,13 @@ public class PhilipsHueBridgeTest {
         verify(restClient, times(1)).get(eq("http://1.1.1.1"), eq("/api/test/lights"), any(JSONObject.class));
         assertThat(result.size(), is(0));
     }
+
+    @Test
+    public void canRegisterUser() throws Exception {
+        when(restClient.post(anyString(), anyString(), any(JSONObject.class))).thenReturn(new JSONData(REGISTER_USER_OK));
+        String result = api.registerUser("Test", "abcdefghijklmnop");
+        verify(restClient, times(1)).post(eq("http://1.1.1.1"), eq("/api"), any(JSONObject.class));
+        assertThat(result, is("1234567890"));
+    }
+
 }

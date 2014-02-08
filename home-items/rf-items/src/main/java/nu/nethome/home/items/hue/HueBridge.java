@@ -132,6 +132,13 @@ public class HueBridge extends HomeItemAdapter {
         hueBridge.setLightState(userName, lampId, state);
     }
 
+    public void registerUser() {
+        String result = hueBridge.registerUser("OpenNetHomeServer", userName);
+        if (result != null && result != "") {
+            userName = result;
+        }
+    }
+
     public String getUserName() {
         return userName;
     }
