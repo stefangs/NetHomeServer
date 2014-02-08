@@ -44,14 +44,17 @@ public class HueBridge extends HomeItemAdapter {
             + "  <Attribute Name=\"Address\" Type=\"String\" Get=\"getUrl\" Set=\"setUrl\" />"
             + "  <Attribute Name=\"Identity\" Type=\"String\" Get=\"getBridgeIdentity\" Init=\"setBridgeIdentity\" />"
             + "  <Attribute Name=\"UserName\" Type=\"String\" Get=\"getUserName\" Set=\"setUserName\" />"
+            + "  <Attribute Name=\"RefreshInterval\" Type=\"String\" Get=\"getRefreshInterval\" Set=\"setRefreshInterval\" />"
             + "  <Action Name=\"findBridge\" Method=\"reconnect\" />"
             + "  <Action Name=\"registerUser\" Method=\"registerUser\" />"
             + "</HomeItem> ");
 
-    String userName = "";
-    String url = "http://192.168.1.174";
-    String bridgeIdentity = "";
-    PhilipsHueBridge hueBridge;
+    private String userName = "";
+    private String url = "http://192.168.1.174";
+    private String bridgeIdentity = "";
+    private PhilipsHueBridge hueBridge;
+    private int refreshInterval = 5;
+    private int refreshConter = 0;
 
 
     @Override
@@ -90,7 +93,8 @@ public class HueBridge extends HomeItemAdapter {
                 reportLampState(lampId);
             }
             return true;
-        } else if (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals("ReportItems")) {
+        } else if (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals("ReportItems") ||
+                (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals("MinuteEvent") && refreshConter++ > refreshInterval)) {
             List<LightId> ids = hueBridge.listLights(userName);
             for (LightId id : ids) {
                 reportLampState(id.getLampId());
@@ -162,5 +166,15 @@ public class HueBridge extends HomeItemAdapter {
 
     public void setBridgeIdentity(String bridgeIdentity) {
         this.bridgeIdentity = bridgeIdentity;
+    }
+
+    public String getRefreshInterval() {
+        return Integer.toString(refreshInterval);
+
+    }
+
+    public void setRefreshInterval(String refreshInterval) {
+        this.refreshInterval = Integer.parseInt(refreshInterval);
+        refreshConter = this.refreshInterval + 1;
     }
 }
