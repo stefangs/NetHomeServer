@@ -24,23 +24,25 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 
 public class JsonRestClient {
 
-    public JSONData get(String baseUrl, String resource, JSONObject argument) throws Exception {
+    public JSONData get(String baseUrl, String resource, JSONObject argument) throws IOException {
         return new JSONData(performRequest(baseUrl, resource, argument != null ?argument.toString() : "", "GET"));
     }
 
-    public JSONData put(String baseUrl, String resource, JSONObject argument) throws Exception {
+    public JSONData put(String baseUrl, String resource, JSONObject argument) throws IOException {
         return new JSONData(performRequest(baseUrl, resource, argument != null ?argument.toString() : "", "PUT"));
     }
 
-    public JSONData post(String baseUrl, String resource, JSONObject argument) throws Exception {
+    public JSONData post(String baseUrl, String resource, JSONObject argument) throws IOException {
         return new JSONData(performRequest(baseUrl, resource, argument != null ?argument.toString() : "", "POST"));
     }
 
-    private String performRequest(String baseUrl, String resource, String body, String method) throws Exception {
+    private String performRequest(String baseUrl, String resource, String body, String method) throws IOException {
         HttpURLConnection connection = null;
         DataOutputStream wr = null;
         BufferedReader rd = null;
@@ -68,7 +70,7 @@ public class JsonRestClient {
             }
             connection.connect();
             if (connection.getResponseCode() < 200 || connection.getResponseCode() > 299) {
-                throw new Exception("Bad HTTP response code: " + connection.getResponseCode());
+                throw new ProtocolException("Bad HTTP response code: " + connection.getResponseCode());
             }
             rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 

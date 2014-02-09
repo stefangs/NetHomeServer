@@ -30,7 +30,7 @@ public class JSONData {
     private final JSONObject object;
     private final JSONArray array;
 
-    public JSONData(String data) {
+    public JSONData(String data)  {
         if (data.trim().startsWith("[")) {
             array = new JSONArray(data);
             object = null;
@@ -46,11 +46,17 @@ public class JSONData {
         return object != null;
     }
 
-    public JSONObject getObject() {
+    public JSONObject getObject() throws HueProcessingException {
+        if (object == null) {
+            throw new JSONException("Not a JSON Object");
+        }
         return object;
     }
 
-    public JSONArray getArray() {
+    public JSONArray getArray() throws HueProcessingException {
+        if (array == null) {
+            throw new JSONException("Not a JSON Array");
+        }
         return array;
     }
 }

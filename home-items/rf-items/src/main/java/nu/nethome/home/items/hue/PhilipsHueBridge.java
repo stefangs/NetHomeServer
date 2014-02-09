@@ -21,8 +21,10 @@ package nu.nethome.home.items.hue;
 
 import nu.nethome.home.system.Event;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -50,88 +52,131 @@ public class PhilipsHueBridge {
         this.client = client;
     }
 
-    public void setLightState(String user, String lamp, LightState state) {
-        JSONObject stateParameter = new JSONObject();
-        if (state.isOn()) {
-            stateParameter.put("on", true);
-            stateParameter.put("bri", state.getBrightness());
-            if (state.getColorTemperature() > 0) {
-                stateParameter.put("ct", state.getColorTemperature());
-            } else {
-                stateParameter.put("hue", state.getHue());
-                stateParameter.put("sat", state.getSaturation());
-            }
-        } else {
-            stateParameter.put("on", false);
-        }
-        String resource = String.format("/api/%s/lights/%s/state", user, lamp);
+    /**
+     * Set the state of the specified lamp
+     *
+     * @param user  Registered user
+     * @param lamp  Lamp identity
+     * @param state New state of the lamp
+     * @throws IOException            If communication fails
+     * @throws HueProcessingException If the command cannot be executed
+     */
+    public void setLightState(String user, String lamp, LightState state) throws IOException, HueProcessingException {
         try {
-            JSONData result = client.put(url, resource, stateParameter);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public Light getLight(String user, String lamp) {
-        String resource = String.format("/api/%s/lights/%s", user, lamp);
-        try {
-            JSONData result = client.get(url, resource, null);
-            if (result.isObject()) {
-                return new Light(result.getObject());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public List<LightId> listLights(String user) {
-        String resource = String.format("/api/%s/lights", user);
-        try {
-            JSONData result = client.get(url, resource, null);
-            if (result.isObject()) {
-                List<LightId> list = new ArrayList<LightId>();
-                for (String lampId : getFieldNames(result.getObject())) {
-                    list.add(new LightId(lampId, result.getObject().getJSONObject(lampId).getString("name")));
+            JSONObject stateParameter = new JSONObject();
+            if (state.isOn()) {
+                stateParameter.put("on", true);
+                stateParameter.put("bri", state.getBrightness());
+                if (state.getColorTemperature() > 0) {
+                    stateParameter.put("ct", state.getColorTemperature());
+                } else {
+                    stateParameter.put("hue", state.getHue());
+                    stateParameter.put("sat", state.getSaturation());
                 }
-                return list;
+            } else {
+                stateParameter.put("on", false);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            String resource = String.format("/api/%s/lights/%s/state", user, lamp);
+            JSONData result = client.put(url, resource, stateParameter);
+            checkForErrorResponse(result);
+        } catch (JSONException e) {
+            throw new HueProcessingException(e);
         }
-        return null;
     }
 
-    public String registerUser(String deviceType, String user) {
-        JSONObject parameter = new JSONObject();
-        parameter.put("devicetype", deviceType);
-        if (user != null && user.length() > 0) {
-            parameter.put("username", user);
+    private void checkForErrorResponse(JSONData result) throws HueProcessingException {
+        if (result.isObject() && result.getObject().has("error")) {
+            JSONObject error = result.getObject().getJSONObject("error");
+            throw new HueProcessingException(error.getString("description"), error.getInt("type"));
         }
+    }
+
+    /**
+     * Get the state of a specified lamp
+     *
+     * @param user Registered user
+     * @param lamp Lamp identity
+     * @throws IOException            If communication fails
+     * @throws HueProcessingException If the command cannot be executed
+     */
+    public Light getLight(String user, String lamp) throws IOException, HueProcessingException {
         try {
+            String resource = String.format("/api/%s/lights/%s", user, lamp);
+            JSONData result = client.get(url, resource, null);
+            checkForErrorResponse(result);
+            return new Light(result.getObject());
+        } catch (JSONException e) {
+            throw new HueProcessingException(e);
+        }
+    }
+
+    /**
+     * List all lamps known to the bridge
+     *
+     * @param user Registered user
+     * @return List of lamps
+     * @throws IOException            If communication fails
+     * @throws HueProcessingException If the command cannot be executed
+     */
+    public List<LightId> listLights(String user) throws HueProcessingException, IOException {
+        try {
+            String resource = String.format("/api/%s/lights", user);
+            JSONData result = client.get(url, resource, null);
+            checkForErrorResponse(result);
+            List<LightId> list = new ArrayList<LightId>();
+            for (String lampId : getFieldNames(result.getObject())) {
+                list.add(new LightId(lampId, result.getObject().getJSONObject(lampId).getString("name")));
+            }
+            return list;
+        } catch (JSONException e) {
+            throw new HueProcessingException(e);
+        }
+    }
+
+    /**
+     * Register a new user to the bridge. The button on the bridge must have been pressed within 30 seconds
+     * for this operation to succeed.
+     *
+     * @param deviceType Name of device, should for example be app name
+     * @param user       Username to register. May be left blank
+     * @return The name of the registered user
+     * @throws IOException            If communication fails
+     * @throws HueProcessingException If the command cannot be executed
+     */
+    public String registerUser(String deviceType, String user) throws HueProcessingException, IOException {
+        try {
+            JSONObject parameter = new JSONObject();
+            parameter.put("devicetype", deviceType);
+            if (user != null && user.length() > 0) {
+                parameter.put("username", user);
+            }
             JSONData result = client.post(url, "/api", parameter);
-            if (!result.isObject()) {
-                JSONObject resultObject = result.getArray().getJSONObject(0);
-                JSONObject resultData = resultObject.getJSONObject("success");
-                return resultData.getString("username");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            checkForErrorResponse(result);
+            JSONObject resultObject = result.getArray().getJSONObject(0);
+            JSONObject resultData = resultObject.getJSONObject("success");
+            return resultData.getString("username");
+        } catch (JSONException e) {
+            throw new HueProcessingException(e);
         }
-        return "";
     }
 
-    public HueConfig getConfiguration(String user) {
-        String resource = String.format("/api/%s/config", user);
+    /**
+     * Get the bridge configuration
+     *
+     * @param user Registered user
+     * @return the configuration
+     * @throws IOException            If communication fails
+     * @throws HueProcessingException If the command cannot be executed
+     */
+    public HueConfig getConfiguration(String user) throws IOException, HueProcessingException {
         try {
+            String resource = String.format("/api/%s/config", user);
             JSONData jResult = client.get(url, resource, null);
-            if (jResult.isObject()) {
-                return new HueConfig(jResult.getObject());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            checkForErrorResponse(jResult);
+            return new HueConfig(jResult.getObject());
+        } catch (JSONException e) {
+            throw new HueProcessingException(e);
         }
-        return null;
     }
 
     private String[] getFieldNames(JSONObject object) {
@@ -139,22 +184,26 @@ public class PhilipsHueBridge {
         return result == null ? new String[0] : result;
     }
 
-    public static List<PhilipsHueBridge> listLocalPhilipsHueBridges() {
-        JsonRestClient client = new JsonRestClient();
+    /**
+     * List all hue bridges in this local network
+     *
+     * @return List of bridges
+     * @throws IOException            If communication fails
+     * @throws HueProcessingException If the command cannot be executed
+     */
+    public static List<PhilipsHueBridge> listLocalPhilipsHueBridges() throws HueProcessingException, IOException {
         try {
+            JsonRestClient client = new JsonRestClient();
             JSONData result = client.get(WWW_MEETHUE_COM_API, HUE_NUPNP, null);
-            if (!result.isObject()) {
-                List<PhilipsHueBridge> list = new ArrayList<PhilipsHueBridge>();
-                for (int i = 0; i < result.getArray().length(); i++) {
-                    JSONObject id = result.getArray().getJSONObject(i);
-                    list.add(new PhilipsHueBridge("http://" + id.getString("internalipaddress"), id.getString("id")));
-                }
-                return list;
+            List<PhilipsHueBridge> list = new ArrayList<PhilipsHueBridge>();
+            for (int i = 0; i < result.getArray().length(); i++) {
+                JSONObject id = result.getArray().getJSONObject(i);
+                list.add(new PhilipsHueBridge("http://" + id.getString("internalipaddress"), id.getString("id")));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            return list;
+        } catch (JSONException e) {
+            throw new HueProcessingException(e);
         }
-        return null;
     }
 
     public String getUrl() {

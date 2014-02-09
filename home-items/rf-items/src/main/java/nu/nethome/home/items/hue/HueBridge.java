@@ -24,11 +24,13 @@ import nu.nethome.home.item.HomeItemType;
 import nu.nethome.home.system.Event;
 import nu.nethome.util.plugin.Plugin;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Represents a Philips Hue bridge and handles communications with it
- * TODO: Error handling/exceptions
  */
 @SuppressWarnings("UnusedDeclaration")
 @Plugin
@@ -48,6 +50,8 @@ public class HueBridge extends HomeItemAdapter {
             + "  <Action Name=\"registerUser\" Method=\"registerUser\" />"
             + "  <Action Name=\"reconnect\" Method=\"reconnect\" />"
             + "</HomeItem> ");
+
+    private static Logger logger = Logger.getLogger(HueBridge.class.getName());
 
     private String userName = "";
     private String url = "http://192.168.1.174";
@@ -75,21 +79,31 @@ public class HueBridge extends HomeItemAdapter {
     }
 
     public void findBridge() {
-        List<PhilipsHueBridge> bridges = PhilipsHueBridge.listLocalPhilipsHueBridges();
-        if (bridges.size() > 0) {
-            this.url = bridges.get(0).getUrl();
-            this.bridgeIdentity = bridges.get(0).getId();
-            this.hueBridge = bridges.get(0);
+        try {
+            List<PhilipsHueBridge> bridges = PhilipsHueBridge.listLocalPhilipsHueBridges();
+            if (bridges.size() > 0) {
+                this.url = bridges.get(0).getUrl();
+                this.bridgeIdentity = bridges.get(0).getId();
+                this.hueBridge = bridges.get(0);
+            }
+            checkConnection();
+        } catch (IOException e) {
+            logger.log(Level.INFO, "Failed to contact Hue location sevice", e);
+        } catch (HueProcessingException e) {
+            logger.log(Level.INFO, "Failed to contact Hue location sevice", e);
         }
-        checkConnection();
     }
 
     private void checkConnection() {
-        configuration = hueBridge.getConfiguration(userName);
-        if (configuration != null) {
+        try {
+            configuration = hueBridge.getConfiguration(userName);
             state = "Connected";
-        } else {
-            state = "Disconnected";
+        } catch (IOException e) {
+            this.state = "Disconnected";
+            logger.log(Level.INFO, "Failed to contact HueBridge", e);
+        } catch (HueProcessingException e) {
+            this.state = "Disconnected";
+            logger.log(Level.INFO, "Command failed in HueBridge", e);
         }
     }
 
@@ -112,33 +126,60 @@ public class HueBridge extends HomeItemAdapter {
             return true;
         } else if (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals("ReportItems") ||
                 (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals("MinuteEvent") && refreshCounter++ > refreshInterval)) {
-            List<LightId> ids = hueBridge.listLights(userName);
-            if (ids != null) {
-                for (LightId id : ids) {
-                    reportLampState(id.getLampId());
-                }
-            }
+            reportAllLampsState();
             return true;
         }
         return false;
     }
 
+    private void reportAllLampsState() {
+        try {
+            List<LightId> ids = hueBridge.listLights(userName);
+            for (LightId id : ids) {
+                reportLampState(id.getLampId());
+            }
+        } catch (IOException e) {
+            this.state = "Disconnected";
+            logger.log(Level.INFO, "Failed to contact HueBridge", e);
+        } catch (HueProcessingException e) {
+            logger.log(Level.INFO, "Command failed in HueBridge", e);
+        }
+    }
+
     private void reportLampState(String lampId) {
-        Light light = hueBridge.getLight(userName, lampId);
-        Event event = server.createEvent("Hue_Message", "");
-        event.setAttribute("Direction", "In");
-        event.setAttribute("Hue.Lamp", lampId);
-        event.setAttribute("Hue.Command", light.getState().isOn() ? "On" : "Off");
-        event.setAttribute("Hue.Brightness", light.getState().getBrightness());
-        event.setAttribute("Hue.Name", light.getName());
-        event.setAttribute("Hue.Model", light.getModelid());
-        event.setAttribute("Hue.Type", light.getType());
-        event.setAttribute("Hue.Version", light.getSwversion());
-        server.send(event);
+        try {
+            Light light = hueBridge.getLight(userName, lampId);
+            Event event = server.createEvent("Hue_Message", "");
+            event.setAttribute("Direction", "In");
+            event.setAttribute("Hue.Lamp", lampId);
+            event.setAttribute("Hue.Command", light.getState().isOn() ? "On" : "Off");
+            event.setAttribute("Hue.Brightness", light.getState().getBrightness());
+            event.setAttribute("Hue.Name", light.getName());
+            event.setAttribute("Hue.Model", light.getModelid());
+            event.setAttribute("Hue.Type", light.getType());
+            event.setAttribute("Hue.Version", light.getSwversion());
+            server.send(event);
+        } catch (IOException e) {
+            this.state = "Disconnected";
+            logger.log(Level.INFO, "Failed to contact HueBridge", e);
+        } catch (HueProcessingException e) {
+            logger.log(Level.INFO, "Command failed in HueBridge", e);
+        }
     }
 
     private void turnLampOff(String lampId) {
-        hueBridge.setLightState(userName, lampId, new LightState());
+        setLightState(lampId, new LightState());
+    }
+
+    private void setLightState(String lampId, LightState state) {
+        try {
+            hueBridge.setLightState(userName, lampId, state);
+        } catch (IOException e) {
+            this.state = "Disconnected";
+            logger.log(Level.INFO, "Failed to contact HueBridge", e);
+        } catch (HueProcessingException e) {
+            logger.log(Level.INFO, "Command failed in HueBridge", e);
+        }
     }
 
     private void turnLampOn(String lampId, Event event) {
@@ -152,14 +193,20 @@ public class HueBridge extends HomeItemAdapter {
         } else {
             state = new LightState(brightness, hue, saturation);
         }
-        hueBridge.setLightState(userName, lampId, state);
+        setLightState(lampId, state);
     }
 
     public void registerUser() {
-        String result = hueBridge.registerUser("OpenNetHomeServer", userName);
-        if (result != null && result != "") {
+        try {
+            String result = hueBridge.registerUser("OpenNetHomeServer", userName);
             userName = result;
             checkConnection();
+        } catch (IOException e) {
+            this.state = "Disconnected";
+            logger.log(Level.INFO, "Failed to contact HueBridge", e);
+        } catch (HueProcessingException e) {
+            this.state = "Disconnected";
+            logger.log(Level.INFO, "Command failed in HueBridge", e);
         }
     }
 

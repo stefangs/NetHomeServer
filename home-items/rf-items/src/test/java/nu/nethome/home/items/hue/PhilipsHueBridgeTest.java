@@ -19,11 +19,13 @@
 
 package nu.nethome.home.items.hue;
 
+import org.hamcrest.CoreMatchers;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -45,9 +47,11 @@ public class PhilipsHueBridgeTest {
     JsonRestClient restClient;
 
     @Before
-    public void setUp() {
+    public void setUp() throws IOException {
         restClient = mock(JsonRestClient.class);
         api = new PhilipsHueBridge(restClient, "1.1.1.1");
+        when(restClient.put(any(String.class), any(String.class), any(JSONObject.class))).thenReturn(new JSONData("{}"));
+
     }
 
     @Test
@@ -58,6 +62,7 @@ public class PhilipsHueBridgeTest {
         verify(restClient, times(1)).put(eq("http://1.1.1.1"), eq("/api/test/lights/2/state"), captor.capture());
         assertThat(captor.getValue().getBoolean("on"), is(true));
     }
+
     @Test
     public void canTurnLampOff() throws Exception {
         LightState off = new LightState();
@@ -65,6 +70,21 @@ public class PhilipsHueBridgeTest {
         ArgumentCaptor<JSONObject> captor = ArgumentCaptor.forClass(JSONObject.class);
         verify(restClient, times(1)).put(eq("http://1.1.1.1"), eq("/api/test/lights/2/state"), captor.capture());
         assertThat(captor.getValue().getBoolean("on"), is(false));
+    }
+
+    private static final String ERROR_RESULT = "{\n" +
+            "        \"error\": {\n" +
+            "            \"type\": 201 ,\n" +
+            "            \"address\": \"/resource/parameteraddress\",\n" +
+            "            \"description\": \"An Error\"\n" +
+            "        }\n" +
+            "    }";
+
+    @Test(expected = HueProcessingException.class)
+    public void turnLampOffDetectsError() throws Exception {
+        when(restClient.put(any(String.class), any(String.class), any(JSONObject.class))).thenReturn(new JSONData(ERROR_RESULT));
+        LightState off = new LightState();
+        api.setLightState(USER_NAME, "2", off);
     }
 
 
