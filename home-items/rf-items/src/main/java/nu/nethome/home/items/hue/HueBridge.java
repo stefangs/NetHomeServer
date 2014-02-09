@@ -28,10 +28,7 @@ import java.util.List;
 
 /**
  * Represents a Philips Hue bridge and handles communications with it
- * TODO: Registration of user
- * TODO: Refresh of Hue Lamps
  * TODO: Error handling/exceptions
- * TODO: Connection state
  */
 @SuppressWarnings("UnusedDeclaration")
 @Plugin
@@ -43,10 +40,13 @@ public class HueBridge extends HomeItemAdapter {
             + "  <Attribute Name=\"State\" Type=\"String\" Get=\"getState\" Default=\"true\" />"
             + "  <Attribute Name=\"Address\" Type=\"String\" Get=\"getUrl\" Set=\"setUrl\" />"
             + "  <Attribute Name=\"Identity\" Type=\"String\" Get=\"getBridgeIdentity\" Init=\"setBridgeIdentity\" />"
+            + "  <Attribute Name=\"DeviceName\" Type=\"String\" Get=\"getDeviceName\"  />"
+            + "  <Attribute Name=\"SWVersion\" Type=\"String\" Get=\"getSWVersion\"  />"
             + "  <Attribute Name=\"UserName\" Type=\"String\" Get=\"getUserName\" Set=\"setUserName\" />"
             + "  <Attribute Name=\"RefreshInterval\" Type=\"String\" Get=\"getRefreshInterval\" Set=\"setRefreshInterval\" />"
-            + "  <Action Name=\"findBridge\" Method=\"reconnect\" />"
+            + "  <Action Name=\"findBridge\" Method=\"findBridge\" />"
             + "  <Action Name=\"registerUser\" Method=\"registerUser\" />"
+            + "  <Action Name=\"reconnect\" Method=\"reconnect\" />"
             + "</HomeItem> ");
 
     private String userName = "";
@@ -54,7 +54,9 @@ public class HueBridge extends HomeItemAdapter {
     private String bridgeIdentity = "";
     private PhilipsHueBridge hueBridge;
     private int refreshInterval = 5;
-    private int refreshConter = 0;
+    private int refreshCounter = 0;
+    private HueConfig configuration = null;
+    private String state = "Disconnected";
 
 
     @Override
@@ -64,15 +66,30 @@ public class HueBridge extends HomeItemAdapter {
 
     @Override
     public void activate() {
-        hueBridge = new PhilipsHueBridge(url, bridgeIdentity);
+        reconnect();
     }
 
     public void reconnect() {
-        List<PhilipsHueBridge> bridges = PhilipsHueBridge.listLocalPhilipsHueBridges ();
+        hueBridge = new PhilipsHueBridge(url, bridgeIdentity);
+        checkConnection();
+    }
+
+    public void findBridge() {
+        List<PhilipsHueBridge> bridges = PhilipsHueBridge.listLocalPhilipsHueBridges();
         if (bridges.size() > 0) {
             this.url = bridges.get(0).getUrl();
             this.bridgeIdentity = bridges.get(0).getId();
             this.hueBridge = bridges.get(0);
+        }
+        checkConnection();
+    }
+
+    private void checkConnection() {
+        configuration = hueBridge.getConfiguration(userName);
+        if (configuration != null) {
+            state = "Connected";
+        } else {
+            state = "Disconnected";
         }
     }
 
@@ -94,10 +111,12 @@ public class HueBridge extends HomeItemAdapter {
             }
             return true;
         } else if (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals("ReportItems") ||
-                (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals("MinuteEvent") && refreshConter++ > refreshInterval)) {
+                (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals("MinuteEvent") && refreshCounter++ > refreshInterval)) {
             List<LightId> ids = hueBridge.listLights(userName);
-            for (LightId id : ids) {
-                reportLampState(id.getLampId());
+            if (ids != null) {
+                for (LightId id : ids) {
+                    reportLampState(id.getLampId());
+                }
             }
             return true;
         }
@@ -140,6 +159,7 @@ public class HueBridge extends HomeItemAdapter {
         String result = hueBridge.registerUser("OpenNetHomeServer", userName);
         if (result != null && result != "") {
             userName = result;
+            checkConnection();
         }
     }
 
@@ -175,6 +195,19 @@ public class HueBridge extends HomeItemAdapter {
 
     public void setRefreshInterval(String refreshInterval) {
         this.refreshInterval = Integer.parseInt(refreshInterval);
-        refreshConter = this.refreshInterval + 1;
+        refreshCounter = this.refreshInterval + 1;
     }
+
+    public String getState() {
+        return state;
+    }
+
+    public String getSWVersion() {
+        return configuration != null ? configuration.getSwVersion() : "";
+    }
+
+    public String getDeviceName() {
+        return configuration != null ? configuration.getName() : "";
+    }
+
 }

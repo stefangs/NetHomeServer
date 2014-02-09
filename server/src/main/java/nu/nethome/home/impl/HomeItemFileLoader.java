@@ -73,11 +73,12 @@ public class HomeItemFileLoader implements HomeItemLoader {
                 for (Attribute attribute : item.getAttributeValues()) {
                     if (!attribute.isWriteOnly()) {
                         try {
-                            out.write("\t\t<Attribute Name=\"" + escape(attribute.getName())
-                                    + "\">" + escape(attribute.getValue()) + "</Attribute>");
+                            String name = escape(attribute.getName());
+                            String value = escape(attribute.getValue());
+                            out.write("\t\t<Attribute Name=\"" + name + "\">" + value + "</Attribute>");
                             out.newLine();
                         } catch (Exception e) {
-                            logger.info("Warning! the attribute name or value throws exception: " + e.getMessage());
+                            logger.info("Warning! the attribute name or value throws exception: " + e.toString());
                         }
 
                     }
@@ -262,6 +263,9 @@ public class HomeItemFileLoader implements HomeItemLoader {
 
     // assumes UTF-8 or UTF-16 as encoding,
     public String escape(String content) {
+        if (content == null) {
+            return "";
+        }
         StringBuilder buffer = new StringBuilder();
         for (int i = 0; i < content.length(); i++) {
             char c = content.charAt(i);

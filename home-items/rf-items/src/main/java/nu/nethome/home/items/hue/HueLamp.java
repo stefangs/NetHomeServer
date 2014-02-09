@@ -37,7 +37,7 @@ public class HueLamp extends HomeItemAdapter implements HomeItem {
     private int hue = 0;
     private int saturation = 0;
     private int colorTemperature = 0;
-    private String color;
+    private String color = "";
     private boolean isOn;
     private int dimLevel1 = 0;
     private int dimLevel2 = 33;

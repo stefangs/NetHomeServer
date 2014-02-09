@@ -121,6 +121,19 @@ public class PhilipsHueBridge {
         return "";
     }
 
+    public HueConfig getConfiguration(String user) {
+        String resource = String.format("/api/%s/config", user);
+        try {
+            JSONData jResult = client.get(url, resource, null);
+            if (jResult.isObject()) {
+                return new HueConfig(jResult.getObject());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private String[] getFieldNames(JSONObject object) {
         String[] result = JSONObject.getNames(object);
         return result == null ? new String[0] : result;

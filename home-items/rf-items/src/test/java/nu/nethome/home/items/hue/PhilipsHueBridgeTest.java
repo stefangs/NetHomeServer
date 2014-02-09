@@ -152,4 +152,40 @@ public class PhilipsHueBridgeTest {
         assertThat(result, is("1234567890"));
     }
 
+    private static final String CONFIG_RESPONSE = "{\n" +
+            "    \"proxyport\": 0,\n" +
+            "    \"UTC\": \"2012-10-29T12:00:00\",\n" +
+            "    \"name\": \"Smartbridge 1\",\n" +
+            "    \"swupdate\": {\n" +
+            "        \"updatestate\":1,\n" +
+            "         \"url\": \"www.meethue.com/patchnotes/1453\",\n" +
+            "         \"text\": \"This is a software update\",\n" +
+            "         \"notify\": false\n" +
+            "     },\n" +
+            "    \"whitelist\": {\n" +
+            "        \"1234567890\": {\n" +
+            "            \"last use date\": \"2010-10-17T01:23:20\",\n" +
+            "            \"create date\": \"2010-10-17T01:23:20\",\n" +
+            "            \"name\": \"iPhone Web 1\"\n" +
+            "        }\n" +
+            "    },\n" +
+            "    \"swversion\": \"01003542\",\n" +
+            "    \"proxyaddress\": \"none\",\n" +
+            "    \"mac\": \"00:17:88:00:00:00\",        \n" +
+            "    \"linkbutton\": false,\n" +
+            "    \"ipaddress\": \"192.168.1.100\",\n" +
+            "    \"netmask\": \"255.255.0.0\",\n" +
+            "    \"gateway\": \"192.168.0.1\",\n" +
+            "    \"dhcp\": false\n" +
+            "}";
+
+    @Test
+    public void canGetConfiguration() throws Exception {
+        when(restClient.get(anyString(), anyString(), any(JSONObject.class))).thenReturn(new JSONData(CONFIG_RESPONSE));
+        HueConfig result = api.getConfiguration("stefanstromberg");
+        verify(restClient, times(1)).get(eq("http://1.1.1.1"), eq("/api/stefanstromberg/config"), any(JSONObject.class));
+        assertThat(result.getName(), is("Smartbridge 1"));
+        assertThat(result.getMac(), is("00:17:88:00:00:00"));
+        assertThat(result.getSwVersion(), is("01003542"));
+    }
 }
