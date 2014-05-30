@@ -23,7 +23,9 @@ On Linux and MAC you also have to make the script executable before running it.
 For example:
 
 >cd src/main/scripts
+
 >chmod +x setup_macosx_cocoa64.sh
+
 >./setup_macosx_cocoa64.sh
 
 This will copy the correct version of the rxtx runtime libraries to the
@@ -59,7 +61,7 @@ Open from IntelliJ
 IntelliJ can read Maven project files, so the project can be opened directly.
 All you have to do is to create a run-configuration. Select:
 
-run->edit configurations
+>run->edit configurations
 
 and create a new application. Select the main class as:
 
